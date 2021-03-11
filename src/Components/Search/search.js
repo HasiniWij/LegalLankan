@@ -2,6 +2,7 @@ import React from 'react';
 import './search.css';
 import Searchimg from './search.png';
 import { Answer } from '../Answer/answer'
+import { Answer2 } from '../Answer/answer2'
 
 export const Search = () => {
     return (
@@ -12,7 +13,7 @@ export const Search = () => {
                     <img class="searchimg" src={Searchimg} alt="Search"/>
                 </div>
                  <div class="searchdiv"><button class="searchbutton" onClick= { Answer } >Search</button></div>
-            </form>
+            //</form>
         </div>
       );
 }

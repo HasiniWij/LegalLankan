@@ -3,13 +3,15 @@ import { logo } from "./logo.svg";
 import './App.css';
 import { HomePage } from './Pages/HomePage';
 import { SearchPage } from './Pages/SearchPage';
-import { ExplorePage } from './Pages/ExplorePage'
+import { ExplorePage } from './Pages/ExplorePage';
 
 import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
 import Logo from './images/logo.png';
 import IG from './images/ig.png';
 import TW from './images/tw.png';
 import FB from './images/fb.png';
+
+import { Answer2 } from './Components/Answer/answer2';
 
 function App() {
   return (
@@ -36,6 +38,7 @@ function App() {
       <Route path='/' exact  component={HomePage}/>
       <Route path='/search' component={ SearchPage }/>
       <Route path='/explore' component={ ExplorePage }/>
+      <Route path='/answer2' component={ Answer2 }/>
       </div>
       <footer>
         <div className="footerdiv">
