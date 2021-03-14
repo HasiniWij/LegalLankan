@@ -20,7 +20,7 @@
 #             queryCategory = C.get_category_of_text(query)
 #
 #             E = Extractor(queryCategory)
-#             extracted = E.get_ranked_documents("main human rights")
+#             extracted = E.get_ranked_documents(C.get_query_keywords(query))
 #
 #             listToStr = ' '.join(map(str, extracted))
 #             print("Query: " + query + '\n' + "Query Category: " + queryCategory + '\n' + "Extraction Piece Index: " + listToStr)
