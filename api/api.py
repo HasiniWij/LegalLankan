@@ -1,43 +1,10 @@
-# from flask import Flask, request
-# from classification.Classifier import Classifier
-# # from .Classifier import get_query_keywords
-# from extraction.Extractor import Extractor
-#
-# app = Flask(__name__)
-#
-# # @app.route('/', methods=['GET'])
-# # def index():
-# #     return{
-# #         'name':'Hello world'
-# #     }
-#
-# @app.route('/search', methods = ['GET', 'POST'])
-# def result():
-#     if request.method == 'GET':
-#         query = request.args.get('query', None)
-#         if query:
-#             C = Classifier("/Users/Shontaal/Documents/GitHub/SDGP/api/classification/models/best_rfc.pickle", "/Users/Shontaal/Documents/GitHub/SDGP/api/classification/models/tfidf.pickle")
-#             queryCategory = C.get_category_of_text(query)
-#
-#             E = Extractor(queryCategory)
-#             extracted = E.get_ranked_documents(C.get_query_keywords(query))
-#
-#             listToStr = ' '.join(map(str, extracted))
-#             print("Query: " + query + '\n' + "Query Category: " + queryCategory + '\n' + "Extraction Piece Index: " + listToStr)
-#             return "Query: " + query + " ||| " + "Query Category: " + queryCategory + " ||| " + "Extraction Piece Index: " + listToStr
-#
-#         return "No place information is given"
-#
-#
-# if __name__ == '__main__':
-#     app.run(debug=True)
-
-
 import pandas as pd
 import pymysql
 import json
 from flask import Flask
 from json import JSONEncoder
+
+from dataScienceComponents.Simplifier import Simplifier
 from dataScienceComponents.classification.Classifier import Classifier
 from dataScienceComponents.extraction.Extractor import Extractor
 
@@ -64,10 +31,144 @@ class serializer(JSONEncoder):
     def default(self, o):
         return o.__dict__
 #
-# @app.route('/search<legIndex>')
-# @app.route('/search<cat>')
-# @app.route('/simplify_piece<pieceIndex>')
-# @app.route('/simplify_leg<legIndex>')
+
+
+class Legislation():
+    def __init__(self, p_title, p_con):
+        self.pieceTitle = p_title
+        self.content = p_con
+
+@app.route('/legislation<legIndex>')
+
+def legislation_full_list(legIndex):
+
+
+    host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
+    port = 3306
+    dbname = "classify-legislation"
+    user = "admin"
+    password = "legalLankan2020"
+    conn = pymysql.connect(host=host, user=user, port=port, passwd=password, db=dbname)
+
+    sql = '''select pieceTitle, content
+                   from piece where legislationIndex = 4 '''
+
+
+    sql_result = pd.read_sql(sql, con=conn)
+
+    print(sql_result)
+
+    data = []
+    for index, row in sql_result.iterrows():
+        pieceTitle = row['pieceTitle']
+        content = row['content']
+        L = Legislation(pieceTitle, content)
+        JSONData = json.dumps(L, indent=4, cls=serializer)
+        data.append(JSONData)
+
+    return_json_answer = json.dumps(data)
+
+    return return_json_answer
+
+
+class LegislationName():
+    def __init__(self, l_name, l_index):
+
+        self.legislationName = l_name
+        self.legislationIndex = str (l_index)
+
+@app.route('/legistlationcategorised<catIndex>')
+def categorised_legislation_list(catIndex):
+    host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
+    port = 3306
+    dbname = "classify-legislation"
+    user = "admin"
+    password = "legalLankan2020"
+    conn = pymysql.connect(host=host, user=user, port=port, passwd=password, db=dbname)
+
+    catIndex = catIndex.strip("<>")
+
+    sql = 'select l.legislationIndex, l.legislationName from legislation l where categoryIndex = "RI"'
+
+    # cursor.execute("INSERT INTO table VALUES (%s, %s, %s)", (var1, var2, var3))
+
+    # print(type(categoryIndex))
+
+    sql_result = pd.read_sql(sql , con=conn)
+
+    print(sql_result)
+
+    data = []
+    for index, row in sql_result.iterrows():
+        legName = row['legislationName']
+        legIndex = row['legislationIndex']
+        L = LegislationName(legName, legIndex)
+        JSONData = json.dumps(L, indent=4, cls=serializer)
+        data.append(JSONData)
+
+
+    return_json_answer =  json.dumps(data)
+
+    return return_json_answer
+
+
+@app.route('/simplify_piece<pieceIndex>')
+def simplify_piece(pieceIndex):
+
+    host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
+    port = 3306
+    dbname = "classify-legislation"
+    user = "admin"
+    password = "legalLankan2020"
+    conn = pymysql.connect(host=host, user=user, port=port, passwd=password, db=dbname)
+
+    sql = '''select pieceTitle, content
+               from piece 
+               where pieceIndex= 5; '''
+
+    sql_result = pd.read_sql(sql, con=conn)
+
+    p_title = sql_result["pieceTitle"][0]
+    p_con = sql_result["content"][0]
+
+    S = Simplifier()
+    lex_simplified = S.get_lexically_simplified_text(p_title + p_con)
+    simplified = S.get_syntactically_simplified_text(lex_simplified)
+
+    return_json_answer = json.dumps(simplified)
+
+    return return_json_answer
+
+
+
+@app.route('/simplify_leg<legIndex>')
+
+def simplify_legislation(legIndex):
+    host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
+    port = 3306
+    dbname = "classify-legislation"
+    user = "admin"
+    password = "legalLankan2020"
+    conn = pymysql.connect(host=host, user=user, port=port, passwd=password, db=dbname)
+
+    sql = '''select p.pieceTitle, p.content
+               from piece 
+               where legistationIndex = 5; '''
+
+    sql_result = pd.read_sql(sql, con=conn)
+
+    data = []
+    for index, row in sql_result.iterrows():
+        pieceTitle = row['pieceTitle']
+        content = row['content']
+        S = Simplifier()
+        lex_simplified = S.get_lexically_simplified_text(pieceTitle + content)
+        simplified = S.get_syntactically_simplified_text(lex_simplified)
+        data.append(simplified)
+
+    return_json_answer = json.dumps(data)
+
+    return return_json_answer
 
 
 
