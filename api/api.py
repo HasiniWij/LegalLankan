@@ -81,7 +81,7 @@ def result(query):
         queryCategory = C.get_category_of_text(query)
 
         E = Extractor(queryCategory)
-        piece_indexes = E.get_ranked_documents("my human rights")
+        piece_indexes = E.get_ranked_documents(C.get_query_keywords(query))
 
         five_doc_content = []
 
@@ -96,7 +96,7 @@ def result(query):
             temp = {}
             sql = '''select p.pieceIndex, p.pieceTitle, p.content, l.legislationIndex, l.legislationName
                from piece p, legislation l
-               where p.pieceIndex=''' + element + " and l.legislationIndex=p.legislationIndex;"
+               where p.pieceIndex=''' + str(element) + " and l.legislationIndex=p.legislationIndex;"
 
             sql_result = pd.read_sql(sql, con=conn)
 

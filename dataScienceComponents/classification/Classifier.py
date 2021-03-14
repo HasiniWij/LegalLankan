@@ -2,15 +2,17 @@ import pickle
 import pandas as pd
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
-
+import os.path
 
 class Classifier:
 
     def __init__(self):
-        with open("models\\svm.pickle", 'rb') as data:
+
+
+        with open("..\\dataScienceComponents\\classification\\models\\svm.pickle", 'rb') as data:
             self.model = pickle.load(data)
 
-        with open("models\\tfidf.pickle", 'rb') as data:
+        with open("..\\dataScienceComponents\\classification\\models\\tfidf.pickle", 'rb') as data:
             self.tfidf = pickle.load(data)
 
         self.category_codes = {
