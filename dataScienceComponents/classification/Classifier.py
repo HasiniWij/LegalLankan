@@ -3,6 +3,7 @@ import pandas as pd
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
+# "models\svm.pickle","models\tfidf.pickle"
 
 def get_query_keywords(query):
     query_lowered = query.lower()  # all letters are turned into lowercase
