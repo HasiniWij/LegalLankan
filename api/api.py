@@ -175,7 +175,7 @@ def simplify_legislation(legIndex):
 
 
 
-@app.route('/search<query>')
+@app.route('/search/<query>')
 # , methods=['GET', 'POST']
 def result(query):
 
