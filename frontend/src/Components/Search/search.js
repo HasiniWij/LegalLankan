@@ -15,9 +15,9 @@ export const Search = () => {
     }
     const history = useHistory();
     const handleHis=()=>{
-        history.push({pathname:'/answer',state: { url: "http://localhost:5000/search/", q:data }});
+        //history.push({pathname:'/answer',state: { url: "http://localhost:5000/search<", q:data }});
         //history.push({pathname:'/answer',state: { url: "https://jsonplaceholder.typicode.com/posts", q:data }});
-        //history.push({pathname:'/answer',state: { urlfull: "http://localhost:5000/search/"+data }});
+        history.push({pathname:'/answer',state: { urlfull: "http://localhost:5000/search"+data }});
     };
     return (
         <div class="container">

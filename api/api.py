@@ -4,6 +4,8 @@ import json
 from flask import Flask
 from json import JSONEncoder
 
+from flask import jsonify
+
 from dataScienceComponents.Simplifier import Simplifier
 from dataScienceComponents.classification.Classifier import Classifier
 from dataScienceComponents.extraction.Extractor import Extractor
@@ -19,12 +21,14 @@ class QueryAnswer():
         l_index=str(sql_result["legislationIndex"][0])
         p_index = str(sql_result["pieceIndex"][0])
 
-
         self.pieceTitle = p_title
         self.content = p_con
         self.legislationName = l_name
         self.legislationIndex = l_index
         self.pieceIndex = p_index
+
+    def to_string(self):
+        return self.pieceIndex, self.pieceTitle, self.legislationIndex, self.legislationName, self.content
 
 
 class serializer(JSONEncoder):
@@ -140,7 +144,6 @@ def simplify_piece(pieceIndex):
     return return_json_answer
 
 
-
 @app.route('/simplify_leg<legIndex>')
 
 def simplify_legislation(legIndex):
@@ -175,6 +178,7 @@ def simplify_legislation(legIndex):
 @app.route('/search<query>')
 # , methods=['GET', 'POST']
 def result(query):
+
     return_json_answer = json.dumps("No place information is given")
     # query = "what are my human rights?"
     if query != None:
@@ -184,7 +188,7 @@ def result(query):
         E = Extractor(queryCategory)
         piece_indexes = E.get_ranked_documents(C.get_query_keywords(query))
 
-        five_doc_content = []
+        # five_doc_content = []
 
         host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
         port = 3306
@@ -192,6 +196,8 @@ def result(query):
         user = "admin"
         password = "legalLankan2020"
         conn = pymysql.connect(host=host, user=user, port=port, passwd=password, db=dbname)
+
+        answers = []
 
         for element in piece_indexes:
             temp = {}
@@ -201,15 +207,30 @@ def result(query):
 
             sql_result = pd.read_sql(sql, con=conn)
 
-            Q = QueryAnswer(sql_result)
-            JSONData = json.dumps(Q, indent=4, cls=serializer)
-            five_doc_content.append(JSONData)
+            # Q = QueryAnswer(sql_result)
+            # print(Q.to_string())
 
+            answer = {"pieceTitle": "", "content": "", "legislationName": "", "legislationIndex": "", "pieceIndex": ""}
+            p_title = sql_result["pieceTitle"][0]
+            p_con = sql_result["content"][0]
+            l_name = sql_result["legislationName"][0]
+            l_index = str(sql_result["legislationIndex"][0])
+            p_index = str(sql_result["pieceIndex"][0])
 
-        return_json_answer =  json.dumps(five_doc_content)
+            answer["pieceTitle"] = p_title
+            answer["content"] = p_con
+            answer["legislationName"] = l_name
+            answer["legislationIndex"] = l_index
+            answer["pieceIndex"] = p_index
 
+            answers.append(answer)
 
-    return return_json_answer
+            # JSONData = json.dumps(Q, indent=4, cls=serializer)
+            # five_doc_content.append(JSONData)
+
+        # return_json_answer = json.dumps(five_doc_content)
+
+    return jsonify(answers)
 
 
 if __name__ == '__main__':
