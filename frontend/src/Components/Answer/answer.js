@@ -26,6 +26,7 @@ export class Answer extends Component {
         })
         .catch(error =>{
             console.log(error)
+            this.setState({ur:this.props.location.state.url+this.props.location.state.q}) //test
             this.setState({urfull:this.props.location.state.urlfull}) //test
             this.setState({errormsg:"Invalid Request"})
         })
