@@ -12,6 +12,7 @@ import TW from './images/tw.png';
 import FB from './images/fb.png';
 
 import { Answer2 } from './Components/Answer/answer2';
+import { Answer } from './Components/Answer/answer';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
       <Route path='/search' component={ SearchPage }/>
       <Route path='/explore' component={ ExplorePage }/>
       <Route path='/answer2' component={ Answer2 }/>
+      <Route path='/answer' component={ Answer }/>
       </div>
       <footer>
         <div className="footerdiv">
