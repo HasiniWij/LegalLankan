@@ -5,7 +5,7 @@ from flask import Flask
 from json import JSONEncoder
 
 from flask import jsonify
-from flask_cors import CORS
+from flask_cors import CORS  # comment this on deployment
 
 from dataScienceComponents.Simplifier import Simplifier
 from dataScienceComponents.classification.Classifier import Classifier
@@ -13,8 +13,7 @@ from dataScienceComponents.extraction.Extractor import Extractor
 
 app = Flask(__name__)
 
-CORS(app) #comment this on deployment
-
+CORS(app)  # comment this on deployment
 
 class QueryAnswer():
     def __init__(self, sql_result):
@@ -37,19 +36,15 @@ class QueryAnswer():
 class serializer(JSONEncoder):
     def default(self, o):
         return o.__dict__
-#
-
 
 class Legislation():
     def __init__(self, p_title, p_con):
         self.pieceTitle = p_title
         self.content = p_con
 
-@app.route('/legislation<legIndex>')
 
-def legislation_full_list(legIndex):
-
-
+@app.route('/legislation/<legIndex>')
+def get_legislation(legIndex):
     host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
     port = 3306
     dbname = "classify-legislation"
@@ -58,24 +53,32 @@ def legislation_full_list(legIndex):
     conn = pymysql.connect(host=host, user=user, port=port, passwd=password, db=dbname)
 
     sql = '''select pieceTitle, content
-                   from piece where legislationIndex = 4 '''
-
+                   from piece where legislationIndex = ''' + str(legIndex)
 
     sql_result = pd.read_sql(sql, con=conn)
 
     print(sql_result)
 
-    data = []
+    legislation = []
+
     for index, row in sql_result.iterrows():
+        piece = {"pieceTitle": "", "content": ""}
+
         pieceTitle = row['pieceTitle']
         content = row['content']
-        L = Legislation(pieceTitle, content)
-        JSONData = json.dumps(L, indent=4, cls=serializer)
-        data.append(JSONData)
 
-    return_json_answer = json.dumps(data)
+        piece["pieceTitle"] = pieceTitle
+        piece["content"] = content
 
-    return return_json_answer
+        # L = Legislation(pieceTitle, content)
+        # JSONData = json.dumps(L, indent=4, cls=serializer)
+        # data.append(JSONData)
+
+        legislation.append(piece)
+
+    # return_json_answer = json.dumps(data)
+
+    return jsonify(legislation)
 
 
 class LegislationName():
@@ -84,8 +87,8 @@ class LegislationName():
         self.legislationName = l_name
         self.legislationIndex = str (l_index)
 
-@app.route('/legistlationcategorised<catIndex>')
-def categorised_legislation_list(catIndex):
+@app.route('/legistlationlist/<catIndex>')
+def get_legislation_list(catIndex):
     host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
     port = 3306
     dbname = "classify-legislation"
@@ -95,7 +98,7 @@ def categorised_legislation_list(catIndex):
 
     catIndex = catIndex.strip("<>")
 
-    sql = 'select l.legislationIndex, l.legislationName from legislation l where categoryIndex = "RI"'
+    sql = '''select l.legislationIndex, l.legislationName from legislation l where categoryIndex = ''' + str(catIndex)
 
     # cursor.execute("INSERT INTO table VALUES (%s, %s, %s)", (var1, var2, var3))
 
@@ -105,22 +108,28 @@ def categorised_legislation_list(catIndex):
 
     print(sql_result)
 
-    data = []
+    leg_list = []
     for index, row in sql_result.iterrows():
+        leg = {"legislationName": "", "legislationIndex": ""}
+
+        # L = LegislationName(legName, legIndex)
+        # JSONData = json.dumps(L, indent=4, cls=serializer)
+
         legName = row['legislationName']
         legIndex = row['legislationIndex']
-        L = LegislationName(legName, legIndex)
-        JSONData = json.dumps(L, indent=4, cls=serializer)
-        data.append(JSONData)
+
+        leg["legislationName"] = legName
+        leg["legislationIndex"] = legIndex
+
+        leg_list.append(leg)
+
+    # return_json_answer =  json.dumps(data)
+
+    return jsonify(leg_list)
 
 
-    return_json_answer =  json.dumps(data)
-
-    return return_json_answer
-
-
-@app.route('/simplify_piece<pieceIndex>')
-def simplify_piece(pieceIndex):
+@app.route('/simplifiedpiece/<pieceIndex>')
+def get_simplified_piece(pieceIndex):
 
     host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
     port = 3306
@@ -131,7 +140,7 @@ def simplify_piece(pieceIndex):
 
     sql = '''select pieceTitle, content
                from piece 
-               where pieceIndex= 5; '''
+               where pieceIndex= ''' + str(pieceIndex)
 
     sql_result = pd.read_sql(sql, con=conn)
 
@@ -147,9 +156,8 @@ def simplify_piece(pieceIndex):
     return return_json_answer
 
 
-@app.route('/simplify_leg<legIndex>')
-
-def simplify_legislation(legIndex):
+@app.route('/simplifiedleg/<legIndex>')
+def get_simplified_legislation(legIndex):
     host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
     port = 3306
     dbname = "classify-legislation"
@@ -159,7 +167,7 @@ def simplify_legislation(legIndex):
 
     sql = '''select p.pieceTitle, p.content
                from piece 
-               where legistationIndex = 5; '''
+               where legistationIndex = ''' + str(legIndex)
 
     sql_result = pd.read_sql(sql, con=conn)
 
@@ -177,10 +185,9 @@ def simplify_legislation(legIndex):
     return return_json_answer
 
 
-
 @app.route('/search/<query>')
 # , methods=['GET', 'POST']
-def result(query):
+def get_answers(query):
 
     return_json_answer = json.dumps("No place information is given")
     # query = "what are my human rights?"

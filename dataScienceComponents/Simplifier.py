@@ -1,4 +1,5 @@
-import spacy
+import en_core_web_sm
+# import spacy
 import nltk
 import re
 from nltk.tokenize import word_tokenize
@@ -80,7 +81,7 @@ class Simplifier:
     # basic Named Entity Recognition code
     def NER_identifier(self, text):
         entity_list = []
-        nlp_ner = spacy.en_core_web_sm.load()
+        nlp_ner = en_core_web_sm.load()
         doc = nlp_ner(text)
         for x in doc.ents:
             entity_tokens = self.tokenizer.tokenize(x.text)
