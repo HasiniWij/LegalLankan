@@ -22,5 +22,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+/.idea
+/dataScienceComponents/__pycache__
+/dataScienceComponents/classification/__pycache__
+dataScienceComponents/extraction/__pycache__
 
 #/venv/lib/python3.8/site-packages/torch/lib/libtorch_cpu.dylib
