@@ -5,12 +5,15 @@ from flask import Flask
 from json import JSONEncoder
 
 from flask import jsonify
+from flask_cors import CORS
 
 from dataScienceComponents.Simplifier import Simplifier
 from dataScienceComponents.classification.Classifier import Classifier
 from dataScienceComponents.extraction.Extractor import Extractor
 
 app = Flask(__name__)
+
+CORS(app) #comment this on deployment
 
 
 class QueryAnswer():

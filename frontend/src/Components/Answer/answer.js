@@ -42,7 +42,7 @@ export class Answer extends Component {
              Results:
              {
                  posts.length ?
-                 posts.map(post => <div key={post.id}>{post.title} {post.id}</div>) :
+                 posts.map(post => <div key={post.pieceTitle}>{post.content} {post.pieceTitle}<br/><br/></div>) :
                  null
              }
              { errormsg? <div>{errormsg}</div> : null}
