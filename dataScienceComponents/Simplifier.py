@@ -58,7 +58,8 @@ class Simplifier:
     # basic Named Entity Recognition code
     def NER_identifier(self, text):
         entity_list = []
-        nlp_ner = en_core_web_sm.load()
+        nlp_ner = spacy.load("C:\\Users\\THOSHIBA\\Documents\\SDGP\\en_core_web_sm-1.2.0.tar.gz")
+        # nlp_ner = en_core_web_sm.load()
         doc = nlp_ner(text)
         for x in doc.ents:
             entity_tokens = self.tokenizer.tokenize(x.text)
@@ -72,6 +73,7 @@ class Simplifier:
 
         list_candidates_bert = []
         names_enitites = self.NER_identifier(input_text)
+
         for word, pred in zip(input_text.split(), list_cwi_predictions):
 
             lowercase_word = word.lower()
@@ -120,7 +122,7 @@ class Simplifier:
                             if ps.stem(replacement) == ps.stem(word) or (not replacement.isalpha()):
                                 replacement = word
                             item = item.replace(word, replacement)
-                lexically_simplified_piece.append(item)
+            lexically_simplified_piece.append(item)
 
         return lexically_simplified_piece
 
@@ -132,11 +134,12 @@ class Simplifier:
                 return True
         return False
 
-    def get_syntactically_simplified_text(self, input_piece):
+    def get_syntactically_simplified_text(self, input_list):
+        input_piece=input_list[1]
         # if the 2 sentences broken from the conjunction form complete sentences, the splitting is successful
         text = re.sub(r"([.,?()\[\]])", "", input_piece)
         count = 0
-        broken_sentences = []
+        broken_sentences = input_list
         if (len(text.split()) > 25) and any(conjunction in text for conjunction in self.conjunction_list):
 
             for word in self.tokenized(text):
@@ -146,7 +149,7 @@ class Simplifier:
                     print("sentences", sentences)
                     if self.confirm_syntactic_simplification(sentences[0]) and \
                             self.confirm_syntactic_simplification(sentences[1]):
-                        broken_sentences = [sentences[0], sentences[1]]
+                        broken_sentences = [input_piece[0],sentences[0], sentences[1]]
                         break
                 count += 1
 
