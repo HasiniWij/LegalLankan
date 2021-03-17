@@ -1,5 +1,4 @@
 import en_core_web_sm
-# import spacy
 import nltk
 import re
 from nltk.tokenize import word_tokenize
@@ -11,63 +10,6 @@ from pycorenlp import *
 
 nlp = StanfordCoreNLP("https://corenlp.run/")
 
-
-# the word is turned to lower case and characters other than letters are removed
-def cleaned_word(word):
-    # Remove links
-    # word = re.sub(r'((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])
-    # *', '', word, flags=re.MULTILINE)
-    # word = re.sub('[\W]', ' ', word)
-    word = re.sub('[^a-zA-Z]', ' ', word)
-    return word.lower().strip()
-
-
-# Complex Word Identification
-def get_list_cwi_predictions(input_text):
-    list_cwi_predictions = []
-    list_of_words = word_tokenize(input_text)
-    for word in list_of_words:
-        word = cleaned_word(word)
-        if zipf_frequency(word, 'en') < 4:
-            list_cwi_predictions.append(True)
-        else:
-            list_cwi_predictions.append(False)
-    return list_cwi_predictions
-
-
-def remove_punctuation(input_text):
-    x = re.sub("[^-9A-Za-z ]", "", input_text)
-    return x
-
-
-def confirm_syntactic_simplification(text):
-    sub_sub_trees = []
-    parser = nlp.annotate(text, properties={"annotators": "parse", "outputFormat": "json"})
-    sent_tree = nltk.tree.ParentedTree.fromstring(parser["sentences"][0]["parse"])
-    sent_tree.pretty_print()
-    sub_trees = list(sent_tree.subtrees())
-
-    if sub_trees[1].label() == "S":
-        for sub_sub_tree in sub_trees[1]:
-            sub_sub_trees.append(sub_sub_tree.label())
-
-        if ("VP" and "NP") in sub_sub_trees:
-            return True
-    return False
-
-
-def tokenized(sentence):
-    nltk_tokens = nltk.word_tokenize(sentence)
-    return nltk_tokens
-
-
-def sentences_list(token_list1, token_list2):
-    str1 = " "
-    str2 = " "
-    broken_list = [str1.join(token_list1), str2.join(token_list2)]
-    return broken_list
-
-
 class Simplifier:
 
     def __init__(self):
@@ -77,6 +19,41 @@ class Simplifier:
         self.model = BertForMaskedLM.from_pretrained(bert_model)
         self.model.eval()
         self.conjunction_list = ["for", "and"]
+
+    def remove_punctuation(self, input_text):
+        x = re.sub("[^-9A-Za-z ]", "", input_text)
+        return x
+
+    # the word is turned to lower case and characters other than letters are removed
+    def cleaned_word(self, word):
+        # Remove links
+        # word = re.sub(r'((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])
+        # *', '', word, flags=re.MULTILINE)
+        # word = re.sub('[\W]', ' ', word)
+        word = re.sub('[^a-zA-Z]', ' ', word)
+        return word.lower().strip()
+
+    def tokenized(self, sentence):
+        nltk_tokens = nltk.word_tokenize(sentence)
+        return nltk_tokens
+
+    def sentences_list(self, token_list1, token_list2):
+        str1 = " "
+        str2 = " "
+        broken_list = [str1.join(token_list1), str2.join(token_list2)]
+        return broken_list
+
+    # Complex Word Identification
+    def get_list_cwi_predictions(self, input_text):
+        list_cwi_predictions = []
+        list_of_words = word_tokenize(input_text)
+        for word in list_of_words:
+            word = self.cleaned_word(word)
+            if zipf_frequency(word, 'en') < 4:
+                list_cwi_predictions.append(True)
+            else:
+                list_cwi_predictions.append(False)
+        return list_cwi_predictions
 
     # basic Named Entity Recognition code
     def NER_identifier(self, text):
@@ -88,6 +65,7 @@ class Simplifier:
             for word in entity_tokens:
                 entity_list.append(word)
         return entity_list
+
 
     # BERT model to predict candidates for identified complex words
     def get_bert_candidates(self, input_text, list_cwi_predictions, numb_predictions_displayed=2):
@@ -118,29 +96,33 @@ class Simplifier:
 
         return list_candidates_bert
 
-    def get_lexically_simplified_text(self, input_piece):
+    def get_lexically_simplified_text(self, input_list):
 
-        input_no_punctuation = remove_punctuation(input_piece)
-        prediction_list = get_list_cwi_predictions(input_no_punctuation)
+        lexically_simplified_piece = []
 
-        ps = LancasterStemmer()
+        for item in input_list:
+            input_no_punctuation = self.remove_punctuation(item)
+            prediction_list = self.get_list_cwi_predictions(input_no_punctuation)
 
-        candidates = self.get_bert_candidates(input_no_punctuation, prediction_list)
+            ps = LancasterStemmer()
 
-        for word, prediction in zip(input_no_punctuation.split(), prediction_list):
-            if prediction:
-                for candidate in candidates:
-                    if candidate[0] == word:
-                        replacement = ""
-                        if zipf_frequency(candidate[1][0], 'en') > zipf_frequency(candidate[1][1], 'en'):
-                            replacement = candidate[1][0]
-                        else:
-                            replacement = candidate[1][1]
-                        if ps.stem(replacement) == ps.stem(word) or (not replacement.isalpha()):
-                            replacement = word
-                        input_piece = input_piece.replace(word, replacement)
+            candidates = self.get_bert_candidates(input_no_punctuation, prediction_list)
 
-        return input_piece
+            for word, prediction in zip(input_no_punctuation.split(), prediction_list):
+                if prediction:
+                    for candidate in candidates:
+                        if candidate[0] == word:
+                            replacement = ""
+                            if zipf_frequency(candidate[1][0], 'en') > zipf_frequency(candidate[1][1], 'en'):
+                                replacement = candidate[1][0]
+                            else:
+                                replacement = candidate[1][1]
+                            if ps.stem(replacement) == ps.stem(word) or (not replacement.isalpha()):
+                                replacement = word
+                            item = item.replace(word, replacement)
+                lexically_simplified_piece.append(item)
+
+        return lexically_simplified_piece
 
     # checking whether a sentence is complete using a parse tree
     # checking whether a sentence has a conjunction
@@ -157,15 +139,30 @@ class Simplifier:
         broken_sentences = []
         if (len(text.split()) > 25) and any(conjunction in text for conjunction in self.conjunction_list):
 
-            for word in tokenized(text):
+            for word in self.tokenized(text):
                 if self.word_is_a_conjunction(word):
-                    token_list = tokenized(text)
-                    sentences = sentences_list(token_list[:count], token_list[count + 1:])
+                    token_list = self.tokenized(text)
+                    sentences = self.sentences_list(token_list[:count], token_list[count + 1:])
                     print("sentences", sentences)
-                    if confirm_syntactic_simplification(sentences[0]) and \
-                            confirm_syntactic_simplification(sentences[1]):
+                    if self.confirm_syntactic_simplification(sentences[0]) and \
+                            self.confirm_syntactic_simplification(sentences[1]):
                         broken_sentences = [sentences[0], sentences[1]]
                         break
                 count += 1
 
         return broken_sentences
+
+    def confirm_syntactic_simplification(self, text):
+        sub_sub_trees = []
+        parser = nlp.annotate(text, properties={"annotators": "parse", "outputFormat": "json"})
+        sent_tree = nltk.tree.ParentedTree.fromstring(parser["sentences"][0]["parse"])
+        sent_tree.pretty_print()
+        sub_trees = list(sent_tree.subtrees())
+
+        if sub_trees[1].label() == "S":
+            for sub_sub_tree in sub_trees[1]:
+                sub_sub_trees.append(sub_sub_tree.label())
+
+            if ("VP" and "NP") in sub_sub_trees:
+                return True
+        return False

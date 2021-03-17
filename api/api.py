@@ -147,8 +147,10 @@ def get_simplified_piece(pieceIndex):
     p_title = sql_result["pieceTitle"][0]
     p_con = sql_result["content"][0]
 
+    piece = [p_title, p_con]
+
     S = Simplifier()
-    lex_simplified = S.get_lexically_simplified_text(p_title + p_con)
+    lex_simplified = S.get_lexically_simplified_text(piece)
     simplified = S.get_syntactically_simplified_text(lex_simplified)
 
     return_json_answer = json.dumps(simplified)
