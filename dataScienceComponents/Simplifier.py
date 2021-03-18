@@ -139,6 +139,7 @@ class Simplifier:
         all_sentences = []
         for i in range(0, len(input_list),2):
 
+            # input_piece is a string
             broken_sentences = input_list[i],input_list[i+1]
             input_piece=input_list[i+1]
 
@@ -153,13 +154,14 @@ class Simplifier:
                     if self.word_is_a_conjunction(word):
                         token_list = self.tokenized(text)
                         sentences = self.sentences_list(token_list[:count], token_list[count + 1:])
+                        print("Sentces",sentences)
+                        print(type(sentences))
                         if self.confirm_syntactic_simplification(sentences[0]) and \
                                 self.confirm_syntactic_simplification(sentences[1]):
                             broken_sentences = [input_list[i],sentences[0], sentences[1]]
-                            all_sentences.append(broken_sentences)
                             break
                     count += 1
-
+            all_sentences.append(broken_sentences)
         return all_sentences
 
     def confirm_syntactic_simplification(self, text):

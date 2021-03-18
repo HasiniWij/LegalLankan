@@ -127,14 +127,17 @@ def get_simplified_legislation(legIndex):
         content = row['content']
         data.append(pieceTitle)
         data.append(content)
+
     S = Simplifier()
     lex_simplified = S.get_lexically_simplified_text(data)
     simplified = S.get_syntactically_simplified_text(lex_simplified)
-
-
-    return_json_answer = json.dumps(simplified)
-
-    return return_json_answer
+    data=[]
+    for i in range(0, len(simplified), 2):
+        answer = {"pieceTitle": "", "content": ""}
+        answer["pieceTitle"] = simplified[i]
+        answer["content"] = simplified[i+1]
+        data.append(answer)
+    return jsonify(data)
 
 
 @app.route('/search/<query>')
