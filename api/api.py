@@ -1,7 +1,7 @@
 import pandas as pd
 import pymysql
 import json
-from flask import Flask
+from flask import Flask, request
 from flask import jsonify
 from flask_cors import CORS  # comment this on deployment
 from dataScienceComponents.Simplifier import Simplifier
@@ -11,7 +11,13 @@ from dataScienceComponents.extraction.Extractor import Extractor
 app = Flask(__name__)
 
 CORS(app)  # comment this on deployment
-
+def database(database_name="classify-legislation"):
+    host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
+    port = 3306
+    dbname =database_name
+    user = "admin"
+    password = "legalLankan2020"
+    conn = pymysql.connect(host=host, user=user, port=port, passwd=password, db=dbname)
 
 @app.route('/legislation/<legIndex>')
 def get_legislation(legIndex):
@@ -99,7 +105,7 @@ def get_simplified_piece(pieceIndex):
     print(simplified)
     answer["pieceTitle"] = simplified[0][0]
     if len(simplified[0]) == 3:
-        answer["content"] = simplified[0][1]+". "+simplified[0][2]
+        answer["content"] = simplified[0][1] + ". " + simplified[0][2]
     else:
         answer["content"] = simplified[0][1]
 
@@ -131,11 +137,11 @@ def get_simplified_legislation(legIndex):
     S = Simplifier()
     lex_simplified = S.get_lexically_simplified_text(data)
     simplified = S.get_syntactically_simplified_text(lex_simplified)
-    data=[]
+    data = []
     for i in range(0, len(simplified), 2):
         answer = {"pieceTitle": "", "content": ""}
         answer["pieceTitle"] = simplified[i]
-        answer["content"] = simplified[i+1]
+        answer["content"] = simplified[i + 1]
         data.append(answer)
     return jsonify(data)
 
@@ -150,7 +156,6 @@ def get_answers(query):
 
         E = Extractor(queryCategory)
         piece_indexes = E.get_ranked_documents(C.get_query_keywords(query))
-
 
         host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
         port = 3306
@@ -186,6 +191,36 @@ def get_answers(query):
 
     return jsonify(answers)
 
+
+@app.route('/logIn')
+def verify_admin():
+    if request.method == 'POST':
+        userName=request.form['userName']
+        adminPassword=request.form['password']
+        conn=database("admin")
+        sql = '''select adminPassword from account_info where adminUsername=''' + str(userName)
+        sql_result = pd.read_sql(sql, con=conn)
+
+        if sql_result.empty:
+            result = "Invalid username"
+
+        elif sql_result["adminPassword"][0] == adminPassword:
+            result = "Signing in..."
+        else:
+            result = "Invalid details"
+
+        return jsonify(result)
+
+# @app.route('/uploadLeg/<userName>/<adminPassword>')
+# def verify_admin(userName, adminPassword):
+# @app.route('/login',methods = ['POST', 'GET'])
+# def login():
+#    if request.method == 'POST':
+#       user = request.form['nm']
+#       return redirect(url_for('success',name = user))
+#    else:
+#       user = request.args.get('nm')
+#       return redirect(url_for('success',name = user))
 
 if __name__ == '__main__':
     app.run(debug=True)
