@@ -1,4 +1,5 @@
 import en_core_web_sm
+import spacy
 import nltk
 import re
 from nltk.tokenize import word_tokenize
@@ -58,7 +59,7 @@ class Simplifier:
     # basic Named Entity Recognition code
     def NER_identifier(self, text):
         entity_list = []
-        nlp_ner = spacy.load("C:\\Users\\THOSHIBA\\Documents\\SDGP\\en_core_web_sm-1.2.0.tar.gz")
+        nlp_ner = en_core_web_sm.load()
         # nlp_ner = en_core_web_sm.load()
         doc = nlp_ner(text)
         for x in doc.ents:
@@ -135,31 +136,36 @@ class Simplifier:
         return False
 
     def get_syntactically_simplified_text(self, input_list):
-        input_piece=input_list[1]
-        # if the 2 sentences broken from the conjunction form complete sentences, the splitting is successful
-        text = re.sub(r"([.,?()\[\]])", "", input_piece)
-        count = 0
-        broken_sentences = input_list
-        if (len(text.split()) > 25) and any(conjunction in text for conjunction in self.conjunction_list):
+        all_sentences = []
+        for i in range(0, len(input_list),2):
 
-            for word in self.tokenized(text):
-                if self.word_is_a_conjunction(word):
-                    token_list = self.tokenized(text)
-                    sentences = self.sentences_list(token_list[:count], token_list[count + 1:])
-                    print("sentences", sentences)
-                    if self.confirm_syntactic_simplification(sentences[0]) and \
-                            self.confirm_syntactic_simplification(sentences[1]):
-                        broken_sentences = [input_piece[0],sentences[0], sentences[1]]
-                        break
-                count += 1
+            broken_sentences = input_list[i],input_list[i+1]
+            input_piece=input_list[i+1]
 
-        return broken_sentences
+            # if the 2 sentences broken from the conjunction form complete sentences, the splitting is successful
+            text = re.sub(r"([.,?()\[\]])", "", input_piece)
+            count = 0
+
+
+            if (len(text.split()) > 25) and any(conjunction in text for conjunction in self.conjunction_list):
+
+                for word in self.tokenized(text):
+                    if self.word_is_a_conjunction(word):
+                        token_list = self.tokenized(text)
+                        sentences = self.sentences_list(token_list[:count], token_list[count + 1:])
+                        if self.confirm_syntactic_simplification(sentences[0]) and \
+                                self.confirm_syntactic_simplification(sentences[1]):
+                            broken_sentences = [input_list[i],sentences[0], sentences[1]]
+                            all_sentences.append(broken_sentences)
+                            break
+                    count += 1
+
+        return all_sentences
 
     def confirm_syntactic_simplification(self, text):
         sub_sub_trees = []
         parser = nlp.annotate(text, properties={"annotators": "parse", "outputFormat": "json"})
         sent_tree = nltk.tree.ParentedTree.fromstring(parser["sentences"][0]["parse"])
-        sent_tree.pretty_print()
         sub_trees = list(sent_tree.subtrees())
 
         if sub_trees[1].label() == "S":
