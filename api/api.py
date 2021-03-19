@@ -1,9 +1,10 @@
 import pandas as pd
 import pymysql
 import json
-from flask import Flask, request
+from flask import Flask, request, url_for, redirect
 from flask import jsonify
 from flask_cors import CORS  # comment this on deployment
+
 from dataScienceComponents.Simplifier import Simplifier
 from dataScienceComponents.classification.Classifier import Classifier
 from dataScienceComponents.extraction.Extractor import Extractor
@@ -11,22 +12,21 @@ from dataScienceComponents.extraction.Extractor import Extractor
 app = Flask(__name__)
 
 CORS(app)  # comment this on deployment
+
+
 def database(database_name="classify-legislation"):
     host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
     port = 3306
-    dbname =database_name
+    dbname = database_name
     user = "admin"
     password = "legalLankan2020"
     conn = pymysql.connect(host=host, user=user, port=port, passwd=password, db=dbname)
+    return conn
+
 
 @app.route('/legislation/<legIndex>')
 def get_legislation(legIndex):
-    host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
-    port = 3306
-    dbname = "classify-legislation"
-    user = "admin"
-    password = "legalLankan2020"
-    conn = pymysql.connect(host=host, user=user, port=port, passwd=password, db=dbname)
+    conn = database()
 
     sql = '''select pieceTitle, content
                    from piece where legislationIndex = ''' + str(legIndex)
@@ -48,25 +48,15 @@ def get_legislation(legIndex):
 
 @app.route('/legistlationlist/<catIndex>')
 def get_legislation_list(catIndex):
-    host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
-    port = 3306
-    dbname = "classify-legislation"
-    user = "admin"
-    password = "legalLankan2020"
-    conn = pymysql.connect(host=host, user=user, port=port, passwd=password, db=dbname)
-
+    conn = database()
     catIndex = catIndex.strip("<>")
-
-    sql = '''select l.legislationIndex, l.legislationName from legislation l where categoryIndex = ''' + str(catIndex)
-
+    sql = '''select l.legislationIndex, l.legislationName from legislation l where categoryIndex = ''' + '"' + str(
+        catIndex) + '"'
     sql_result = pd.read_sql(sql, con=conn)
-
-    print(sql_result)
 
     leg_list = []
     for index, row in sql_result.iterrows():
         leg = {"legislationName": "", "legislationIndex": ""}
-
         legName = row['legislationName']
         legIndex = row['legislationIndex']
 
@@ -74,18 +64,12 @@ def get_legislation_list(catIndex):
         leg["legislationIndex"] = legIndex
 
         leg_list.append(leg)
-
     return jsonify(leg_list)
 
 
 @app.route('/simplifiedpiece/<pieceIndex>')
 def get_simplified_piece(pieceIndex):
-    host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
-    port = 3306
-    dbname = "classify-legislation"
-    user = "admin"
-    password = "legalLankan2020"
-    conn = pymysql.connect(host=host, user=user, port=port, passwd=password, db=dbname)
+    conn = database()
 
     sql = '''select pieceTitle, content
                from piece 
@@ -114,12 +98,7 @@ def get_simplified_piece(pieceIndex):
 
 @app.route('/simplifiedleg/<legIndex>')
 def get_simplified_legislation(legIndex):
-    host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
-    port = 3306
-    dbname = "classify-legislation"
-    user = "admin"
-    password = "legalLankan2020"
-    conn = pymysql.connect(host=host, user=user, port=port, passwd=password, db=dbname)
+    conn = database()
 
     sql = '''select pieceTitle, content
                from piece
@@ -148,8 +127,6 @@ def get_simplified_legislation(legIndex):
 
 @app.route('/search/<query>')
 def get_answers(query):
-    return_json_answer = json.dumps("No place information is given")
-    # query = "what are my human rights?"
     if query != None:
         C = Classifier()
         queryCategory = C.get_category_of_text(query)
@@ -157,15 +134,9 @@ def get_answers(query):
         E = Extractor(queryCategory)
         piece_indexes = E.get_ranked_documents(C.get_query_keywords(query))
 
-        host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
-        port = 3306
-        dbname = "classify-legislation"
-        user = "admin"
-        password = "legalLankan2020"
-        conn = pymysql.connect(host=host, user=user, port=port, passwd=password, db=dbname)
+        conn = database()
 
         answers = []
-
         for element in piece_indexes:
             temp = {}
             sql = '''select p.pieceIndex, p.pieceTitle, p.content, l.legislationIndex, l.legislationName
@@ -192,13 +163,13 @@ def get_answers(query):
     return jsonify(answers)
 
 
-@app.route('/logIn')
-def verify_admin():
+@app.route('/login', methods=['POST', 'GET'])
+def login():
     if request.method == 'POST':
-        userName=request.form['userName']
-        adminPassword=request.form['password']
-        conn=database("admin")
-        sql = '''select adminPassword from account_info where adminUsername=''' + str(userName)
+        userName = request.form['userName']
+        adminPassword = request.form['password']
+        conn = database("admins")
+        sql = '''select adminPassword from account_info where adminUsername=''' + "'" + str(userName) + "'"
         sql_result = pd.read_sql(sql, con=conn)
 
         if sql_result.empty:
@@ -211,16 +182,6 @@ def verify_admin():
 
         return jsonify(result)
 
-# @app.route('/uploadLeg/<userName>/<adminPassword>')
-# def verify_admin(userName, adminPassword):
-# @app.route('/login',methods = ['POST', 'GET'])
-# def login():
-#    if request.method == 'POST':
-#       user = request.form['nm']
-#       return redirect(url_for('success',name = user))
-#    else:
-#       user = request.args.get('nm')
-#       return redirect(url_for('success',name = user))
 
 if __name__ == '__main__':
     app.run(debug=True)
