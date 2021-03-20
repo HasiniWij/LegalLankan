@@ -1,37 +1,23 @@
 import pandas as pd
-import pymysql
-import json
-from flask import Flask, request, url_for, redirect
+from flask import Flask, request
 from flask import jsonify
-from flask_cors import CORS  # comment this on deployment
+from flask_cors import CORS
 
+from backend.DatabaseConnection import DatabaseConnection
 from dataScienceComponents.Simplifier import Simplifier
 from dataScienceComponents.classification.Classifier import Classifier
 from dataScienceComponents.extraction.Extractor import Extractor
 
 app = Flask(__name__)
-
 CORS(app)  # comment this on deployment
-
-
-def database(database_name="classify-legislation"):
-    host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
-    port = 3306
-    dbname = database_name
-    user = "admin"
-    password = "legalLankan2020"
-    conn = pymysql.connect(host=host, user=user, port=port, passwd=password, db=dbname)
-    return conn
 
 
 @app.route('/legislation/<legIndex>')
 def get_legislation(legIndex):
-    conn = database()
+    sql = '''select pieceTitle, content from piece where legislationIndex = ''' + str(legIndex)
 
-    sql = '''select pieceTitle, content
-                   from piece where legislationIndex = ''' + str(legIndex)
-
-    sql_result = pd.read_sql(sql, con=conn)
+    db = DatabaseConnection("classify-legislation")
+    sql_result = db.selectFromDB(sql)
 
     legislation = []
 
@@ -48,12 +34,11 @@ def get_legislation(legIndex):
 
 @app.route('/legistlationlist/<catIndex>')
 def get_legislation_list(catIndex):
-    conn = database()
     catIndex = catIndex.strip("<>")
     sql = '''select l.legislationIndex, l.legislationName from legislation l where categoryIndex = ''' + '"' + str(
         catIndex) + '"'
-    sql_result = pd.read_sql(sql, con=conn)
-
+    db = DatabaseConnection("classify-legislation")
+    sql_result = db.selectFromDB(sql)
     leg_list = []
     for index, row in sql_result.iterrows():
         leg = {"legislationName": "", "legislationIndex": ""}
@@ -69,13 +54,10 @@ def get_legislation_list(catIndex):
 
 @app.route('/simplifiedpiece/<pieceIndex>')
 def get_simplified_piece(pieceIndex):
-    conn = database()
+    sql = '''select pieceTitle, content from piece where pieceIndex= ''' + str(pieceIndex)
 
-    sql = '''select pieceTitle, content
-               from piece 
-               where pieceIndex= ''' + str(pieceIndex)
-
-    sql_result = pd.read_sql(sql, con=conn)
+    db = DatabaseConnection("classify-legislation")
+    sql_result = db.selectFromDB(sql)
 
     p_title = sql_result["pieceTitle"][0]
     p_con = sql_result["content"][0]
@@ -98,13 +80,12 @@ def get_simplified_piece(pieceIndex):
 
 @app.route('/simplifiedleg/<legIndex>')
 def get_simplified_legislation(legIndex):
-    conn = database()
-
     sql = '''select pieceTitle, content
                from piece
                where legislationIndex = ''' + str(legIndex)
 
-    sql_result = pd.read_sql(sql, con=conn)
+    db = DatabaseConnection("classify-legislation")
+    sql_result = db.selectFromDB(sql)
 
     data = []
     for index, row in sql_result.iterrows():
@@ -118,9 +99,7 @@ def get_simplified_legislation(legIndex):
     simplified = S.get_syntactically_simplified_text(lex_simplified)
     data = []
     for i in range(0, len(simplified), 2):
-        answer = {"pieceTitle": "", "content": ""}
-        answer["pieceTitle"] = simplified[i]
-        answer["content"] = simplified[i + 1]
+        answer = {"pieceTitle": simplified[i], "content": simplified[i + 1]}
         data.append(answer)
     return jsonify(data)
 
@@ -129,21 +108,19 @@ def get_simplified_legislation(legIndex):
 def get_answers(query):
     if query != None:
         C = Classifier()
-        queryCategory = C.get_category_of_text(query)
+        query_category = C.get_category_of_text(query)
 
-        E = Extractor(queryCategory)
+        E = Extractor(query_category)
         piece_indexes = E.get_ranked_documents(C.get_query_keywords(query))
-
-        conn = database()
 
         answers = []
         for element in piece_indexes:
-            temp = {}
             sql = '''select p.pieceIndex, p.pieceTitle, p.content, l.legislationIndex, l.legislationName
                from piece p, legislation l
                where p.pieceIndex=''' + str(element) + " and l.legislationIndex=p.legislationIndex;"
 
-            sql_result = pd.read_sql(sql, con=conn)
+            db = DatabaseConnection("classify-legislation")
+            sql_result = db.selectFromDB(sql)
 
             answer = {"pieceTitle": "", "content": "", "legislationName": "", "legislationIndex": "", "pieceIndex": ""}
             p_title = sql_result["pieceTitle"][0]
@@ -166,21 +143,66 @@ def get_answers(query):
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        userName = request.form['userName']
-        adminPassword = request.form['password']
-        conn = database("admins")
-        sql = '''select adminPassword from account_info where adminUsername=''' + "'" + str(userName) + "'"
-        sql_result = pd.read_sql(sql, con=conn)
+        user_name = request.form['userName']
+        admin_password = request.form['password']
+
+        sql = '''select adminPassword from account_info where adminUsername=''' + "'" + str(user_name) + "'"
+        db = DatabaseConnection("admins")
+        sql_result = db.selectFromDB(sql)
 
         if sql_result.empty:
             result = "Invalid username"
 
-        elif sql_result["adminPassword"][0] == adminPassword:
+        elif sql_result["adminPassword"][0] == admin_password:
             result = "Signing in..."
         else:
             result = "Invalid details"
 
         return jsonify(result)
+
+
+@app.route('/uploadLeg')
+def uploadLegislation():
+    global piece_title
+    if request.method == 'POST':
+        db = DatabaseConnection("classify-legislation")
+        legislation = request.form['legislation']
+        legislation_name = request.form['legislation_name']
+
+        insert_leg_sql = "INSERT INTO legislation ( legislationName) VALUES (%s)"
+        val = (legislation_name)
+        db.insertToDB(insert_leg_sql, val)
+
+        splitter = DocumentSplitting()
+        list_dictionary_piece = splitter.getpieces(legislation)
+
+        sql = "select legislationIndex from legislation where legislationName=" + legislation_name
+        sql_result = db.selectFromDB(sql)
+        leg_index = sql_result["legislationName"][0]
+
+        categories = {}
+        # article1:CR,article2=CR,
+        for piece_dictionary in list_dictionary_piece:
+            C = Classifier()
+            piece_category = C.get_category_of_text(piece_title + piece_dictionary.get(piece_title))
+            categories[piece_title] = piece_category
+
+        same_category = len(list(set(list(categories.values())))) == 1
+
+        if same_category:
+            cat=categories[0].get(piece_title)
+            update_leg_category_sql = "UPDATE legislation SET categoryIndex = "+str(cat)+" WHERE legislationIndex =" +leg_index
+            db.updateDB(update_leg_category_sql)
+            for piece_dictionary in list_dictionary_piece:
+                sql = "INSERT INTO piece ( pieceTitle,content,legislationIndex) VALUES (%s, %s,%s)"
+                val = (piece_title, piece_dictionary.get(piece_title),leg_index)
+                db.insertToDB(sql, val)
+
+        else:
+            for piece_dictionary in list_dictionary_piece:
+                sql = "INSERT INTO pieceCategory ( pieceTitle,content,legislationIndex,categoryIndex) VALUES (%s, %s,%s,%s)"
+                val = (piece_title, piece_dictionary.get(piece_title), leg_index,categories.get(piece_title))
+                db.insertToDB(sql, val)
 
 
 if __name__ == '__main__':
