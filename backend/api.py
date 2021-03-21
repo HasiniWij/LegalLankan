@@ -107,7 +107,7 @@ def get_simplified_legislation(legIndex):
 @app.route('/search/<query>')
 def get_answers(query):
     if query != None:
-        C = Classifier()
+        C = Classifier("../ dataScienceComponents / classification / models / svm.pickle","../dataScienceComponents/classification/models/tfidf.pickle")
         query_category = C.get_category_of_text(query)
 
         E = Extractor(query_category)
@@ -161,48 +161,48 @@ def login():
         return jsonify(result)
 
 
-@app.route('/uploadLeg')
-def uploadLegislation():
-    global piece_title
-    if request.method == 'POST':
-        db = DatabaseConnection("classify-legislation")
-        legislation = request.form['legislation']
-        legislation_name = request.form['legislation_name']
-
-        insert_leg_sql = "INSERT INTO legislation ( legislationName) VALUES (%s)"
-        val = (legislation_name)
-        db.insertToDB(insert_leg_sql, val)
-
-        splitter = DocumentSplitting()
-        list_dictionary_piece = splitter.getpieces(legislation)
-
-        sql = "select legislationIndex from legislation where legislationName=" + legislation_name
-        sql_result = db.selectFromDB(sql)
-        leg_index = sql_result["legislationName"][0]
-
-        categories = {}
-        # article1:CR,article2=CR,
-        for piece_dictionary in list_dictionary_piece:
-            C = Classifier()
-            piece_category = C.get_category_of_text(piece_title + piece_dictionary.get(piece_title))
-            categories[piece_title] = piece_category
-
-        same_category = len(list(set(list(categories.values())))) == 1
-
-        if same_category:
-            cat=categories[0].get(piece_title)
-            update_leg_category_sql = "UPDATE legislation SET categoryIndex = "+str(cat)+" WHERE legislationIndex =" +leg_index
-            db.updateDB(update_leg_category_sql)
-            for piece_dictionary in list_dictionary_piece:
-                sql = "INSERT INTO piece ( pieceTitle,content,legislationIndex) VALUES (%s, %s,%s)"
-                val = (piece_title, piece_dictionary.get(piece_title),leg_index)
-                db.insertToDB(sql, val)
-
-        else:
-            for piece_dictionary in list_dictionary_piece:
-                sql = "INSERT INTO pieceCategory ( pieceTitle,content,legislationIndex,categoryIndex) VALUES (%s, %s,%s,%s)"
-                val = (piece_title, piece_dictionary.get(piece_title), leg_index,categories.get(piece_title))
-                db.insertToDB(sql, val)
+# @app.route('/uploadLeg')
+# def uploadLegislation():
+#     global piece_title
+#     if request.method == 'POST':
+#         db = DatabaseConnection("classify-legislation")
+#         legislation = request.form['legislation']
+#         legislation_name = request.form['legislation_name']
+#
+#         insert_leg_sql = "INSERT INTO legislation ( legislationName) VALUES (%s)"
+#         val = (legislation_name)
+#         db.insertToDB(insert_leg_sql, val)
+#
+#         splitter = DocumentSplitting()
+#         list_dictionary_piece = splitter.getpieces(legislation)
+#
+#         sql = "select legislationIndex from legislation where legislationName=" + legislation_name
+#         sql_result = db.selectFromDB(sql)
+#         leg_index = sql_result["legislationName"][0]
+#
+#         categories = {}
+#         # article1:CR,article2=CR,
+#         for piece_dictionary in list_dictionary_piece:
+#             C = Classifier()
+#             piece_category = C.get_category_of_text(piece_title + piece_dictionary.get(piece_title))
+#             categories[piece_title] = piece_category
+#
+#         same_category = len(list(set(list(categories.values())))) == 1
+#
+#         if same_category:
+#             cat=categories[0].get(piece_title)
+#             update_leg_category_sql = "UPDATE legislation SET categoryIndex = "+str(cat)+" WHERE legislationIndex =" +leg_index
+#             db.updateDB(update_leg_category_sql)
+#             for piece_dictionary in list_dictionary_piece:
+#                 sql = "INSERT INTO piece ( pieceTitle,content,legislationIndex) VALUES (%s, %s,%s)"
+#                 val = (piece_title, piece_dictionary.get(piece_title),leg_index)
+#                 db.insertToDB(sql, val)
+#
+#         else:
+#             for piece_dictionary in list_dictionary_piece:
+#                 sql = "INSERT INTO pieceCategory ( pieceTitle,content,legislationIndex,categoryIndex) VALUES (%s, %s,%s,%s)"
+#                 val = (piece_title, piece_dictionary.get(piece_title), leg_index,categories.get(piece_title))
+#                 db.insertToDB(sql, val)
 
 
 if __name__ == '__main__':

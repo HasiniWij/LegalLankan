@@ -5,13 +5,12 @@ from nltk.stem import WordNetLemmatizer
 
 class Classifier:
 
-    def __init__(self):
+    def __init__(self,svm_path,tfidf_path):
 
-
-        with open("../dataScienceComponents/classification/models/svm.pickle", 'rb') as data:
+        with open(svm_path, 'rb') as data:
             self.model = pickle.load(data)
 
-        with open("../dataScienceComponents/classification/models/tfidf.pickle", 'rb') as data:
+        with open(tfidf_path, 'rb') as data:
             self.tfidf = pickle.load(data)
 
         self.category_codes = {
