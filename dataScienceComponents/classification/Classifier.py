@@ -5,7 +5,7 @@ from nltk.stem import WordNetLemmatizer
 
 class Classifier:
 
-    def __init__(self,svm_path,tfidf_path):
+    def __init__(self, svm_path, tfidf_path):
 
         with open(svm_path, 'rb') as data:
             self.model = pickle.load(data)
