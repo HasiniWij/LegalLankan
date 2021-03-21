@@ -1,15 +1,14 @@
 import React, { Component} from 'react'; 
-import './answer.css';
 import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
 import axios from 'axios';
 
-export class Answer extends Component {
+export class MenuAnswer extends Component {
     constructor(props){
         super(props)
         this.state={
             posts:[],
             errormsg:"",
-            ur:"",
+            tit:"",
             urfull:"",
         }
     }
@@ -21,28 +20,24 @@ export class Answer extends Component {
         .then(response =>{
             console.log(response)
             this.setState({posts: response.data})
-            this.setState({ur:this.props.location.state.url+this.props.location.state.q}) //test
             this.setState({urfull:this.props.location.state.urlfull}) //test
+            this.setState({title:this.props.location.state.title})
         })
         .catch(error =>{
             console.log(error)
-            this.setState({ur:this.props.location.state.url+this.props.location.state.q}) //test
             this.setState({urfull:this.props.location.state.urlfull}) //test
             this.setState({errormsg:"Invalid Request"})
         })
     }
-
     render(){
-        const {posts, errormsg, ur,urfull} = this.state
+        const {posts, errormsg,urfull,title} = this.state
         return (
          <div>
-            {/*  test */}
-             { ur? <div>{ur}</div> : null} 
+             { title? <div>{title}</div> : null}
              { urfull? <div>{urfull}</div> : null} 
-             Results:
              {
                  posts.length ?
-                 posts.map(post => <div key={post.pieceTitle}>{post.content} {post.pieceTitle}<br/><br/></div>) :
+                 posts.map(post => <div key={post.id}>{post.title} </div>) :
                  null
              }
              { errormsg? <div>{errormsg}</div> : null}
@@ -50,4 +45,4 @@ export class Answer extends Component {
     )
     }
 }
-export default Answer
+export default MenuAnswer

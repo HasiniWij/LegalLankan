@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Route} from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 
 
-
 export const Search = () => {
     const [data,setData]=useState(null);
     function getData(val){
@@ -14,11 +13,11 @@ export const Search = () => {
         console.log(val.target.value)
     }
     const history = useHistory();
-    const handleHis=()=>{
-        //history.push({pathname:'/answer',state: { url: "http://localhost:5000/search<", q:data }});
-        //history.push({pathname:'/answer',state: { url: "https://jsonplaceholder.typicode.com/posts", q:data }});
-        history.push({pathname:'/answer',state: { urlfull: "http://localhost:5000/search/"+data }});
-    };
+    // const handleHis=()=>{
+    //     //history.push({pathname:'/answer',state: { url: "http://localhost:5000/search/", q:data }});
+    //     //history.push({pathname:'/answer',state: { url: "https://jsonplaceholder.typicode.com/posts", q:data }});
+    //     history.push({pathname:'/answer',state: { urlfull: "http://localhost:5000/search/"+data }});
+    // };
     return (
         <div class="container">
             <form>
@@ -27,7 +26,9 @@ export const Search = () => {
                     name="query" placeholder="Enter Keyword or Query.."></input>
                     <img class="searchimg" src={Searchimg} alt="Search"/>
                 </div>
-                 <div class="searchdiv"><button class="searchbutton"  onClick={handleHis}>Search</button></div>
+                 <div class="searchdiv"><button class="searchbutton" 
+                 onClick={() => {history.push({pathname:'/answer',state: { urlfull: "http://localhost:5000/search/"+data }}) }}>
+                 Search</button></div>
             </form>
         </div>
       );
