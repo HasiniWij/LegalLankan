@@ -4,6 +4,7 @@ from flask import jsonify
 from flask_cors import CORS
 
 from backend.DatabaseConnection import DatabaseConnection
+from backend.DocumentSplitter import DocumentSplitter
 from dataScienceComponents.Simplifier import Simplifier
 from dataScienceComponents.classification.Classifier import Classifier
 from dataScienceComponents.extraction.Extractor import Extractor
@@ -173,8 +174,13 @@ def login():
 #         val = (legislation_name)
 #         db.insertToDB(insert_leg_sql, val)
 #
+
 #         splitter = DocumentSplitting()
 #         list_dictionary_piece = splitter.getpieces(legislation)
+
+#         splitter = DocumentSplitter()
+#         list_dictionary_piece = splitter.split_core_legislation(legislation)
+
 #
 #         sql = "select legislationIndex from legislation where legislationName=" + legislation_name
 #         sql_result = db.selectFromDB(sql)
