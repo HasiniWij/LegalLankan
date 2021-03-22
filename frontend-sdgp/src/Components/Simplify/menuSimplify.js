@@ -2,26 +2,23 @@ import React, { Component} from 'react';
 import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
 import axios from 'axios';
 
-export class MenuAnswer extends Component {
+export class MenuSimplify extends Component {
     constructor(props){
         super(props)
         this.state={
             posts:[],
             errormsg:"",
-            tit:"",
             urfull:"",
+            index3:"",
         }
     }
     componentDidMount(){
-        //axios.get(this.props.location.state.url+this.props.location.state.q)
-        //axios.get(this.props.location.state.url)
-        //axios.get("https://jsonplaceholder.typicode.com/posts")
         axios.get(this.props.location.state.urlfull)
         .then(response =>{
             console.log(response)
             this.setState({posts: response.data})
             this.setState({urfull:this.props.location.state.urlfull}) //test
-            this.setState({title:this.props.location.state.title})
+            this.setState({index3:this.props.location.state.in});
         })
         .catch(error =>{
             console.log(error)
@@ -29,20 +26,23 @@ export class MenuAnswer extends Component {
             this.setState({errormsg:"Invalid Request"})
         })
     }
+
     render(){
-        const {posts, errormsg,urfull,title} = this.state
+        const {index3,posts,urfull} = this.state
         return (
          <div>
-             { title? <div>{title}</div> : null}
+             { index3? <div>{index3}</div> : null} 
              { urfull? <div>{urfull}</div> : null} 
              {
                  posts.length ?
-                 posts.map(post => <div key={post.id}>{post.title} </div>) :
+                 posts.map(post => <div key={post.pieceIndex}>
+                     {post.pieceTitle}
+                     {post.content}
+                     </div>) :
                  null
              }
-             { errormsg? <div>{errormsg}</div> : null}
         </div>
     )
     }
 }
-export default MenuAnswer
+export default MenuSimplify

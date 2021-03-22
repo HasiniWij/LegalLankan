@@ -1,7 +1,6 @@
 import React, { Component, useState} from 'react'; 
 import './search.css';
 import Searchimg from './search.png';
-import { Answer2 } from '../Answer/answer2';
 import { BrowserRouter as Router, Route} from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 

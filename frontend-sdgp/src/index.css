@@ -1,13 +1,11 @@
-body {
-  margin: 0;
-  font-family:"Bahnscrift", sans-serif;
-  background-color: rgb(88,88,88);
-
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body { 
+  margin: 0; 
+  font-family:"Bahnscrift", sans-serif; 
+  /* background-image: url("background.jpg"); */
+  background-position: center; 
+  background-repeat: no-repeat; 
+  background-size: cover; 
+  background-attachment: fixed;
 }
 
 .colorpalette{

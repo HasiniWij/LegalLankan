@@ -1,20 +1,19 @@
 import React, { Component} from 'react'; 
-import './answer.css';
 import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
 import axios from 'axios';
+import './answer.css';
 
-export class Answer extends Component {
+export class MenuAnswer extends Component {
     constructor(props){
         super(props)
         this.state={
             posts:[],
             errormsg:"",
-            ur:"",
+            tit:"",
             urfull:"",
         }
     }
     componentDidMount(){
-        ///legislation/<legIndex>
         //axios.get(this.props.location.state.url+this.props.location.state.q)
         //axios.get(this.props.location.state.url)
         //axios.get("https://jsonplaceholder.typicode.com/posts")
@@ -23,41 +22,29 @@ export class Answer extends Component {
             console.log(response)
             this.setState({posts: response.data})
             this.setState({urfull:this.props.location.state.urlfull}) //test
+            this.setState({title:this.props.location.state.title})
         })
         .catch(error =>{
             console.log(error)
-            this.setState({ur:this.props.location.state.url+this.props.location.state.q}) //test
             this.setState({urfull:this.props.location.state.urlfull}) //test
             this.setState({errormsg:"Invalid Request"})
         })
     }
-
     render(){
-        const {posts, errormsg, ur,urfull} = this.state
+        const {posts, errormsg,urfull,title} = this.state
         return (
          <div>
-            {/*  test */}
-             { ur? <div>{ur}</div> : null} 
+             { title? <div>{title}</div> : null}
              { urfull? <div>{urfull}</div> : null} 
-             Results:
              {
-                //  posts.length ?
-                //  posts.map(post => <div key={post.id}>
-                //      <Link to={{pathname:"/legislation",
-                //     state: { id:post.id }}}>{post.title}{post.id}
-                //     </Link>
-                //     </div>) :
-                //  null
-
                  posts.length ?
-                 posts.map(post => <div key={post.pieceIndex}>
-                     <Link to ={{pathname:"/piece", state:{index:post.pieceIndex,content:post.content,
-                    name:post.legislationName,title:post.pieceTitle}}}>
-                     {post.legislationName}
-                     {post.pieceIndex}
-                     {post.pieceTitle}
+                 posts.map(post => <div class="leglist" key={post.legislationIndex}>
+                     <Link to ={{pathname:"/legislation", 
+                     state:{urlfull: "http://localhost:5000/legislation/"+post.legislationIndex, in:post.legislationIndex}}}>
+                     {post.legislationName} 
+                     {post.legislationIndex}
                      </Link>
-                    </div>) :
+                     </div>) :
                  null
              }
              { errormsg? <div>{errormsg}</div> : null}
@@ -65,4 +52,4 @@ export class Answer extends Component {
     )
     }
 }
-export default Answer
+export default MenuAnswer
