@@ -1,0 +1,15 @@
+.menuCon{
+    width: 50%;
+    float: left;
+    color: white;
+}
+.searchcon{
+    color: white;
+    width: 50%;
+    float: left;
+}
+.simplify{
+    color: white;
+    float: left;
+    margin-left: 50px;
+}
