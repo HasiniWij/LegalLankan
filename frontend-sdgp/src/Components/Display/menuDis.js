@@ -1,16 +1,16 @@
 import React, { Component} from 'react'; 
 import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
 import axios from 'axios';
-import './simplify.css';
+import './display.css';
 
-export class SearchSimplify extends Component {
+export class MenuDis extends Component {
     constructor(props){
         super(props)
         this.state={
             posts:[],
             errormsg:"",
             urfull:"",
-            index3:"",
+            legno:"",
         }
     }
     componentDidMount(){
@@ -18,8 +18,8 @@ export class SearchSimplify extends Component {
         .then(response =>{
             console.log(response)
             this.setState({posts: response.data})
+            this.setState({legno:this.props.location.state.in})
             this.setState({urfull:this.props.location.state.urlfull}) //test
-            this.setState({index3:this.props.location.state.in});
         })
         .catch(error =>{
             console.log(error)
@@ -27,18 +27,25 @@ export class SearchSimplify extends Component {
             this.setState({errormsg:"Invalid Request"})
         })
     }
-
     render(){
-        const {index3,posts,urfull,errormsg} = this.state
+        const {urfull,posts,legno} = this.state
         return (
-         <div className="menusim">
-             { index3? <div>{index3}</div> : null} 
+        <div>
+         <div class="menuCon">
              { urfull? <div>{urfull}</div> : null} 
-             { errormsg? <div>{errormsg}</div> : null} 
-             <div>{posts.content}</div>
-             <div>{posts.pieceTitle}</div>
+             { legno? <div>{legno}</div> : null} 
+             <Link to ={{pathname:"/legislation/simplify", state:{urlfull:"http://localhost:5000/simplifiedleg/"+legno,in:legno}}}>Simplify</Link>
+            {
+                 posts.length ?
+                 posts.map(post => <div key={post.legislationIndex}>
+                     {post.pieceTitle} 
+                     {post.content}
+                     </div>) :
+                 null
+             }
+        </div>
         </div>
     )
     }
 }
-export default SearchSimplify
+export default MenuDis

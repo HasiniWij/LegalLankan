@@ -8,30 +8,32 @@ import pandas as pd
 
 class Extractor:
 
-    def __init__(self, common_path):
+    def __init__(self, common_path,category):
+        if category=="other":
+            print("other")
+        else:
+            # common_path = "../dataScienceComponents/extraction/models/"+category+"/"+category
 
-        # common_path = "../dataScienceComponents/extraction/models/"+category+"/"+category
-        common_path = common_path
-        # loading the similarity matrix which stores document similarity data of all documents within the category
-        matrix_path = common_path+"_matrix.pickle"
+            # loading the similarity matrix which stores document similarity data of all documents within the category
+            matrix_path = common_path+"_matrix.pickle"
 
-        with open(matrix_path, 'rb') as matrix:
-            self.category_matrix = pickle.load(matrix)
+            with open(matrix_path, 'rb') as matrix:
+                self.category_matrix = pickle.load(matrix)
 
-        # loading the dictionary of the category
-        dictionary_path = common_path+"_dic.pickle"
-        with open(dictionary_path, 'rb') as cat_dictionary:
-            self.dictionary = pickle.load(cat_dictionary)
+            # loading the dictionary of the category
+            dictionary_path = common_path+"_dic.pickle"
+            with open(dictionary_path, 'rb') as cat_dictionary:
+                self.dictionary = pickle.load(cat_dictionary)
 
-        # loading the tfidf model of the category
-        tfidf_path = common_path+"_tfdif.pickle"
-        with open(tfidf_path, 'rb') as tfidf_model:
-            self.tfidf = pickle.load(tfidf_model)
+            # loading the tfidf model of the category
+            tfidf_path = common_path+"_tfdif.pickle"
+            with open(tfidf_path, 'rb') as tfidf_model:
+                self.tfidf = pickle.load(tfidf_model)
 
-        # loading the piece index mapping with matrix index of the category
-        piece_index_mapping_path = common_path+"-pieceIndex-mapping.pickle"
-        with open(piece_index_mapping_path, 'rb') as mapping:
-            self.piece_index_mapping = pickle.load(mapping)
+            # loading the piece index mapping with matrix index of the category
+            piece_index_mapping_path = common_path+"-pieceIndex-mapping.pickle"
+            with open(piece_index_mapping_path, 'rb') as mapping:
+                self.piece_index_mapping = pickle.load(mapping)
 
     def get_ranked_documents(self,keywords):
         documents_with_a_rank = {}

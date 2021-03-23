@@ -1,11 +1,9 @@
-import pandas as pd
 from flask import Flask, request
 from flask import jsonify
 from flask_cors import CORS
 
 from backend.DatabaseConnection import DatabaseConnection
-from backend.DocumentSplitter import DocumentSplitter
-from dataScienceComponents.Simplifier import Simplifier
+from dataScienceComponents.simplification.Simplifier import Simplifier
 from dataScienceComponents.classification.Classifier import Classifier
 from dataScienceComponents.extraction.Extractor import Extractor
 
@@ -15,7 +13,7 @@ CORS(app)  # comment this on deployment
 
 @app.route('/legislation/<legIndex>')
 def get_legislation(legIndex):
-    sql = '''select pieceTitle, content from piece where legislationIndex = ''' + str(legIndex)
+    sql = '''select pieceIndex, pieceTitle, content from piece where legislationIndex = ''' + str(legIndex)
 
     db = DatabaseConnection("classify-legislation")
     sql_result = db.selectFromDB(sql)
@@ -23,9 +21,10 @@ def get_legislation(legIndex):
     legislation = []
 
     for index, row in sql_result.iterrows():
-        piece = {"pieceTitle": "", "content": ""}
+        piece = {"pieceTitle": "", "content": "", "pieceIndex:": ""}
         pieceTitle = row['pieceTitle']
         content = row['content']
+        piece['pieceIndex']=row['pieceIndex']
         piece["pieceTitle"] = pieceTitle
         piece["content"] = content
         legislation.append(piece)
@@ -55,11 +54,10 @@ def get_legislation_list(catIndex):
 
 @app.route('/simplifiedpiece/<pieceIndex>')
 def get_simplified_piece(pieceIndex):
-    sql = '''select pieceTitle, content from piece where pieceIndex= ''' + str(pieceIndex)
 
+    sql = '''select pieceTitle, content from piece where pieceIndex= ''' + str(pieceIndex)
     db = DatabaseConnection("classify-legislation")
     sql_result = db.selectFromDB(sql)
-
     p_title = sql_result["pieceTitle"][0]
     p_con = sql_result["content"][0]
 
@@ -68,50 +66,28 @@ def get_simplified_piece(pieceIndex):
     S = Simplifier()
     lex_simplified = S.get_lexically_simplified_text(piece)
     simplified = S.get_syntactically_simplified_text(lex_simplified)
-    answer = {"pieceTitle": "", "content": ""}
-    print(simplified)
-    answer["pieceTitle"] = simplified[0][0]
-    if len(simplified[0]) == 3:
-        answer["content"] = simplified[0][1] + ". " + simplified[0][2]
+
+    answer = {"pieceTitle": simplified[0], "content": "", "pieceIndex": pieceIndex}
+
+    if len(simplified) == 3:
+        answer["content"] = simplified[1] + ". " + simplified[2]
     else:
-        answer["content"] = simplified[0][1]
+        answer["content"] = simplified[1]
+
 
     return jsonify(answer)
-
-
-@app.route('/simplifiedleg/<legIndex>')
-def get_simplified_legislation(legIndex):
-    sql = '''select pieceTitle, content
-               from piece
-               where legislationIndex = ''' + str(legIndex)
-
-    db = DatabaseConnection("classify-legislation")
-    sql_result = db.selectFromDB(sql)
-
-    data = []
-    for index, row in sql_result.iterrows():
-        pieceTitle = row['pieceTitle']
-        content = row['content']
-        data.append(pieceTitle)
-        data.append(content)
-
-    S = Simplifier()
-    lex_simplified = S.get_lexically_simplified_text(data)
-    simplified = S.get_syntactically_simplified_text(lex_simplified)
-    data = []
-    for i in range(0, len(simplified), 2):
-        answer = {"pieceTitle": simplified[i], "content": simplified[i + 1]}
-        data.append(answer)
-    return jsonify(data)
 
 
 @app.route('/search/<query>')
 def get_answers(query):
     if query != None:
-        C = Classifier("../ dataScienceComponents / classification / models / svm.pickle","../dataScienceComponents/classification/models/tfidf.pickle")
+        C = Classifier("../dataScienceComponents/classification/models/svm.pickle", "../dataScienceComponents"
+                                                                                    "/classification/models/tfidf"
+                                                                                    ".pickle")
         query_category = C.get_category_of_text(query)
 
-        E = Extractor(query_category)
+        common_path = "../dataScienceComponents/extraction/models/" + query_category + "/" + query_category
+        E = Extractor(common_path)
         piece_indexes = E.get_ranked_documents(C.get_query_keywords(query))
 
         answers = []

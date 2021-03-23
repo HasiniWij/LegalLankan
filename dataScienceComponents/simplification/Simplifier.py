@@ -1,3 +1,5 @@
+import pickle
+
 import en_core_web_sm
 import spacy
 import nltk
@@ -13,12 +15,22 @@ nlp = StanfordCoreNLP("https://corenlp.run/")
 
 class Simplifier:
 
-    def __init__(self):
+    is_first_run=True
 
+    if is_first_run:
+        with open("../dataScienceComponents/simplification/lexical_model.pickle", 'rb') as data:
+            model = pickle.load(data)
+            is_first_run=False
+            print("a")
+
+
+
+    def __init__(self):
+        print("1")
         bert_model = 'bert-large-uncased'
         self.tokenizer = BertTokenizer.from_pretrained(bert_model)
-        self.model = BertForMaskedLM.from_pretrained(bert_model)
-        self.model.eval()
+        # self.model = BertForMaskedLM.from_pretrained(bert_model)
+        Simplifier.model.eval()
         self.conjunction_list = ["for", "and"]
 
     def remove_punctuation(self, input_text):
@@ -44,17 +56,17 @@ class Simplifier:
         broken_list = [str1.join(token_list1), str2.join(token_list2)]
         return broken_list
 
-    # Complex Word Identification
-    def get_list_cwi_predictions(self, input_text):
-        list_cwi_predictions = []
-        list_of_words = word_tokenize(input_text)
-        for word in list_of_words:
-            word = self.cleaned_word(word)
-            if zipf_frequency(word, 'en') < 4:
-                list_cwi_predictions.append(True)
-            else:
-                list_cwi_predictions.append(False)
-        return list_cwi_predictions
+    # # Complex Word Identification
+    # def get_list_cwi_predictions(self, input_text):
+    #     list_cwi_predictions = []
+    #     list_of_words = word_tokenize(input_text)
+    #     for word in list_of_words:
+    #         word = self.cleaned_word(word)
+    #         if zipf_frequency(word, 'en') < 4:
+    #             list_cwi_predictions.append(True)
+    #         else:
+    #             list_cwi_predictions.append(False)
+    #     return list_cwi_predictions
 
     # basic Named Entity Recognition code
     def NER_identifier(self, text):
@@ -70,62 +82,62 @@ class Simplifier:
 
 
     # BERT model to predict candidates for identified complex words
-    def get_bert_candidates(self, input_text, list_cwi_predictions, numb_predictions_displayed=2):
-
-        list_candidates_bert = []
-        names_enitites = self.NER_identifier(input_text)
-
-        for word, pred in zip(input_text.split(), list_cwi_predictions):
-
-            lowercase_word = word.lower()
-
-            if pred and lowercase_word not in names_enitites:
+    def get_bert_candidates(self, input_text,word,count):
+       numb_predictions_displayed = 2
+       list_candidates_bert = []
+       names_enitites = self.NER_identifier(input_text)
+       lowercase_word = word.lower()
+       print(input_text)
+       if lowercase_word not in names_enitites:
                 replace_word_mask = input_text.replace(word, '[MASK]')
                 text = f'[CLS]{replace_word_mask} [SEP] {input_text} [SEP] '
+                print(text)
                 tokenized_text = self.tokenizer.tokenize(text)
-                masked_index = [i for i, x in enumerate(tokenized_text) if x == '[MASK]'][0]
+                masked_index = count
+                print("count ",count)
+                print("tokenized_text",tokenized_text)
                 indexed_tokens = self.tokenizer.convert_tokens_to_ids(tokenized_text)
                 segments_ids = [0] * len(tokenized_text)
                 tokens_tensor = torch.tensor([indexed_tokens])
                 segments_tensors = torch.tensor([segments_ids])
-
                 # Predict all tokens
                 with torch.no_grad():
-                    outputs = self.model(tokens_tensor, token_type_ids=segments_tensors)
+                    outputs = Simplifier.model(tokens_tensor, token_type_ids=segments_tensors)
                     predictions = outputs[0][0][masked_index]
                 predicted_ids = torch.argsort(predictions, descending=True)[:numb_predictions_displayed]
                 predicted_tokens = self.tokenizer.convert_ids_to_tokens(list(predicted_ids))
                 list_candidates_bert.append((word, predicted_tokens))
+       print(list_candidates_bert)
+       return list_candidates_bert
 
-        return list_candidates_bert
+    def get_lexically_simplified_text(self, piece_list):
 
-    def get_lexically_simplified_text(self, input_list):
-
-        lexically_simplified_piece = []
-
-        for item in input_list:
-            input_no_punctuation = self.remove_punctuation(item)
-            prediction_list = self.get_list_cwi_predictions(input_no_punctuation)
-
-            ps = LancasterStemmer()
-
-            candidates = self.get_bert_candidates(input_no_punctuation, prediction_list)
-
-            for word, prediction in zip(input_no_punctuation.split(), prediction_list):
-                if prediction:
+        lexically_simplified_pieces = []
+        ps = LancasterStemmer()
+        for sentence in piece_list:
+            input_no_punctuation = self.remove_punctuation(sentence)
+            list_of_words = word_tokenize(input_no_punctuation)
+            count=2
+            for word in list_of_words:
+                word = self.cleaned_word(word)
+                if zipf_frequency(word, 'en') < 4:
+                    candidates=self.get_bert_candidates(input_no_punctuation, word,count)
                     for candidate in candidates:
                         if candidate[0] == word:
-                            replacement = ""
+
                             if zipf_frequency(candidate[1][0], 'en') > zipf_frequency(candidate[1][1], 'en'):
                                 replacement = candidate[1][0]
                             else:
                                 replacement = candidate[1][1]
                             if ps.stem(replacement) == ps.stem(word) or (not replacement.isalpha()):
                                 replacement = word
-                            item = item.replace(word, replacement)
-            lexically_simplified_piece.append(item)
+                            sentence = sentence.replace(word, replacement)
+                count+=1
+            lexically_simplified_pieces.append(sentence)
+        return lexically_simplified_pieces
 
-        return lexically_simplified_piece
+
+
 
     # checking whether a sentence is complete using a parse tree
     # checking whether a sentence has a conjunction
@@ -136,7 +148,8 @@ class Simplifier:
         return False
 
     def get_syntactically_simplified_text(self, input_list):
-        all_sentences = []
+
+
         for i in range(0, len(input_list),2):
 
             # input_piece is a string
@@ -154,15 +167,16 @@ class Simplifier:
                     if self.word_is_a_conjunction(word):
                         token_list = self.tokenized(text)
                         sentences = self.sentences_list(token_list[:count], token_list[count + 1:])
-                        print("Sentces",sentences)
-                        print(type(sentences))
-                        if self.confirm_syntactic_simplification(sentences[0]) and \
-                                self.confirm_syntactic_simplification(sentences[1]):
+                        # print("Sentces",sentences)
+                        # print(type(sentences))
+                        if self.confirm_syntactic_simplification(sentences[0]) and self.confirm_syntactic_simplification(sentences[1]):
                             broken_sentences = [input_list[i],sentences[0], sentences[1]]
                             break
                     count += 1
-            all_sentences.append(broken_sentences)
-        return all_sentences
+
+            # print("all_sentences",all_sentences)
+
+        return broken_sentences
 
     def confirm_syntactic_simplification(self, text):
         sub_sub_trees = []
