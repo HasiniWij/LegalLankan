@@ -26,5 +26,5 @@ yarn-error.log*
 /dataScienceComponents/__pycache__
 /dataScienceComponents/classification/__pycache__
 dataScienceComponents/extraction/__pycache__
-
+/backend/__pycache__
 #/venv/lib/python3.8/site-packages/torch/lib/libtorch_cpu.dylib
