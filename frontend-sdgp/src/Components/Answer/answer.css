@@ -1,33 +1,4 @@
-.allanswers{
-    width: 50%;
-    height: 100%;
-    margin: 4% 0 0 3.5%;
+.menuans{color: white;}
+.searchans{
     color: white;
-    font-size: 15px;
-}
-.answers{
-    color: rgba(256, 256, 256, 0.5);
-    text-decoration: none;
-}
-.anstitle{
-    color: white;
-    font-size: 17px;
-}
-.ansdiv{
-    margin: 0 0 2.6% 0;
-    transition: transform .3s;
-}
-.ansdiv:hover{
-    transform: scale(1.01);
-    color: white;
-}
-.results{
-    margin-bottom: 2%;
-    letter-spacing: 1px;
-    font-size: 20px;
-    color: rgb(16, 16, 16);
-    font-weight: bold;
-}
-.leglist{
-    margin-left:15%;
 }

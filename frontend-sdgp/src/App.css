@@ -1,5 +1,48 @@
-header{
-  background-color: rgb(184, 184, 184);
+.links{
+  width: 12%;
+  letter-spacing: 2px;
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+}
+.links:visited{
+  color: white
+}
+img{
+  height: 9%;
+  width: 9%;
+  float: left;
+  margin: 0.6% 45% 0 1%;
+}
+.routerdiv{
+  margin-top: 2%;
+}
+.headerdiv{
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  margin: auto;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.linkdiv{
+  padding: 0 2.6%;
+  display:inline-block;
+  margin: 30px 0;
+}
+.linkline{
+  margin: 4px auto;
+  height: 3px;
+  width: 100%;
+  background-color: rgba(150,120,72,0.5);
+}
+
+
+
+
+
+/* header{
+  background-color: rgba(184, 184, 184,0.4);
   padding-bottom: 10px;
 }
 ul{
@@ -67,4 +110,4 @@ footer{
 .im{
   height: 100%;
   width: 100%;
-}
+} */

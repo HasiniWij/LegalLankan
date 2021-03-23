@@ -35,7 +35,7 @@ export class Answer extends Component {
     render(){
         const {posts, errormsg, ur,urfull} = this.state
         return (
-         <div>
+         <div className="searchans">
             {/*  test */}
              { ur? <div>{ur}</div> : null} 
              { urfull? <div>{urfull}</div> : null} 

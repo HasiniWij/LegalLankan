@@ -1,6 +1,7 @@
 import React, { Component} from 'react'; 
 import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
 import axios from 'axios';
+import './simplify.css';
 
 export class MenuSimplify extends Component {
     constructor(props){
@@ -30,7 +31,7 @@ export class MenuSimplify extends Component {
     render(){
         const {index3,posts,urfull} = this.state
         return (
-         <div>
+         <div className="menusim">
              { index3? <div>{index3}</div> : null} 
              { urfull? <div>{urfull}</div> : null} 
              {

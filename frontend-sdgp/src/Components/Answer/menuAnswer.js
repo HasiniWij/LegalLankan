@@ -33,7 +33,7 @@ export class MenuAnswer extends Component {
     render(){
         const {posts, errormsg,urfull,title} = this.state
         return (
-         <div>
+         <div className="menuans">
              { title? <div>{title}</div> : null}
              { urfull? <div>{urfull}</div> : null} 
              {

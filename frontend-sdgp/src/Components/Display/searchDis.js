@@ -22,14 +22,12 @@ export class SearchDis extends Component {
     render(){
         const {index, content, name, title} = this.state
         return (
-        <div>
          <div className="searchcon">
              <Link to ={{pathname:"/piece/simplify", state:{urlfull:"http://localhost:5000/simplifiedpiece/"+index,in:index}}}>Simplify</Link>
             { index? <div>{index}</div> : null} 
             { content? <div>{content}</div> : null} 
             { name? <div>{name}</div> : null} 
             { title? <div>{title}</div> : null} 
-        </div>
         </div>
     )
     }
