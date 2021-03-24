@@ -1,4 +1,33 @@
-.menuans{color: white;}
+.menuans{
+    float: left;
+    width: 65%;
+    height: 100%;
+    margin: 1% 0 2% 3%;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 2% 3%;
+    border-radius: 15px;
+    box-shadow: 0px 20px 50px rgba(0, 0, 0, 1);
+}
 .searchans{
     color: white;
+}
+.menulinks{
+    text-decoration: none;
+    color: white;
+    font-size: 15px;
+    transition:.1s;
+}
+.menulinks:hover{
+    color: rgba(169,121,46,1);
+}
+.menutitle{
+    margin-bottom: 2%;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: rgba(169,121,46,1);
+    font-weight: 700;
+    /* text-shadow:0 0 10px rgba(192,140,57,1) ; */
+}
+.leglist{
+    margin-bottom: 0.8%;
 }

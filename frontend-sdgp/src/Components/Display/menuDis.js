@@ -1,5 +1,5 @@
 import React, { Component} from 'react'; 
-import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Link, NavLink, Route} from 'react-router-dom';
 import axios from 'axios';
 import './display.css';
 
@@ -11,6 +11,7 @@ export class MenuDis extends Component {
             errormsg:"",
             urfull:"",
             legno:"",
+            name:"",
         }
     }
     componentDidMount(){
@@ -19,33 +20,42 @@ export class MenuDis extends Component {
             console.log(response)
             this.setState({posts: response.data})
             this.setState({legno:this.props.location.state.in})
-            this.setState({urfull:this.props.location.state.urlfull}) //test
+            this.setState({name:this.props.location.state.name})
         })
         .catch(error =>{
             console.log(error)
-            this.setState({urfull:this.props.location.state.urlfull}) //test
+            // this.setState({urfull:this.props.location.state.urlfull}) //test
             this.setState({errormsg:"Invalid Request"})
         })
     }
     render(){
-        const {urfull,posts,legno} = this.state
+        const {errormsg,posts,legno,name} = this.state
         return (
-        <div>
-         <div class="menuCon">
-             { urfull? <div>{urfull}</div> : null} 
-             { legno? <div>{legno}</div> : null} 
-             <Link to ={{pathname:"/legislation/simplify", state:{urlfull:"http://localhost:5000/simplifiedleg/"+legno,in:legno}}}>Simplify</Link>
+             <div className="piecelist">
+             { errormsg? <div>{errormsg}</div> : null}
+             { name? <div className="legtitle">{name}</div> : null} 
             {
                  posts.length ?
-                 posts.map(post => <div key={post.legislationIndex}>
-                     {post.pieceTitle} 
-                     {post.content}
-                     </div>) :
+                 posts.map(post => 
+                 <div className="pieces" key={post.legislationIndex}>
+                     <div className="mentext">
+                        <span>{post.pieceTitle} </span><br/>
+                        <span>{post.content} </span>
+                     </div>
+                     <div className="mensib">
+                        <NavLink to={{pathname:`/simplify/${post.pieceIndex}`, state:{urlfull:"http://localhost:5000/simplifiedpiece/"+post.pieceIndex, 
+                        pindex:post.pieceIndex, content:post.content, title:post.pieceTitle, legno:legno,name:name}}}>
+                         Simplify</NavLink>
+                     </div>
+                     
+                        {/* <div style={{fontSize: "17px", color:"grey"}}>{post.pieceTitle} </div>
+                        <div style={{fontSize: "15px", color:"white"}}>{post.content}</div> */}
+    
+                   
+                </div>) :
                  null
              }
-        </div>
-        </div>
+             </div>
     )
     }
 }
-export default MenuDis

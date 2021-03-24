@@ -27,21 +27,16 @@ export class SearchSimplify extends Component {
             this.setState({errormsg:"Invalid Request"})
         })
     }
+
     render(){
-        const {index3,posts,urfull} = this.state
+        const {index3,posts,urfull,errormsg} = this.state
         return (
          <div className="searchsim">
              { index3? <div>{index3}</div> : null} 
              { urfull? <div>{urfull}</div> : null} 
-             {
-                 posts.length ?
-                 posts.map(post => <div key={post.pieceIndex}>
-                    {post.pieceTitle}
-                    {post.content}
-                     </div>) :
-                 null
-             }
-            SearchSimplify
+             { errormsg? <div>{errormsg}</div> : null} 
+             <div>{posts.content}</div>
+             <div>{posts.pieceTitle}</div>
         </div>
     )
     }

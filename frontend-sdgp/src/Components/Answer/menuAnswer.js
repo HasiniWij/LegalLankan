@@ -9,7 +9,7 @@ export class MenuAnswer extends Component {
         this.state={
             posts:[],
             errormsg:"",
-            tit:"",
+            title:"",
             urfull:"",
         }
     }
@@ -21,33 +21,30 @@ export class MenuAnswer extends Component {
         .then(response =>{
             console.log(response)
             this.setState({posts: response.data})
-            this.setState({urfull:this.props.location.state.urlfull}) //test
             this.setState({title:this.props.location.state.title})
         })
         .catch(error =>{
             console.log(error)
-            this.setState({urfull:this.props.location.state.urlfull}) //test
-            this.setState({errormsg:"Invalid Request"})
+            this.setState({errormsg:"NOTHING TO SHOW HERE"})
         })
     }
     render(){
-        const {posts, errormsg,urfull,title} = this.state
+        const {posts, errormsg,title} = this.state
         return (
          <div className="menuans">
-             { title? <div>{title}</div> : null}
-             { urfull? <div>{urfull}</div> : null} 
+             { title? <div className="menutitle">{title}</div> : null}
+             { errormsg? <div className="menutitle">{errormsg}</div> : null}
              {
                  posts.length ?
                  posts.map(post => <div class="leglist" key={post.legislationIndex}>
-                     <Link to ={{pathname:"/legislation", 
-                     state:{urlfull: "http://localhost:5000/legislation/"+post.legislationIndex, in:post.legislationIndex}}}>
-                     {post.legislationName} 
-                     {post.legislationIndex}
+                     <Link className="menulinks" to ={{pathname:"/legislation", 
+                     state:{urlfull: "http://localhost:5000/legislation/"+post.legislationIndex, 
+                     in:post.legislationIndex, name:post.legislationName}}}>
+                     - {post.legislationName} 
                      </Link>
                      </div>) :
                  null
              }
-             { errormsg? <div>{errormsg}</div> : null}
         </div>
     )
     }

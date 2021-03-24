@@ -9,8 +9,12 @@ export class MenuSimplify extends Component {
         this.state={
             posts:[],
             errormsg:"",
+            pindex:"",
             urfull:"",
-            index3:"",
+            content:"",
+            title:"",
+            legno:"",
+            name:"",
         }
     }
     componentDidMount(){
@@ -18,30 +22,36 @@ export class MenuSimplify extends Component {
         .then(response =>{
             console.log(response)
             this.setState({posts: response.data})
-            this.setState({urfull:this.props.location.state.urlfull}) //test
-            this.setState({index3:this.props.location.state.in});
+            this.setState({pindex:this.props.location.state.pindex})
+            this.setState({urfull:this.props.location.state.urlfull})
+            this.setState({content:this.props.location.state.content})
+            this.setState({title:this.props.location.state.title})
+            this.setState({name:this.props.location.state.name})
+            this.setState({legno:this.props.location.state.legno})
         })
         .catch(error =>{
             console.log(error)
-            this.setState({urfull:this.props.location.state.urlfull}) //test
-            this.setState({errormsg:"Invalid Request"})
+            this.setState({errormsg:"NOTHING TO SHOW HERE"})
         })
     }
-
+    
     render(){
-        const {index3,posts,urfull} = this.state
+        const {pindex,posts,urfull,errormsg,content,title,legno,name} = this.state
         return (
          <div className="menusim">
-             { index3? <div>{index3}</div> : null} 
+              { pindex? <div>{pindex}</div> : null} 
              { urfull? <div>{urfull}</div> : null} 
-             {
-                 posts.length ?
-                 posts.map(post => <div key={post.pieceIndex}>
-                     {post.pieceTitle}
-                     {post.content}
-                     </div>) :
-                 null
-             }
+             { errormsg? <div>{errormsg}</div> : null}
+             { title? <div>{title}</div> : null}
+             { content? <div>{content}</div> : null}
+             { posts? <div>
+                 <div>{posts.content}</div>
+             <div>{posts.pieceTitle}</div>
+             </div> : null}  
+             <Link to ={{pathname:"/legislation", 
+                     state:{urlfull: "http://localhost:5000/legislation/"+legno, 
+                     in:legno, name:name}}}>Go back to legislation</Link>
+             
         </div>
     )
     }

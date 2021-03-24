@@ -23,7 +23,7 @@ export const Search = () => {
                 <div class="searchbox">
                     <input type="text" class="searchtext" onChange={getData}
                     name="query" placeholder="Enter Keyword or Query.."></input>
-                    <img class="searchimg" src={Searchimg} alt="Search"/>
+                    <div class="searchimgdiv"><img className="searchimg" src={Searchimg} alt="Search"/></div>
                 </div>
                  <div class="searchdiv"><button class="searchbutton" 
                  onClick={() => {history.push({pathname:'/answer',state: { urlfull: "http://localhost:5000/search/"+data }}) }}>

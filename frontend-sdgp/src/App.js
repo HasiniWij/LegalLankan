@@ -1,7 +1,7 @@
 import React from 'react'; 
 import { logo } from "./logo.svg";
 import './App.css';
-import {BrowserRouter, BrowserRouter as Router, NavLink, Route} from 'react-router-dom';
+import {BrowserRouter, BrowserRouter as Router, NavLink, Route, Redirect, Switch} from 'react-router-dom';
 
 import Logo from './images/logo.png';
 import IG from './images/ig.png';
@@ -22,26 +22,28 @@ function App() {
   return (
     <div>
     <Router>
-      <div className="headerdiv"> 
+    <div className="headerdiv"> 
       <div className="image">
-        <img src={Logo} alt="Logo"/>
+        <img className="logoimg" src={Logo} alt="Logo"/>
       </div>
           <div className="linkdiv">
-            <NavLink  to="/search" className="links">SEARCH</NavLink>
-            <div className="linkline"></div>
+            <NavLink activeClassName="active" to="/home" className="links">HOME</NavLink>
           </div>
           <div className="linkdiv">
-            <NavLink  to="/" className="links">HOME</NavLink >
-            <div className="linkline"></div>
+            <NavLink activeClassName="active" to="/search" className="links">SEARCH</NavLink >
           </div>
           <div className="linkdiv">
-            <NavLink  to="/explore" className="links">EXPLORE</NavLink >
-            <div className="linkline"></div>
+            <NavLink activeClassName="active" to="/explore" className="links">EXPLORE</NavLink >
           </div>
       </div> 
       <div className="routerdiv">
-      <Route path='/' exact  component={Home}/>
-      <Route path='/search' component={ Search }/>
+      <Route exact path="/"
+                render={() => {
+                    return (<Redirect to="/home" />)
+                }}
+              />
+      <Route exact path='/home' component={Home}/>
+      <Route exact path='/search' component={ Search }/>
       <Route path='/explore' component={ Explore }/>
       <Route path='/answer' component={ Answer }/>
       <Route path='/piece' component={ SearchDis }/>
@@ -51,7 +53,9 @@ function App() {
       <Route path='/explore/employment' component={ MenuAnswer }/>
       <Route path='/legislation' component={ MenuDis }/>
       <Route path='/piece/simplify' component={ SearchSimplify }/>
-      <Route path='/legislation/simplify' component={ MenuSimplify }/>
+      <Switch>
+      <Route path='/simplify/:Id' component={ MenuSimplify }/>
+      </Switch>
       </div>
     </Router>
     </div>
