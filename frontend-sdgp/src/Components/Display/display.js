@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Link, NavLink, Route} from 'react-router-dom';
 import axios from 'axios';
 import './display.css';
 
-export class MenuDis extends Component {
+export class Display extends Component {
     constructor(props){
         super(props)
         this.state={
@@ -31,25 +31,23 @@ export class MenuDis extends Component {
     render(){
         const {errormsg,posts,legno,name} = this.state
         return (
-             <div className="piecelist">
-             { errormsg? <div>{errormsg}</div> : null}
+             <div className="legcon">
+             { errormsg? <div className="legtitle">{errormsg}</div> : null}
              { name? <div className="legtitle">{name}</div> : null} 
             {
                  posts.length ?
                  posts.map(post => 
-                 <div className="pieces" key={post.legislationIndex}>
-                     <div className="mentext">
-                        <span>{post.pieceTitle} </span><br/>
-                        <span>{post.content} </span>
+                 <div className="legpiece" key={post.legislationIndex}>
+                     <div className="menutext">
+                        <span style={{fontSize: "16px", color:"rgba(182,166,139,1)", }}>{post.pieceTitle} </span><br/>
+                        <span style={{fontSize: "15px", color:"white", marginTop:"4px"}}>{post.content} </span>
                      </div>
-                     <div className="mensib">
-                        <NavLink to={{pathname:`/simplify/${post.pieceIndex}`, state:{urlfull:"http://localhost:5000/simplifiedpiece/"+post.pieceIndex, 
+                        <NavLink className="menulink" to={{pathname:`/simplify/${post.pieceIndex}`, state:{urlfull:"http://localhost:5000/simplifiedpiece/"+post.pieceIndex, 
                         pindex:post.pieceIndex, content:post.content, title:post.pieceTitle, legno:legno,name:name}}}>
-                         Simplify</NavLink>
-                     </div>
+                         SIMPLIFY</NavLink>
                      
-                        {/* <div style={{fontSize: "17px", color:"grey"}}>{post.pieceTitle} </div>
-                        <div style={{fontSize: "15px", color:"white"}}>{post.content}</div> */}
+                
+                     
     
                    
                 </div>) :

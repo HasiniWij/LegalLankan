@@ -1,7 +1,7 @@
 import React, { Component} from 'react'; 
 import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
 import axios from 'axios';
-import './answer.css';
+import './menuAnswer.css';
 
 export class MenuAnswer extends Component {
     constructor(props){
