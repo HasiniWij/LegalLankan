@@ -8,10 +8,9 @@ import pandas as pd
 
 class Extractor:
 
-    def __init__(self, common_path):
+    def __init__(self, category):
 
-        # common_path = "../dataScienceComponents/extraction/models/"+category+"/"+category
-        common_path = common_path
+        common_path = "../dataScienceComponents/extraction/models/"+category+"/"+category
         # loading the similarity matrix which stores document similarity data of all documents within the category
         matrix_path = common_path+"_matrix.pickle"
 
