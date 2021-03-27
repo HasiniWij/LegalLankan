@@ -18,15 +18,15 @@ export const Search = () => {
     //     history.push({pathname:'/answer',state: { urlfull: "http://localhost:5000/search/"+data }});
     // };
     return (
-        <div class="container">
+        <div className="container">
             <form>
-                <div class="searchbox">
-                    <input type="text" class="searchtext" onChange={getData}
+                <div className="searchbox">
+                    <input type="text" className="searchtext" onChange={getData}
                     name="query" placeholder="Enter Keyword or Query.."></input>
-                    <img class="searchimg" src={Searchimg} alt="Search"/>
+                    <div className="searchimgdiv"><img className="searchimg" src={Searchimg} alt="Search"/></div>
                 </div>
-                 <div class="searchdiv"><button class="searchbutton" 
-                 onClick={() => {history.push({pathname:'/answer',state: { urlfull: "http://localhost:5000/search/"+data }}) }}>
+                 <div className="searchdiv"><button className="searchbutton" 
+                 onClick={() => {history.push({pathname:'/answer',state: { urlfull: "http://localhost:5000/search/"+data, query:data }}) }}>
                  Search</button></div>
             </form>
         </div>

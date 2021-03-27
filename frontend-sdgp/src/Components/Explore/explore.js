@@ -1,31 +1,31 @@
 import React from 'react'; 
 import './explore.css';
 import { MenuAnswer } from '../Answer/menuAnswer';
-import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
+import {BrowserRouter as Router, NavLink, Route} from 'react-router-dom';
 
-export const Explore = () => {
+export const Explore = () => { 
     return (
         <div>
-            <div class="categorylist">
-                <div class="catitems">
-                    <Link class="catlink" to={{pathname:"/explore/family", 
-                    state: { urlfull: "http://localhost:5000/legistlationlist/FA", title:"Family" }}}>FAMILY
-                    </Link>
+            <div className="categorylist">
+                <div className="catitems">
+                    <NavLink activeClassName="activee" className="catlink" to={{pathname:"/explore/family", 
+                    state: { urlfull: "http://localhost:5000/legistlationlist/FA", title:"FAMILY" }}}>FAMILY
+                    </NavLink>
                 </div>
-                <div class="catitems">
-                    <Link class="catlink" to={{pathname:"/explore/rights",
-                    state: { urlfull: "http://localhost:5000/legistlationlist/RI", title:"Rights" }}}>RIGHTS
-                    </Link>
+                <div className="catitems">
+                    <NavLink activeClassName="activee" className="catlink" to={{pathname:"/explore/rights",
+                    state: { urlfull: "http://localhost:5000/legistlationlist/RI", title:"RIGHTS" }}}>RIGHTS
+                    </NavLink>
                 </div>
-                <div class="catitems">
-                    <Link class="catlink" to={{pathname:"/explore/crime",
-                    state: { urlfull: "http://localhost:5000/legistlationlist/CR", title:"Crime" }}}>CRIME
-                    </Link>
+                <div className="catitems">
+                    <NavLink activeClassName="activee" className="catlink" to={{pathname:"/explore/crime",
+                    state: { urlfull: "http://localhost:5000/legistlationlist/CR", title:"CRIME" }}}>CRIME
+                    </NavLink>
                 </div>
-                <div class="catitems">
-                    <Link class="catlink" to={{pathname:"/explore/employment",
-                    state: { urlfull: "http://localhost:5000/legistlationlist/EM", title:"Employment" }}}>EMPLOYMENT
-                    </Link>
+                <div className="catitems">
+                    <NavLink activeClassName="activee" className="catlink" to={{pathname:"/explore/employment",
+                    state: { urlfull: "http://localhost:5000/legistlationlist/EM", title:"EMPLOYMENT" }}}>EMPLOYMENT
+                    </NavLink>
                 </div>
             </div>
         </div>
