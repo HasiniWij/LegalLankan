@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination:/home/root/legalLankanFrontend-app
+    destination:/var/www/html/
 hooks:
   ApplicationStop:
     - location: scripts/stop_server.sh

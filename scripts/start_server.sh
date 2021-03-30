@@ -2,7 +2,7 @@
 echo starting server
 
 # here we just use npm to run the build
-cd /home/root/legalLankanFrontend-app
+cd /var/www/html/
 echo building application...
 sudo npm run build
 

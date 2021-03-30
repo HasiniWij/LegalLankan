@@ -33,7 +33,7 @@ fi
 # install the application using npm
 # we need to traverse to where the application bundle is copied too.
 echo installing application with npm
-cd  /home/root/legalLankanFrontend-app
+cd  /var/www/html/
 sudo npm install
 
 echo installing pm2
