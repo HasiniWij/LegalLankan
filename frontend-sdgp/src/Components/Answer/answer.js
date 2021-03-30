@@ -40,8 +40,7 @@ export class Answer extends Component {
                      <span style={{fontSize: "16px", color:"rgba(182,166,139,1)", }}>{post.pieceTitle} - {post.legislationName}</span><br/>
                      <span style={{fontSize: "15px", color:"white", marginTop:"4px"}}>{post.content}</span>
                     <div className="searchlinks">
-                        <NavLink className="menulink" to={{pathname:`/simplify/${post.pieceIndex}`, state:{urlfull:"http://localhost:5000/simplifiedpiece/"+ 542,
-//                        post.pieceIndex
+                        <NavLink className="menulink" to={{pathname:`/simplify/${post.pieceIndex}`, state:{urlfull:"http://localhost:5000/simplifiedpiece/"+ post.pieceIndex,
                         pindex:post.pieceIndex, content:post.content, title:post.pieceTitle, legno:post.legislationIndex,name:post.legislationName}}}>
                          SIMPLIFY</NavLink>
 

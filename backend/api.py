@@ -67,7 +67,7 @@ def get_simplified_piece(pieceIndex):
     S = Simplifier()
     lex_simplified = S.get_lexically_simplified_text(piece)
     simplified = S.get_syntactically_simplified_text(lex_simplified)
-    answer = {"pieceTitle": "", "content": ""}
+    answer = {"pieceTitle": "", "content": "", "pieceIndex": pieceIndex}
     print(simplified)
     answer["pieceTitle"] = simplified[0]
     if len(simplified) == 3:
