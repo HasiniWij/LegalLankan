@@ -7,10 +7,10 @@
 # here we update the server and install node and npm
 echo installing dependencies
 #sudo apt-get update
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-sudo apt-get install nodejs -y
-sudo apt-get -y install npm
-
+#curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+#sudo apt-get install nodejs -y
+#sudo apt-get -y install npm
+sudo npm install -g npm
 # check to make sure the symbolic link for nodejs node exists
 echo checking for nodejs symlink
 file="/usr/bin/node"
