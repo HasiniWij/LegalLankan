@@ -1,6 +1,6 @@
 from flask import Flask, request
 from flask import jsonify
-from flask_cors import CORS
+#from flask_cors import CORS
 
 from backend.DatabaseConnection import DatabaseConnection
 from dataScienceComponents.simplification.Simplifier import Simplifier
@@ -8,7 +8,7 @@ from dataScienceComponents.classification.Classifier import Classifier
 from dataScienceComponents.extraction.Extractor import Extractor
 
 app = Flask(__name__)
-CORS(app)  # comment this on deployment
+#CORS(app)  # comment this on deployment
 
 
 @app.route('/legislation/<legIndex>')
