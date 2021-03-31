@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: /
+  - source: /frontend-sdgp/src/
     destination:  /home/ec2-user/legalLankanFrontend-app
 hooks:
   ApplicationStop:
