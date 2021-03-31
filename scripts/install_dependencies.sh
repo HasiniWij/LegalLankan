@@ -5,17 +5,17 @@
 #stdout logs of this process executing can be found in /opt/codedeploy-agent/deployment-root/47../<deployment_id>/logs/scripts.log
 
 # here we update the server and install node and npm
-echo installing dependencies
-#sudo apt-get update
-#curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-#sudo apt-get install nodejs -y
-#sudo apt-get -y install npm
-#sudo npm install -g npm
+echo this is a echo-installing dependencies
+sudo apt-get update
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt-get install nodejs -y
+sudo apt-get -y install npm
+sudo npm install -g npm
 
-sudo yum install -y gcc-c++ make
-curl -sL https://rpm.nodesource.com/setup_14.x | sudo -E bash -
-sudo yum install -y nodejs
-echo node -v
+#sudo yum install -y gcc-c++ make
+#curl -sL https://rpm.nodesource.com/setup_14.x | sudo -E bash -
+#sudo yum install -y nodejs
+#echo node -v
 
 
 
