@@ -10,7 +10,7 @@ hooks:
       runas: root
       
   BeforeInstall:
-    - location: scripts/install_dependencies1.sh
+    - location: scripts/install_dependencies.sh
       timeout: 300
       runas: root
   
