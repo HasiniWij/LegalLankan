@@ -7,11 +7,11 @@ from dataScienceComponents.simplification.Simplifier import Simplifier
 from dataScienceComponents.classification.Classifier import Classifier
 from dataScienceComponents.extraction.Extractor import Extractor
 
-app = Flask(__name__)
+application = Flask(__name__)
 #CORS(app)  # comment this on deployment
 
 
-@app.route('/legislation/<legIndex>')
+@application.route('/legislation/<legIndex>')
 def get_legislation(legIndex):
     sql = '''select pieceTitle, content from piece where legislationIndex = ''' + str(legIndex)
 
@@ -31,7 +31,7 @@ def get_legislation(legIndex):
     return jsonify(legislation)
 
 
-@app.route('/legistlationlist/<catIndex>')
+@application.route('/legistlationlist/<catIndex>')
 def get_legislation_list(catIndex):
     catIndex = catIndex.strip("<>")
     sql = '''select l.legislationIndex, l.legislationName from legislation l where categoryIndex = ''' + '"' + str(
@@ -51,7 +51,7 @@ def get_legislation_list(catIndex):
     return jsonify(leg_list)
 
 
-@app.route('/simplifiedpiece/<pieceIndex>')
+@application.route('/simplifiedpiece/<pieceIndex>')
 def get_simplified_piece(pieceIndex):
     print("piece index "+pieceIndex)
     sql = '''select pieceTitle, content from piece where pieceIndex= ''' + str(pieceIndex)
@@ -78,7 +78,7 @@ def get_simplified_piece(pieceIndex):
     return jsonify(answer)
 
 
-@app.route('/simplifiedleg/<legIndex>')
+@application.route('/simplifiedleg/<legIndex>')
 def get_simplified_legislation(legIndex):
     sql = '''select pieceTitle, content
                from piece
@@ -104,7 +104,7 @@ def get_simplified_legislation(legIndex):
     return jsonify(data)
 
 
-@app.route('/search/<query>')
+@application.route('/search/<query>')
 def get_answers(query):
     if query is not None:
         C = Classifier("../dataScienceComponents/classification/models/svm.pickle", "../dataScienceComponents"
@@ -142,7 +142,7 @@ def get_answers(query):
     return jsonify(answers)
 
 
-@app.route('/login', methods=['POST', 'GET'])
+@application.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
         user_name = request.form['userName']
@@ -213,4 +213,4 @@ def login():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    application.run(debug=True)
