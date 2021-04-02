@@ -107,7 +107,7 @@ def get_simplified_legislation(legIndex):
 @application.route('/search/<query>')
 def get_answers(query):
     if query is not None:
-        C = Classifier("../dataScienceComponents/classification/models/svm.pickle", "../dataScienceComponents"
+        C = Classifier("dataScienceComponents/classification/models/svm.pickle", "../dataScienceComponents"
                                                                                     "/classification/models/tfidf"
                                                                                     ".pickle")
         query_category = C.get_category_of_text(query)
@@ -212,5 +212,5 @@ def login():
 #                 db.insertToDB(sql, val)
 
 
-if __name__ == '__main__':
-    application.run(debug=True)
+# if __name__ == '__main__':
+#     application.run(debug=True)
