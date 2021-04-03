@@ -51,8 +51,8 @@ pycorenlp==0.3.0
 wordfreq==2.4.2
 zipp==3.4.1
 transformers==4.3.3
-
-
 setuptools==47.1.0
-spacy==3.0.5
+
+importlib-metadata==3.7.2
+
 
