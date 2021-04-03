@@ -10,6 +10,10 @@ from dataScienceComponents.extraction.Extractor import Extractor
 application = Flask(__name__)
 #CORS(app)  # comment this on deployment
 
+@application.route('/')
+def hello_world():
+    return "Hello World"
+
 
 @application.route('/legislation/<legIndex>')
 def get_legislation(legIndex):
