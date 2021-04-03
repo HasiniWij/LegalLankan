@@ -1,14 +1,10 @@
-from flask import Flask, request
-from flask import jsonify
-#from flask_cors import CORS
-
+import pickle
+import jieba
+from flask import Flask, jsonify, request
+from gensim import corpora, models, similarities
 from backend.DatabaseConnection import DatabaseConnection
-from dataScienceComponents.simplification.Simplifier import Simplifier
-from dataScienceComponents.classification.Classifier import Classifier
-from dataScienceComponents.extraction.Extractor import Extractor
 
 application = Flask(__name__)
-#CORS(app)  # comment this on deployment
 
 @application.route('/')
 def hello_world():
@@ -33,8 +29,7 @@ def get_legislation(legIndex):
         legislation.append(piece)
 
     return jsonify(legislation)
-
-
+    
 # @application.route('/legistlationlist/<catIndex>')
 # def get_legislation_list(catIndex):
 #     catIndex = catIndex.strip("<>")
