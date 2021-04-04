@@ -3,6 +3,9 @@ import jieba
 from flask import Flask, jsonify, request
 from gensim import corpora, models, similarities
 from backend.DatabaseConnection import DatabaseConnection
+from dataScienceComponents.classification.Classifier import Classifier
+from dataScienceComponents.extraction.Extractor import Extractor
+from dataScienceComponents.simplification.Simplifier import Simplifier
 
 application = Flask(__name__)
 
