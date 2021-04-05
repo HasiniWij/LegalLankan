@@ -79,6 +79,3 @@ Sphinx==3.5.2
 traceback2==1.4.0
 
 
-spacy==3.0.5
-
-
