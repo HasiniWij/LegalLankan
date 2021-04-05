@@ -3,6 +3,7 @@ import jieba
 from flask import Flask, jsonify, request
 # from gensim import corpora, models, similarities
 from backend.DatabaseConnection import DatabaseConnection
+
 from dataScienceComponents.classification.Classifier import Classifier
 from dataScienceComponents.extraction.Extractor import Extractor
 # from dataScienceComponents.simplification.Simplifier import Simplifier
@@ -11,7 +12,12 @@ application = Flask(__name__)
 
 @application.route('/')
 def hello_world():
-    return "Hello World"
+    C = Classifier("dataScienceComponents/classification/models/svm.pickle", "dataScienceComponents"
+                                                                                    "/classification/models/tfidf"
+                                                                                    ".pickle")
+    query_category = C.get_category_of_text("human rights")
+
+    return jsonify(query_category)
 
 
 @application.route('/legislation/<legIndex>')
