@@ -3,9 +3,9 @@ import jieba
 from flask import Flask, jsonify, request
 # from gensim import corpora, models, similarities
 from backend.DatabaseConnection import DatabaseConnection
-# from dataScienceComponents.classification.Classifier import Classifier
-# from dataScienceComponents.extraction.Extractor import Extractor
-# from dataScienceComponents.simplification.Simplifier import Simplifier
+from dataScienceComponents.classification.Classifier import Classifier
+from dataScienceComponents.extraction.Extractor import Extractor
+from dataScienceComponents.simplification.Simplifier import Simplifier
 
 application = Flask(__name__)
 
@@ -33,7 +33,7 @@ def get_legislation(legIndex):
 
     return jsonify(legislation)
     
-@application.route('/legistlationlist/<catIndex>')
+@application.route('/legislationlist/<catIndex>')
 def get_legislation_list(catIndex):
     catIndex = catIndex.strip("<>")
     sql = '''select l.legislationIndex, l.legislationName from legislation l where categoryIndex = ''' + '"' + str(
@@ -78,9 +78,6 @@ def get_simplified_piece(pieceIndex):
         answer["content"] = simplified[1]
 
     return jsonify(answer)
-
-
-
 
 
 @application.route('/search/<query>')
