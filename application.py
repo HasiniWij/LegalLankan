@@ -12,11 +12,7 @@ application = Flask(__name__)
 
 @application.route('/')
 def hello_world():
-    C = Classifier("dataScienceComponents/classification/models/svm.pickle", "dataScienceComponents"
-                                                                                         "/classification/models/tfidf"
-                                                                                         ".pickle")
-    query_category = C.get_category_of_text("human rights")
-    return jsonify(query_category)
+    return "LegalLankan API"
 
 
 @application.route('/legislation/<legIndex>')
