@@ -12,7 +12,7 @@ application = Flask(__name__)
 
 @application.route('/')
 def hello_world():
-    return jsonify("LegalLankan API")
+    return "LegalLankan API"
 
 
 @application.route('/legislation/<legIndex>')
