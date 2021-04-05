@@ -4,20 +4,15 @@ from flask import Flask, jsonify, request
 # from gensim import corpora, models, similarities
 from backend.DatabaseConnection import DatabaseConnection
 
-from dataScienceComponents.classification.Classifier import Classifier
-from dataScienceComponents.extraction.Extractor import Extractor
+# from dataScienceComponents.classification.Classifier import Classifier
+# from dataScienceComponents.extraction.Extractor import Extractor
 # from dataScienceComponents.simplification.Simplifier import Simplifier
 
 application = Flask(__name__)
 
 @application.route('/')
 def hello_world():
-    C = Classifier("dataScienceComponents/classification/models/svm.pickle", "dataScienceComponents"
-                                                                                    "/classification/models/tfidf"
-                                                                                    ".pickle")
-    query_category = C.get_category_of_text("human rights")
-
-    return jsonify(query_category)
+    return jsonify("LegalLankan API")
 
 
 @application.route('/legislation/<legIndex>')
@@ -86,42 +81,42 @@ def get_legislation_list(catIndex):
 #     return jsonify(answer)
 
 
-@application.route('/search/<query>')
-def get_answers(query):
-    if query is not None:
-        C = Classifier("dataScienceComponents/classification/models/svm.pickle", "dataScienceComponents"
-                                                                                    "/classification/models/tfidf"
-                                                                                    ".pickle")
-        query_category = C.get_category_of_text(query)
-
-        E = Extractor(query_category)
-        piece_indexes = E.get_ranked_documents(C.get_query_keywords(query))
-
-        answers = []
-        for element in piece_indexes:
-            sql = '''select p.pieceIndex, p.pieceTitle, p.content, l.legislationIndex, l.legislationName
-               from piece p, legislation l
-               where p.pieceIndex=''' + str(element) + " and l.legislationIndex=p.legislationIndex;"
-
-            db = DatabaseConnection("classify-legislation")
-            sql_result = db.selectFromDB(sql)
-
-            answer = {"pieceTitle": "", "content": "", "legislationName": "", "legislationIndex": "", "pieceIndex": ""}
-            p_title = sql_result["pieceTitle"][0]
-            p_con = sql_result["content"][0]
-            l_name = sql_result["legislationName"][0]
-            l_index = str(sql_result["legislationIndex"][0])
-            p_index = str(sql_result["pieceIndex"][0])
-
-            answer["pieceTitle"] = p_title
-            answer["content"] = p_con
-            answer["legislationName"] = l_name
-            answer["legislationIndex"] = l_index
-            answer["pieceIndex"] = p_index
-
-            answers.append(answer)
-
-    return jsonify(answers)
+# @application.route('/search/<query>')
+# def get_answers(query):
+#     if query is not None:
+#         C = Classifier("dataScienceComponents/classification/models/svm.pickle", "dataScienceComponents"
+#                                                                                     "/classification/models/tfidf"
+#                                                                                     ".pickle")
+#         query_category = C.get_category_of_text(query)
+#
+#         E = Extractor(query_category)
+#         piece_indexes = E.get_ranked_documents(C.get_query_keywords(query))
+#
+#         answers = []
+#         for element in piece_indexes:
+#             sql = '''select p.pieceIndex, p.pieceTitle, p.content, l.legislationIndex, l.legislationName
+#                from piece p, legislation l
+#                where p.pieceIndex=''' + str(element) + " and l.legislationIndex=p.legislationIndex;"
+#
+#             db = DatabaseConnection("classify-legislation")
+#             sql_result = db.selectFromDB(sql)
+#
+#             answer = {"pieceTitle": "", "content": "", "legislationName": "", "legislationIndex": "", "pieceIndex": ""}
+#             p_title = sql_result["pieceTitle"][0]
+#             p_con = sql_result["content"][0]
+#             l_name = sql_result["legislationName"][0]
+#             l_index = str(sql_result["legislationIndex"][0])
+#             p_index = str(sql_result["pieceIndex"][0])
+#
+#             answer["pieceTitle"] = p_title
+#             answer["content"] = p_con
+#             answer["legislationName"] = l_name
+#             answer["legislationIndex"] = l_index
+#             answer["pieceIndex"] = p_index
+#
+#             answers.append(answer)
+#
+#     return jsonify(answers)
 
 
 # @application.route('/login', methods=['POST', 'GET'])
