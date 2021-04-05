@@ -5,7 +5,7 @@ from flask import Flask, jsonify, request
 from backend.DatabaseConnection import DatabaseConnection
 from dataScienceComponents.classification.Classifier import Classifier
 from dataScienceComponents.extraction.Extractor import Extractor
-from dataScienceComponents.simplification.Simplifier import Simplifier
+# from dataScienceComponents.simplification.Simplifier import Simplifier
 
 application = Flask(__name__)
 
@@ -53,31 +53,31 @@ def get_legislation_list(catIndex):
     return jsonify(leg_list)
 
 
-@application.route('/simplifiedpiece/<pieceIndex>')
-def get_simplified_piece(pieceIndex):
-    print("piece index "+pieceIndex)
-    sql = '''select pieceTitle, content from piece where pieceIndex= ''' + str(pieceIndex)
-
-    db = DatabaseConnection("classify-legislation")
-    sql_result = db.selectFromDB(sql)
-
-    p_title = sql_result["pieceTitle"][0]
-    p_con = sql_result["content"][0]
-
-    piece = [p_title, p_con]
-
-    S = Simplifier()
-    lex_simplified = S.get_lexically_simplified_text(piece)
-    simplified = S.get_syntactically_simplified_text(lex_simplified)
-    answer = {"pieceTitle": "", "content": "", "pieceIndex": pieceIndex}
-    print(simplified)
-    answer["pieceTitle"] = simplified[0]
-    if len(simplified) == 3:
-        answer["content"] = simplified[1] + ". " + simplified[2]
-    else:
-        answer["content"] = simplified[1]
-
-    return jsonify(answer)
+# @application.route('/simplifiedpiece/<pieceIndex>')
+# def get_simplified_piece(pieceIndex):
+#     print("piece index "+pieceIndex)
+#     sql = '''select pieceTitle, content from piece where pieceIndex= ''' + str(pieceIndex)
+#
+#     db = DatabaseConnection("classify-legislation")
+#     sql_result = db.selectFromDB(sql)
+#
+#     p_title = sql_result["pieceTitle"][0]
+#     p_con = sql_result["content"][0]
+#
+#     piece = [p_title, p_con]
+#
+#     S = Simplifier()
+#     lex_simplified = S.get_lexically_simplified_text(piece)
+#     simplified = S.get_syntactically_simplified_text(lex_simplified)
+#     answer = {"pieceTitle": "", "content": "", "pieceIndex": pieceIndex}
+#     print(simplified)
+#     answer["pieceTitle"] = simplified[0]
+#     if len(simplified) == 3:
+#         answer["content"] = simplified[1] + ". " + simplified[2]
+#     else:
+#         answer["content"] = simplified[1]
+#
+#     return jsonify(answer)
 
 
 @application.route('/search/<query>')
