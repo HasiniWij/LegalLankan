@@ -9,22 +9,22 @@ export const Explore = () => {
             <div className="categorylist">
                 <div className="catitems">
                     <NavLink activeClassName="activee" className="catlink" to={{pathname:"/explore/family", 
-                    state: { urlfull: "http://legallankanbackend-env.eba-rt6yfkpt.ap-south-1.elasticbeanstalk.com/legistlationlist/FA", title:"FAMILY" }}}>FAMILY
+                    state: { urlfull: "https://legallankan-api.azurewebsites.net/legislationlist/FA", title:"FAMILY" }}}>FAMILY
                     </NavLink>
                 </div>
                 <div className="catitems">
                     <NavLink activeClassName="activee" className="catlink" to={{pathname:"/explore/rights",
-                    state: { urlfull: "http://legallankanbackend-env.eba-rt6yfkpt.ap-south-1.elasticbeanstalk.com/legistlationlist/RI", title:"RIGHTS" }}}>RIGHTS
+                    state: { urlfull: "https://legallankan-api.azurewebsites.net/legislationlist/RI", title:"RIGHTS" }}}>RIGHTS
                     </NavLink>
                 </div>
                 <div className="catitems">
                     <NavLink activeClassName="activee" className="catlink" to={{pathname:"/explore/crime",
-                    state: { urlfull: "http://legallankanbackend-env.eba-rt6yfkpt.ap-south-1.elasticbeanstalk.com/legistlationlist/CR", title:"CRIME" }}}>CRIME
+                    state: { urlfull: "https://legallankan-api.azurewebsites.net/legislationlist/CR", title:"CRIME" }}}>CRIME
                     </NavLink>
                 </div>
                 <div className="catitems">
                     <NavLink activeClassName="activee" className="catlink" to={{pathname:"/explore/employment",
-                    state: { urlfull: "http://legallankanbackend-env.eba-rt6yfkpt.ap-south-1.elasticbeanstalk.com/legistlationlist/EM", title:"EMPLOYMENT" }}}>EMPLOYMENT
+                    state: { urlfull: "https://legallankan-api.azurewebsites.net/legislationlist/EM", title:"EMPLOYMENT" }}}>EMPLOYMENT
                     </NavLink>
                 </div>
             </div>
