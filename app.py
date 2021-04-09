@@ -9,7 +9,7 @@ from backend.DatabaseConnection import DatabaseConnection
 
 # from dataScienceComponents.classification.Classifier import Classifier
 from dataScienceComponents.extraction.Extractor import Extractor
-# from dataScienceComponents.simplification.Simplifier import Simplifier
+from dataScienceComponents.simplification.Simplifier import Simplifier
 #test
 
 app = Flask(__name__)
@@ -71,31 +71,31 @@ def test():
 #     return jsonify(piece_indexes)
 
 
-# @app.route('/simplifiedpiece/<pieceIndex>')
-# def get_simplified_piece(pieceIndex):
-#     print("piece index "+pieceIndex)
-#     sql = '''select pieceTitle, content from piece where pieceIndex= ''' + str(pieceIndex)
-#
-#     db = DatabaseConnection("classify-legislation")
-#     sql_result = db.selectFromDB(sql)
-#
-#     p_title = sql_result["pieceTitle"][0]
-#     p_con = sql_result["content"][0]
-#
-#     piece = [p_title, p_con]
-#
-#     S = Simplifier()
-#     lex_simplified = S.get_lexically_simplified_text(piece)
-#     simplified = S.get_syntactically_simplified_text(lex_simplified)
-#     answer = {"pieceTitle": "", "content": "", "pieceIndex": pieceIndex}
-#     print(simplified)
-#     answer["pieceTitle"] = simplified[0]
-#     if len(simplified) == 3:
-#         answer["content"] = simplified[1] + ". " + simplified[2]
-#     else:
-#         answer["content"] = simplified[1]
-#
-#     return jsonify(answer)
+@app.route('/simplifiedpiece/<pieceIndex>')
+def get_simplified_piece(pieceIndex):
+    print("piece index "+pieceIndex)
+    sql = '''select pieceTitle, content from piece where pieceIndex= ''' + str(pieceIndex)
+
+    db = DatabaseConnection("classify-legislation")
+    sql_result = db.selectFromDB(sql)
+
+    p_title = sql_result["pieceTitle"][0]
+    p_con = sql_result["content"][0]
+
+    piece = [p_title, p_con]
+
+    S = Simplifier()
+    lex_simplified = S.get_lexically_simplified_text(piece)
+    simplified = S.get_syntactically_simplified_text(lex_simplified)
+    answer = {"pieceTitle": "", "content": "", "pieceIndex": pieceIndex}
+    print(simplified)
+    answer["pieceTitle"] = simplified[0]
+    if len(simplified) == 3:
+        answer["content"] = simplified[1] + ". " + simplified[2]
+    else:
+        answer["content"] = simplified[1]
+
+    return jsonify(answer)
 
 
 # @app.route('/search/<query>')
@@ -105,34 +105,34 @@ def test():
 #                                                                                     "/classification/models/tfidf"
 #                                                                                     ".pickle")
 #         query_category = C.get_category_of_text(query)
-#
+
 #         E = Extractor(query_category)
 #         piece_indexes = E.get_ranked_documents(C.get_query_keywords(query))
-#
+
 #         answers = []
 #         for element in piece_indexes:
 #             sql = '''select p.pieceIndex, p.pieceTitle, p.content, l.legislationIndex, l.legislationName
 #                from piece p, legislation l
 #                where p.pieceIndex=''' + str(element) + " and l.legislationIndex=p.legislationIndex;"
-#
+
 #             db = DatabaseConnection("classify-legislation")
 #             sql_result = db.selectFromDB(sql)
-#
+
 #             answer = {"pieceTitle": "", "content": "", "legislationName": "", "legislationIndex": "", "pieceIndex": ""}
 #             p_title = sql_result["pieceTitle"][0]
 #             p_con = sql_result["content"][0]
 #             l_name = sql_result["legislationName"][0]
 #             l_index = str(sql_result["legislationIndex"][0])
 #             p_index = str(sql_result["pieceIndex"][0])
-#
+
 #             answer["pieceTitle"] = p_title
 #             answer["content"] = p_con
 #             answer["legislationName"] = l_name
 #             answer["legislationIndex"] = l_index
 #             answer["pieceIndex"] = p_index
-#
+
 #             answers.append(answer)
-#
+
 #     return jsonify(answers)
 
 
