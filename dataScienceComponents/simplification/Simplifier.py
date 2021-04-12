@@ -56,18 +56,7 @@ class Simplifier:
         broken_list = [str1.join(token_list1), str2.join(token_list2)]
         return broken_list
 
-    # # Complex Word Identification
-    # def get_list_cwi_predictions(self, input_text):
-    #     list_cwi_predictions = []
-    #     list_of_words = word_tokenize(input_text)
-    #     for word in list_of_words:
-    #         word = self.cleaned_word(word)
-    #         if zipf_frequency(word, 'en') < 4:
-    #             list_cwi_predictions.append(True)
-    #         else:
-    #             list_cwi_predictions.append(False)
-    #     return list_cwi_predictions
-
+ 
     # basic Named Entity Recognition code
     def NER_identifier(self, text):
         entity_list = []
@@ -87,15 +76,12 @@ class Simplifier:
        list_candidates_bert = []
        names_enitites = self.NER_identifier(input_text)
        lowercase_word = word.lower()
-       print(input_text)
        if lowercase_word not in names_enitites:
                 replace_word_mask = input_text.replace(word, '[MASK]')
                 text = f'[CLS]{replace_word_mask} [SEP] {input_text} [SEP] '
                 print(text)
                 tokenized_text = self.tokenizer.tokenize(text)
                 masked_index = count
-                print("count ",count)
-                print("tokenized_text",tokenized_text)
                 indexed_tokens = self.tokenizer.convert_tokens_to_ids(tokenized_text)
                 segments_ids = [0] * len(tokenized_text)
                 tokens_tensor = torch.tensor([indexed_tokens])
@@ -107,7 +93,6 @@ class Simplifier:
                 predicted_ids = torch.argsort(predictions, descending=True)[:numb_predictions_displayed]
                 predicted_tokens = self.tokenizer.convert_ids_to_tokens(list(predicted_ids))
                 list_candidates_bert.append((word, predicted_tokens))
-       print(list_candidates_bert)
        return list_candidates_bert
 
     def get_lexically_simplified_text(self, piece_list):
