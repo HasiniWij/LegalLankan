@@ -86,6 +86,7 @@ class Simplifier:
                 segments_ids = [0] * len(tokenized_text)
                 tokens_tensor = torch.tensor([indexed_tokens])
                 segments_tensors = torch.tensor([segments_ids])
+                
                 # Predict all tokens
                 with torch.no_grad():
                     outputs = Simplifier.model(tokens_tensor, token_type_ids=segments_tensors)
