@@ -13,22 +13,24 @@ CORS(app)  # comment this on deployment
 
 @app.route('/legislation/<legIndex>')
 def get_legislation(legIndex):
-    sql = '''select pieceIndex, pieceTitle, content from piece where legislationIndex = ''' + str(legIndex)
+    sql = '''select pieceTitle, content from piece where legislationIndex = ''' + str(legIndex)
 
     db = DatabaseConnection("classify-legislation")
     sql_result = db.selectFromDB(sql)
 
     legislation = []
-
     for index, row in sql_result.iterrows():
-        piece = {"pieceTitle": "", "content": "", "pieceIndex:": ""}
+        piece = {"pieceTitle": "", "content": "","number":""}
         pieceTitle = row['pieceTitle']
         content = row['content']
-        piece['pieceIndex']=row['pieceIndex']
-        piece["pieceTitle"] = pieceTitle
+        temp = pieceTitle.split("-", 1)
+        piece["pieceTitle"] = temp[1]
+        piece["number"] = int(temp[0])
         piece["content"] = content
         legislation.append(piece)
-
+    legislation.sort(key=lambda item: item.get("number"))
+    for item in legislation:
+        item.pop("number")
     return jsonify(legislation)
 
 
