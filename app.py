@@ -1,16 +1,15 @@
-# import pickle
-# import jieba
-# nltk.download('wordnet')
-# nltk.download('stopwords')
-# nltk.download('punkt')
+import nltk
+nltk.download('wordnet')
+nltk.download('stopwords')
+nltk.download('punkt')
 from flask import Flask, jsonify, request
 # from gensim import corpora, models, similarities
 from backend.DatabaseConnection import DatabaseConnection
 
 # from dataScienceComponents.classification.Classifier import Classifier
 from dataScienceComponents.extraction.Extractor import Extractor
-from dataScienceComponents.simplification.Simplifier import Simplifier
-#test
+# from dataScienceComponents.simplification.Simplifier import Simplifier
+
 
 app = Flask(__name__)
 
@@ -59,43 +58,34 @@ def get_legislation_list(catIndex):
         leg_list.append(leg)
     return jsonify(leg_list)
 
-@app.route('/test')
-def test():
-    E = Extractor("rights")
-    piece_indexes = E.get_ranked_documents("human rights")
-    return jsonify(str(piece_indexes))
-    
-  
-#     E = Extractor("rights")
-#     piece_indexes = E.get_ranked_documents("human rights")
-#     return jsonify(piece_indexes)
 
 
-@app.route('/simplifiedpiece/<pieceIndex>')
-def get_simplified_piece(pieceIndex):
-    print("piece index "+pieceIndex)
-    sql = '''select pieceTitle, content from piece where pieceIndex= ''' + str(pieceIndex)
 
-    db = DatabaseConnection("classify-legislation")
-    sql_result = db.selectFromDB(sql)
+# @app.route('/simplifiedpiece/<pieceIndex>')
+# def get_simplified_piece(pieceIndex):
+#     print("piece index "+pieceIndex)
+#     sql = '''select pieceTitle, content from piece where pieceIndex= ''' + str(pieceIndex)
 
-    p_title = sql_result["pieceTitle"][0]
-    p_con = sql_result["content"][0]
+#     db = DatabaseConnection("classify-legislation")
+#     sql_result = db.selectFromDB(sql)
 
-    piece = [p_title, p_con]
+#     p_title = sql_result["pieceTitle"][0]
+#     p_con = sql_result["content"][0]
 
-    S = Simplifier()
-    lex_simplified = S.get_lexically_simplified_text(piece)
-    simplified = S.get_syntactically_simplified_text(lex_simplified)
-    answer = {"pieceTitle": "", "content": "", "pieceIndex": pieceIndex}
-    print(simplified)
-    answer["pieceTitle"] = simplified[0]
-    if len(simplified) == 3:
-        answer["content"] = simplified[1] + ". " + simplified[2]
-    else:
-        answer["content"] = simplified[1]
+#     piece = [p_title, p_con]
 
-    return jsonify(answer)
+#     S = Simplifier()
+#     lex_simplified = S.get_lexically_simplified_text(piece)
+#     simplified = S.get_syntactically_simplified_text(lex_simplified)
+#     answer = {"pieceTitle": "", "content": "", "pieceIndex": pieceIndex}
+#     print(simplified)
+#     answer["pieceTitle"] = simplified[0]
+#     if len(simplified) == 3:
+#         answer["content"] = simplified[1] + ". " + simplified[2]
+#     else:
+#         answer["content"] = simplified[1]
+
+#     return jsonify(answer)
 
 
 # @app.route('/search/<query>')
