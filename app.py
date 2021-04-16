@@ -26,7 +26,7 @@ def hello_world():
 
 @app.route('/legislation/<legIndex>')
 def get_legislation(legIndex):
-    sql = '''select pieceTitle, content from piece where legislationIndex = ''' + str(legIndex)
+    sql = '''select pieceTitle, pieceIndex, content from piece where legislationIndex = ''' + str(legIndex)
 
     db = DatabaseConnection("classify-legislation")
     sql_result = db.selectFromDB(sql)
@@ -34,11 +34,10 @@ def get_legislation(legIndex):
     legislation = []
 
     for index, row in sql_result.iterrows():
-        piece = {"pieceTitle": "", "content": ""}
-        pieceTitle = row['pieceTitle']
-        content = row['content']
-        piece["pieceTitle"] = pieceTitle
-        piece["content"] = content
+        piece = {"pieceTitle": "", "content": "", "pieceIndex":""}      
+        piece["pieceTitle"] =row['pieceTitle']
+        piece["content"] = row['content']
+        piece["pieceIndex"] = row['pieceIndex']
         legislation.append(piece)
 
     return jsonify(legislation)
@@ -61,17 +60,6 @@ def get_legislation_list(catIndex):
 
         leg_list.append(leg)
     return jsonify(leg_list)
-
-@app.route('/test')
-def test():
-    E = Extractor("rights")
-    piece_indexes = E.get_ranked_documents("human rights")
-    return jsonify(str(piece_indexes))
-    
-  
-#     E = Extractor("rights")
-#     piece_indexes = E.get_ranked_documents("human rights")
-#     return jsonify(piece_indexes)
 
 
 @app.route('/simplifiedpiece/<pieceIndex>')
