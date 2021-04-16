@@ -34,12 +34,22 @@ def get_legislation(legIndex):
     legislation = []
 
     for index, row in sql_result.iterrows():
-        piece = {"pieceTitle": "", "content": "", "pieceIndex":""}      
-        piece["pieceTitle"] =row['pieceTitle']
+        piece = {"pieceTitle": "", "content": "","number":"", "pieceIndex":""}
+        
         piece["content"] = row['content']
         piece["pieceIndex"] = row['pieceIndex']
+        
+        pieceTitle = row['pieceTitle']
+        temp = pieceTitle.split("-", 1)
+        piece["pieceTitle"] = temp[1]
+        piece["number"] = int(temp[0])
+        
         legislation.append(piece)
-
+        
+        
+    legislation.sort(key=lambda item: item.get("number"))
+    for item in legislation:
+        item.pop("number")
     return jsonify(legislation)
     
 @app.route('/legislationlist/<catIndex>')
@@ -87,15 +97,6 @@ def get_simplified_piece(pieceIndex):
 
     return jsonify(answer)
 
-# @app.route('/search/<query>')
-# def get_answers(query):
-    
-#     query_category = ""
-#     if query is not None:
-#         C = Classifier("dataScienceComponents/classification/models/svm.pickle", "dataScienceComponents/classification/models/tfidf.pickle")      
-#         query_category = C.get_category_of_text(query)
-    
-#     return query_category
 
 @app.route('/search/<query>')
 def get_answers(query):
