@@ -45,7 +45,7 @@ export class Answer extends Component {
                          SIMPLIFY</NavLink>
 
                          <Link className="sealeglink" to ={{pathname:"/legislation", 
-                        state:{urlfull: "https://legallankan-api.azurewebsites.net/legislation/"+post.legislationIndex, 
+                        state:{urlfull: "http://legallankan-env-1.eba-p35fjvzs.ap-south-1.elasticbeanstalk.com/legislation/"+post.legislationIndex, 
                         in:post.legislationIndex, name:post.legislationName}}}>SEE FULL LEGISLATION</Link>
                     </div>            
                     </div>) :
