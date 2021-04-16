@@ -40,12 +40,12 @@ export class Answer extends Component {
                      <span style={{fontSize: "16px", color:"rgba(182,166,139,1)", }}>{post.pieceTitle} - {post.legislationName}</span><br/>
                      <span style={{fontSize: "15px", color:"white", marginTop:"4px"}}>{post.content}</span>
                     <div className="searchlinks">
-                        <NavLink className="menulink" to={{pathname:`/simplify/${post.pieceIndex}`, state:{urlfull:"http://legallankanbackend-env.eba-rt6yfkpt.ap-south-1.elasticbeanstalk.com/simplifiedpiece/"+post.pieceIndex, 
+                        <NavLink className="menulink" to={{pathname:`/simplify/${post.pieceIndex}`, state:{urlfull:"https://legallankanbackend.azurewebsites.net/simplifiedpiece/"+post.pieceIndex,
                         pindex:post.pieceIndex, content:post.content, title:post.pieceTitle, legno:post.legislationIndex,name:post.legislationName}}}>
                          SIMPLIFY</NavLink>
 
                          <Link className="sealeglink" to ={{pathname:"/legislation", 
-                        state:{urlfull: "http://legallankan-env-1.eba-p35fjvzs.ap-south-1.elasticbeanstalk.com/legislation/"+post.legislationIndex, 
+                        state:{urlfull: "https://legallankanbackend.azurewebsites.net/legislation/"+post.legislationIndex,
                         in:post.legislationIndex, name:post.legislationName}}}>SEE FULL LEGISLATION</Link>
                     </div>            
                     </div>) :

@@ -59,7 +59,7 @@ export class Simplify extends Component {
               
              <div className="goback">GO BACK TO - 
              <Link className="goblink" to ={{pathname:"/legislation", 
-                     state:{urlfull: "http://legallankan-env-1.eba-p35fjvzs.ap-south-1.elasticbeanstalk.com/legislation/"+legno, 
+                     state:{urlfull: "https://legallankanbackend.azurewebsites.net/legislation/"+legno,
                      in:legno, name:name}}}> {name}</Link>
              </div>             
         </div>
