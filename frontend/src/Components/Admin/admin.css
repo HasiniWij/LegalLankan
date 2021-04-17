@@ -1,0 +1,130 @@
+/* admin styles */
+.logincon{
+    width: 30%;
+    height: 100%;
+    padding: 2% 3%;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 15px;
+    box-shadow: 0px 20px 40px rgba(0, 0, 0, 1);
+    margin: 7% auto 0 auto;
+}
+.formimgdiv{
+    padding-bottom: 3%;
+    text-align: center;
+}
+.formimg{
+    width: 45%;
+    height: 45%;
+}
+.forminputs {
+    width: 90%;
+    margin: 5% auto 5% auto;
+}
+.input{
+    width: 100%;
+    padding: 10px 0;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #666;
+    color:rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    /* text-transform: uppercase; */
+    outline: none;
+}
+.labels{
+    color: white;
+    letter-spacing: 1.5px;
+    font-size: 14px;
+}
+.star{
+    color: rgba(169,121,46,1);
+    text-shadow: 0 0 20px rgba(169,121,46,0.5);
+    font-size: 17px;
+}
+.loginbuttondiv{
+    width: 100%;
+    text-align: center;
+    padding-top:3% ;
+}
+.loginbutton{
+    width: 30%;
+    outline: none;
+    height: 35px;
+    letter-spacing: 1px;
+    color: white;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.8);
+    transition: transform .3s;
+    border: 3px solid rgba(169,121,46,1);
+    box-shadow:  0px 0px 10px rgba(169,121,46,1);
+    box-sizing: none;
+    border-radius: 15px;
+    margin: auto;
+}
+.loginbutton:hover{
+    transform: scale(1.07);
+}
+
+/* process styles */
+.processcon{
+    width: 25%;
+    height: 100%;
+    margin: 15% auto 0 auto;
+    padding: 2% 3%;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    box-shadow: 0px 20px 40px rgba(0, 0, 0, 1);
+    text-align: center;
+}
+.succmsg{
+    color: white;
+    letter-spacing: 1px;
+    margin-bottom: 8%;
+}
+.uplink{
+    padding:2.5% 4%;
+    letter-spacing: 1px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    background-color: rgba(169,121,46,1);
+    box-shadow: 0px 0px 10px rgba(169,121,46,0.3);
+}
+.uplink:hover{
+    background-color: rgba(169,121,46,0.7);
+}
+.loadermsg{
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    margin-top: 1%;
+    color: rgba(169,121,46,1);
+    font-weight: 700;
+}
+.loader {
+    border: 5px solid rgba(169,121,46,0.1);
+    border-top: 5px solid rgba(169,121,46,1); 
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin: auto;
+    animation: spin 1.1s linear infinite;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* upload styles */
+.uploadcon{
+    width: 70%;
+    padding: 2% 3%;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    box-shadow: 0px 20px 40px rgba(0, 0, 0, 1);
+    color: white;
+    text-align: center;
+    margin: 5% auto 0 auto;
+}
