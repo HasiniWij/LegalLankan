@@ -1,13 +1,9 @@
-# import pickle
-# import jieba
 import nltk
-
 nltk.download('wordnet')
 nltk.download('stopwords')
 nltk.download('punkt')
 
 from flask import Flask, jsonify, request
-# from gensim import corpora, models, similarities
 from backend.DatabaseConnection import DatabaseConnection
 
 from dataScienceComponents.classification.Classifier import Classifier
@@ -17,10 +13,9 @@ from dataScienceComponents.simplification.Simplifier import Simplifier
 
 app = Flask(__name__)
 
-# application = Flask(__name__)
 
 @app.route('/')
-def hello_world():
+def default():
     return "LegalLankan API"
 
 
@@ -81,6 +76,8 @@ def get_simplified_piece(pieceIndex):
     sql_result = db.selectFromDB(sql)
 
     p_title = sql_result["pieceTitle"][0]
+    temp = p_title.split("-", 1)
+    p_title = temp[1]
     p_con = sql_result["content"][0]
 
     piece = [p_title, p_con]
@@ -125,6 +122,10 @@ def get_answers(query):
             l_index = str(sql_result["legislationIndex"][0])
             p_index = str(sql_result["pieceIndex"][0])
 
+            
+            temp = p_title.split("-", 1)
+            p_title = temp[1]
+            
             answer["pieceTitle"] = p_title
             answer["content"] = p_con
             answer["legislationName"] = l_name
@@ -136,25 +137,26 @@ def get_answers(query):
     return jsonify(answers)
 
 
-# @application.route('/login', methods=['POST', 'GET'])
-# def login():
-#     if request.method == 'POST':
-#         user_name = request.form['userName']
-#         admin_password = request.form['password']
-#
-#         sql = '''select adminPassword from account_info where adminUsername=''' + "'" + str(user_name) + "'"
-#         db = DatabaseConnection("admins")
-#         sql_result = db.selectFromDB(sql)
-#
-#         if sql_result.empty:
-#             result = "Invalid username"
-#
-#         elif sql_result["adminPassword"][0] == admin_password:
-#             result = "Signing in..."
-#         else:
-#             result = "Invalid details"
-#
-#         return jsonify(result)
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        data=request.json
+        user_name = data.get('userName')
+        admin_password = data.get('password')
+
+        sql = '''select adminPassword from account_info where adminUsername=''' + "'" + str(user_name) + "'"
+        db = DatabaseConnection("admins")
+        sql_result = db.selectFromDB(sql)
+
+        if sql_result.empty:
+            result = "Invalid username"
+
+        elif sql_result["adminPassword"][0] == admin_password:
+            result = "Signing in..."
+        else:
+            result = "Invalid details"
+
+        return result
 
 
 # @app.route('/uploadLeg')
@@ -205,6 +207,3 @@ def get_answers(query):
 #                 val = (piece_title, piece_dictionary.get(piece_title), leg_index,categories.get(piece_title))
 #                 db.insertToDB(sql, val)
 
-
-# if __name__ == '__main__':
-#     application.run(debug=True)
