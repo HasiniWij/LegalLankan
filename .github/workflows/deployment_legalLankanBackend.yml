@@ -33,6 +33,7 @@ jobs:
     
     - name: Install en_core_web_sm
       run: python -m spacy download en_core_web_sm
+      working-directory: venv
         
       
     # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
