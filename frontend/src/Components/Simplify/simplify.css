@@ -45,5 +45,28 @@
 .goblink:hover{
     color:rgba(169,121,46,0.7);
 }
+.loadermsg{
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    margin-top: 1%;
+    color: rgba(169,121,46,1);
+    font-weight: 700;
+}
+.loader {
+    border: 5px solid rgba(169,121,46,0.1);
+    border-top: 5px solid rgba(169,121,46,1); 
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin: auto;
+    animation: spin 1.1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 
     

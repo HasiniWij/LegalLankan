@@ -9,22 +9,22 @@ export const Explore = () => {
             <div className="categorylist">
                 <div className="catitems">
                     <NavLink activeClassName="activee" className="catlink" to={{pathname:"/explore/family", 
-                    state: { urlfull: "https://legallankanbackend.azurewebsites.net/legislationlist/FA", title:"FAMILY" }}}>FAMILY
+                    state: { urlfull: "https://legallankanbackend.azurewebsites.net/legistlationlist/FA", title:"FAMILY" }}}>FAMILY
                     </NavLink>
                 </div>
                 <div className="catitems">
                     <NavLink activeClassName="activee" className="catlink" to={{pathname:"/explore/rights",
-                    state: { urlfull: "https://legallankanbackend.azurewebsites.net/legislationlist/RI", title:"RIGHTS" }}}>RIGHTS
+                    state: { urlfull: "https://legallankanbackend.azurewebsites.net/legistlationlist/RI", title:"RIGHTS" }}}>RIGHTS
                     </NavLink>
                 </div>
                 <div className="catitems">
                     <NavLink activeClassName="activee" className="catlink" to={{pathname:"/explore/crime",
-                    state: { urlfull: "https://legallankanbackend.azurewebsites.net/legislationlist/CR", title:"CRIME" }}}>CRIME
+                    state: { urlfull: "https://legallankanbackend.azurewebsites.net/legistlationlist/CR", title:"CRIME" }}}>CRIME
                     </NavLink>
                 </div>
                 <div className="catitems">
                     <NavLink activeClassName="activee" className="catlink" to={{pathname:"/explore/employment",
-                    state: { urlfull: "https://legallankanbackend.azurewebsites.net/legislationlist/EM", title:"EMPLOYMENT" }}}>EMPLOYMENT
+                    state: { urlfull: "https://legallankanbackend.azurewebsites.net/legistlationlist/EM", title:"EMPLOYMENT" }}}>EMPLOYMENT
                     </NavLink>
                 </div>
             </div>
