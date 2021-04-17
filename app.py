@@ -2,11 +2,14 @@
 # nltk.download('wordnet')
 # nltk.download('stopwords')
 # nltk.download('punkt')
+import pickle
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 from backend.DatabaseConnection import DatabaseConnection
+from backend.DocumentSplitter import DocumentSplitter
+from backend.uploadLeg import uploadLeg
 
 from dataScienceComponents.classification.Classifier import Classifier
 from dataScienceComponents.extraction.Extractor import Extractor
@@ -150,56 +153,43 @@ def get_answers(query):
 #         else:
 #             result = "Invalid details"
 #
-#         return jsonify(result)
+#         return (result)
 
 
+#
+#
 # @app.route('/uploadLeg')
 # def uploadLegislation():
-#     global piece_title
 #     if request.method == 'POST':
-#         db = DatabaseConnection("classify-legislation")
+#
 #         legislation = request.form['legislation']
 #         legislation_name = request.form['legislation_name']
 #
+#         db = DatabaseConnection("classify-legislation")
 #         insert_leg_sql = "INSERT INTO legislation ( legislationName) VALUES (%s)"
-#         val = (legislation_name)
+#         val = legislation_name
 #         db.insertToDB(insert_leg_sql, val)
-#
-
-#         splitter = DocumentSplitting()
-#         list_dictionary_piece = splitter.getpieces(legislation)
-
-#         splitter = DocumentSplitter()
-#         list_dictionary_piece = splitter.split_core_legislation(legislation)
-
 #
 #         sql = "select legislationIndex from legislation where legislationName=" + legislation_name
 #         sql_result = db.selectFromDB(sql)
 #         leg_index = sql_result["legislationName"][0]
 #
-#         categories = {}
-#         # article1:CR,article2=CR,
+#         splitter = DocumentSplitter()
+#         list_dictionary_piece = splitter.split_core_legislation(legislation)
+#
 #         for piece_dictionary in list_dictionary_piece:
-#             C = Classifier()
-#             piece_category = C.get_category_of_text(piece_title + piece_dictionary.get(piece_title))
-#             categories[piece_title] = piece_category
+#             content = piece_dictionary.get("content")
+#             title = piece_dictionary.get("piece_title")
+#             u = uploadLeg(title, content)
+#             u.upload_data_of_piece(leg_index, legislation_name)
 #
-#         same_category = len(list(set(list(categories.values())))) == 1
-#
-#         if same_category:
-#             cat=categories[0].get(piece_title)
-#             update_leg_category_sql = "UPDATE legislation SET categoryIndex = "+str(cat)+" WHERE legislationIndex =" +leg_index
-#             db.updateDB(update_leg_category_sql)
-#             for piece_dictionary in list_dictionary_piece:
-#                 sql = "INSERT INTO piece ( pieceTitle,content,legislationIndex) VALUES (%s, %s,%s)"
-#                 val = (piece_title, piece_dictionary.get(piece_title),leg_index)
-#                 db.insertToDB(sql, val)
-#
-#         else:
-#             for piece_dictionary in list_dictionary_piece:
-#                 sql = "INSERT INTO pieceCategory ( pieceTitle,content,legislationIndex,categoryIndex) VALUES (%s, %s,%s,%s)"
-#                 val = (piece_title, piece_dictionary.get(piece_title), leg_index,categories.get(piece_title))
-#                 db.insertToDB(sql, val)
+#         category = ["family", "crime", "rights", "employment", ]
+#         for cat in category:
+#             df_path = "dataScienceComponents/extraction/models/" + cat + "/" + cat+"-df"
+#             with open(df_path, 'rb') as df:
+#                 df_cat = pickle.load(df)
+#             e = Extractor()
+#             e.create_matix_dic_tfidf(df_cat, cat)
 
 
 # if __name__ == '__main__':

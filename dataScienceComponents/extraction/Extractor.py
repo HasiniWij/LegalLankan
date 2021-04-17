@@ -58,7 +58,36 @@ class Extractor:
 
         return five_ranked_piece_index
 
+    def create_matix_dic_tfidf(self, category_df, category):
+        # doucmnets should be ranked according legName, pieceName,content
+        data = []
+        for index, row in category_df.iterrows():
+            full_content = row['legName'] + " " + row['pieceName'] + " " + row['content']
+            data.append(full_content)
 
+        # dictionary - convert search word to vector
+        # jieba - cuts the kewords into segments
+        data = [jieba.lcut(text) for text in data]
+        dictionary = corpora.Dictionary(data)
+
+        # counts the word features of the dictionary of texts
+        feature_cnt = len(dictionary.token2id)
+        # counts the number of occurrences of a word within the corpus
+        corpus = [dictionary.doc2bow(text) for text in data]
+        # Creates a tf-idf model
+        tfidf = models.TfidfModel(corpus)
+        # Convert and index the corpus to check for similarity
+        matrix = similarities.SparseMatrixSimilarity(tfidf[corpus], num_features=feature_cnt)
+        common_path = "dataScienceComponents/extraction/models/" + category + "/" + category
+
+        with open(common_path + '_matrix.pickle', 'wb') as output:
+            pickle.dump(matrix, output)
+
+        with open(common_path + '_dic.pickle', 'wb') as output:
+            pickle.dump(dictionary, output)
+
+        with open(common_path + '_tfdif.pickle', 'wb') as output:
+            pickle.dump(tfidf, output)
 
 
 
