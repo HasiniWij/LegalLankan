@@ -53,13 +53,17 @@ export class Simplify extends Component {
                 { posts? <div style={{width: "90%", margin:"0 auto", }}>
                 <div style={{fontSize: "16px", color:"rgba(182,166,139,1)", }}>{posts.pieceTitle}</div>
                  <div style={{fontSize: "15px", color:"white", marginTop:"4px"}}>{posts.content}</div>
-                </div> : null} 
+                </div> :
+                <div>
+                    <div className="loader"></div>
+                    <div className="loadermsg">PLEASE WAIT..</div>
+                </div>} 
              </div>
              </div>
               
              <div className="goback">GO BACK TO - 
              <Link className="goblink" to ={{pathname:"/legislation", 
-                     state:{urlfull: "http://localhost:5000/legislation/"+legno, 
+                     state:{urlfull: "https://legallankanbackend.azurewebsites.net/legislation/"+legno, 
                      in:legno, name:name}}}> {name}</Link>
              </div>             
         </div>

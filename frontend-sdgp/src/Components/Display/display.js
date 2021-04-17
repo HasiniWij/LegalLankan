@@ -42,16 +42,15 @@ export class Display extends Component {
                         <span style={{fontSize: "16px", color:"rgba(182,166,139,1)", }}>{post.pieceTitle} </span><br/>
                         <span style={{fontSize: "15px", color:"white", marginTop:"4px"}}>{post.content} </span>
                      </div>
-                        <NavLink className="menulink" to={{pathname:`/simplify/${post.pieceIndex}`, state:{urlfull:"http://localhost:5000/simplifiedpiece/"+post.pieceIndex, 
+                        <NavLink className="menulink" to={{pathname:`/simplify/${post.pieceIndex}`, state:{urlfull:"https://legallankanbackend.azurewebsites.net/simplifiedpiece/"+post.pieceIndex, 
                         pindex:post.pieceIndex, content:post.content, title:post.pieceTitle, legno:legno,name:name}}}>
                          SIMPLIFY</NavLink>
                      
-                
-                     
-    
-                   
                 </div>) :
-                 null
+                <div>
+                    <div className="loader"></div>
+                    <div className="loadermsg">PLEASE WAIT..</div>
+                </div>
              }
              </div>
     )

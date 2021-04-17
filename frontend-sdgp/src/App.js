@@ -1,12 +1,8 @@
 import React from 'react'; 
-import { logo } from "./logo.svg";
 import './App.css';
-import {BrowserRouter, BrowserRouter as Router, NavLink, Route, Redirect, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, NavLink, Route, Redirect, Switch} from 'react-router-dom';
 
 import Logo from './images/logo.png';
-import IG from './images/ig.png';
-import TW from './images/tw.png';
-import FB from './images/fb.png';
 
 import { Answer } from './Components/Answer/answer';
 import { Search } from './Components/Search/search';
@@ -40,8 +36,8 @@ function App() {
                     return (<Redirect to="/home" />)
                 }}
               />
-      <Route exact path='/home' component={Home}/>
-      <Route exact path='/search' component={ Search }/>
+      <Route path='/home' component={Home}/>
+      <Route path='/search' component={ Search }/>
       <Route path='/explore' component={ Explore }/>
       <Route path='/answer' component={ Answer }/>
       <Route path='/explore/family' component={ MenuAnswer }/>

@@ -26,7 +26,7 @@ export const Search = () => {
                     <div className="searchimgdiv"><img className="searchimg" src={Searchimg} alt="Search"/></div>
                 </div>
                  <div className="searchdiv"><button className="searchbutton" 
-                 onClick={() => {history.push({pathname:'/answer',state: { urlfull: "http://localhost:5000/search/"+data, query:data }}) }}>
+                 onClick={() => {history.push({pathname:'/answer',state: { urlfull: "https://legallankanbackend.azurewebsites.net/search/"+data, query:data }}) }}>
                  Search</button></div>
             </form>
         </div>
