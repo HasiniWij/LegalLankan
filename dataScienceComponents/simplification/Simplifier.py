@@ -18,23 +18,13 @@ class Simplifier:
     bert_model = 'bert-base-uncased'
     model = ""
 
-#     if is_first_run:
-#         bert_model = 'bert-large-uncased'
-#         model = BertForMaskedLM.from_pretrained(bert_model)
-#         is_first_run = False
-#         print("first run")
-        # with open("../dataScienceComponents/simplification/lexical_model.pickle", 'rb') as data:
-            # model = pickle.load(data)
+
     def __init__(self):
-#       print("1")
         # bert_model = 'bert-large-uncased'
         if Simplifier.is_first_run:
             Simplifier.model = BertForMaskedLM.from_pretrained(Simplifier.bert_model)
             Simplifier.is_first_run = False
-#           print("first run")
-        
         self.tokenizer = BertTokenizer.from_pretrained(Simplifier.bert_model)
-        # self.model = BertForMaskedLM.from_pretrained(bert_model)
         Simplifier.model.eval()
         self.conjunction_list = ["for", "and"]
 
@@ -44,10 +34,6 @@ class Simplifier:
 
     # the word is turned to lower case and characters other than letters are removed
     def cleaned_word(self, word):
-        # Remove links
-        # word = re.sub(r'((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])
-        # *', '', word, flags=re.MULTILINE)
-        # word = re.sub('[\W]', ' ', word)
         word = re.sub('[^a-zA-Z]', ' ', word)
         return word.lower().strip()
 
@@ -61,37 +47,27 @@ class Simplifier:
         broken_list = [str1.join(token_list1), str2.join(token_list2)]
         return broken_list
 
-    # # Complex Word Identification
-    # def get_list_cwi_predictions(self, input_text):
-    #     list_cwi_predictions = []
-    #     list_of_words = word_tokenize(input_text)
-    #     for word in list_of_words:
-    #         word = self.cleaned_word(word)
-    #         if zipf_frequency(word, 'en') < 4:
-    #             list_cwi_predictions.append(True)
-    #         else:
-    #             list_cwi_predictions.append(False)
-    #     return list_cwi_predictions
 
-    # basic Named Entity Recognition code
-#     def NER_identifier(self, text):
-#         entity_list = []
-#         # nlp_ner = en_core_web_sm.load()
-#         nlp_ner = spacy.load("en_core_web_sm")
-#         doc = nlp_ner(text)
-#         for x in doc.ents:
-#             entity_tokens = self.tokenizer.tokenize(x.text)
-#             for word in entity_tokens:
-#                 entity_list.append(word)
-#         return entity_list
+
+#     basic Named Entity Recognition code
+    def NER_identifier(self, text):
+        entity_list = []
+        # nlp_ner = en_core_web_sm.load()
+        nlp_ner = spacy.load("en_core_web_sm")
+        doc = nlp_ner(text)
+        for x in doc.ents:
+            entity_tokens = self.tokenizer.tokenize(x.text)
+            for word in entity_tokens:
+                entity_list.append(word)
+        return entity_list
 
 
     # BERT model to predict candidates for identified complex words
     def get_bert_candidates(self, input_text,word,count):
        numb_predictions_displayed = 2
        list_candidates_bert = []
-#        names_enitites = self.NER_identifier(input_text)
-       names_enitites = []
+       names_enitites = self.NER_identifier(input_text)
+#        names_enitites = []
        lowercase_word = word.lower()
        print(input_text)
        if lowercase_word not in names_enitites:
