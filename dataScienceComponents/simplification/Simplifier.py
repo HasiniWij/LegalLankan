@@ -1,6 +1,7 @@
 # import pickle
-# import en_core_web_sm
+
 import spacy
+import en_core_web_sm
 import nltk
 import re
 from nltk.tokenize import word_tokenize
