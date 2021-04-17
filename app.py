@@ -1,40 +1,54 @@
-from flask import Flask, request
-from flask import jsonify
+# import nltk
+# nltk.download('wordnet')
+# nltk.download('stopwords')
+# nltk.download('punkt')
+
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 from backend.DatabaseConnection import DatabaseConnection
-from dataScienceComponents.simplification.Simplifier import Simplifier
+
 from dataScienceComponents.classification.Classifier import Classifier
 from dataScienceComponents.extraction.Extractor import Extractor
+from dataScienceComponents.simplification.Simplifier import Simplifier
 
 app = Flask(__name__)
 CORS(app)  # comment this on deployment
 
+@app.route('/')
+def hello_world():
+    return "LegalLankan API"
+
 
 @app.route('/legislation/<legIndex>')
 def get_legislation(legIndex):
-    sql = '''select pieceTitle, content from piece where legislationIndex = ''' + str(legIndex)
+    sql = '''select pieceTitle, pieceIndex, content from piece where legislationIndex = ''' + str(legIndex)
 
     db = DatabaseConnection("classify-legislation")
     sql_result = db.selectFromDB(sql)
 
     legislation = []
+
     for index, row in sql_result.iterrows():
-        piece = {"pieceTitle": "", "content": "","number":""}
+        piece = {"pieceTitle": "", "content": "","number":"", "pieceIndex":""}
+        
+        piece["content"] = row['content']
+        piece["pieceIndex"] = row['pieceIndex']
+        
         pieceTitle = row['pieceTitle']
-        content = row['content']
         temp = pieceTitle.split("-", 1)
         piece["pieceTitle"] = temp[1]
         piece["number"] = int(temp[0])
-        piece["content"] = content
+        
         legislation.append(piece)
+        
+        
     legislation.sort(key=lambda item: item.get("number"))
     for item in legislation:
         item.pop("number")
     return jsonify(legislation)
-
-
-@app.route('/legistlationlist/<catIndex>')
+    
+@app.route('/legislationlist/<catIndex>')
 def get_legislation_list(catIndex):
     catIndex = catIndex.strip("<>")
     sql = '''select l.legislationIndex, l.legislationName from legislation l where categoryIndex = ''' + '"' + str(
@@ -56,10 +70,12 @@ def get_legislation_list(catIndex):
 
 @app.route('/simplifiedpiece/<pieceIndex>')
 def get_simplified_piece(pieceIndex):
-
+    print("piece index "+pieceIndex)
     sql = '''select pieceTitle, content from piece where pieceIndex= ''' + str(pieceIndex)
+
     db = DatabaseConnection("classify-legislation")
     sql_result = db.selectFromDB(sql)
+
     p_title = sql_result["pieceTitle"][0]
     p_con = sql_result["content"][0]
 
@@ -68,28 +84,25 @@ def get_simplified_piece(pieceIndex):
     S = Simplifier()
     lex_simplified = S.get_lexically_simplified_text(piece)
     simplified = S.get_syntactically_simplified_text(lex_simplified)
-
-    answer = {"pieceTitle": simplified[0], "content": "", "pieceIndex": pieceIndex}
-
+    answer = {"pieceTitle": "", "content": "", "pieceIndex": pieceIndex}
+    answer["pieceTitle"] = simplified[0]
     if len(simplified) == 3:
         answer["content"] = simplified[1] + ". " + simplified[2]
     else:
         answer["content"] = simplified[1]
-
 
     return jsonify(answer)
 
 
 @app.route('/search/<query>')
 def get_answers(query):
-    if query != None:
-        C = Classifier("../dataScienceComponents/classification/models/svm.pickle", "../dataScienceComponents"
+    if query is not None:
+        C = Classifier("dataScienceComponents/classification/models/svm.pickle", "dataScienceComponents"
                                                                                     "/classification/models/tfidf"
                                                                                     ".pickle")
         query_category = C.get_category_of_text(query)
 
-        common_path = "../dataScienceComponents/extraction/models/" + query_category + "/" + query_category
-        E = Extractor(common_path)
+        E = Extractor(query_category)
         piece_indexes = E.get_ranked_documents(C.get_query_keywords(query))
 
         answers = []
@@ -119,25 +132,25 @@ def get_answers(query):
     return jsonify(answers)
 
 
-@app.route('/login', methods=['POST', 'GET'])
-def login():
-    if request.method == 'POST':
-        user_name = request.form['userName']
-        admin_password = request.form['password']
-
-        sql = '''select adminPassword from account_info where adminUsername=''' + "'" + str(user_name) + "'"
-        db = DatabaseConnection("admins")
-        sql_result = db.selectFromDB(sql)
-
-        if sql_result.empty:
-            result = "Invalid username"
-
-        elif sql_result["adminPassword"][0] == admin_password:
-            result = "Signing in..."
-        else:
-            result = "Invalid details"
-
-        return jsonify(result)
+# @application.route('/login', methods=['POST', 'GET'])
+# def login():
+#     if request.method == 'POST':
+#         user_name = request.form['userName']
+#         admin_password = request.form['password']
+#
+#         sql = '''select adminPassword from account_info where adminUsername=''' + "'" + str(user_name) + "'"
+#         db = DatabaseConnection("admins")
+#         sql_result = db.selectFromDB(sql)
+#
+#         if sql_result.empty:
+#             result = "Invalid username"
+#
+#         elif sql_result["adminPassword"][0] == admin_password:
+#             result = "Signing in..."
+#         else:
+#             result = "Invalid details"
+#
+#         return jsonify(result)
 
 
 # @app.route('/uploadLeg')
@@ -189,5 +202,5 @@ def login():
 #                 db.insertToDB(sql, val)
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     application.run(debug=True)

@@ -6,36 +6,35 @@ import jieba
 import pickle
 import pandas as pd
 
+
 class Extractor:
 
-    def __init__(self, common_path,category):
-        if category=="other":
-            print("other")
-        else:
-            # common_path = "../dataScienceComponents/extraction/models/"+category+"/"+category
+    def __init__(self, category):
 
-            # loading the similarity matrix which stores document similarity data of all documents within the category
-            matrix_path = common_path+"_matrix.pickle"
+        common_path = "./dataScienceComponents/extraction/models/" + category + "/" + category
 
-            with open(matrix_path, 'rb') as matrix:
-                self.category_matrix = pickle.load(matrix)
+        # loading the similarity matrix which stores document similarity data of all documents within the category
+        matrix_path = common_path + "_matrix.pickle"
 
-            # loading the dictionary of the category
-            dictionary_path = common_path+"_dic.pickle"
-            with open(dictionary_path, 'rb') as cat_dictionary:
-                self.dictionary = pickle.load(cat_dictionary)
+        with open(matrix_path, 'rb') as matrix:
+            self.category_matrix = pickle.load(matrix)
 
-            # loading the tfidf model of the category
-            tfidf_path = common_path+"_tfdif.pickle"
-            with open(tfidf_path, 'rb') as tfidf_model:
-                self.tfidf = pickle.load(tfidf_model)
+        # loading the dictionary of the category
+        dictionary_path = common_path + "_dic.pickle"
+        with open(dictionary_path, 'rb') as cat_dictionary:
+            self.dictionary = pickle.load(cat_dictionary)
 
-            # loading the piece index mapping with matrix index of the category
-            piece_index_mapping_path = common_path+"-pieceIndex-mapping.pickle"
-            with open(piece_index_mapping_path, 'rb') as mapping:
-                self.piece_index_mapping = pickle.load(mapping)
+        # loading the tfidf model of the category
+        tfidf_path = common_path + "_tfdif.pickle"
+        with open(tfidf_path, 'rb') as tfidf_model:
+            self.tfidf = pickle.load(tfidf_model)
 
-    def get_ranked_documents(self,keywords):
+        # loading the piece index mapping with matrix index of the category
+        df_path = common_path + "-df.pickle"
+        with open(df_path, 'rb') as mapping:
+            self.df = pickle.load(mapping)
+
+    def get_ranked_documents(self, keywords):
         documents_with_a_rank = {}
 
         # dictionary - convert search word to vector
@@ -47,13 +46,13 @@ class Extractor:
 
         for i in range(len(sim)):
             if sim[i] > 0.00:
-                documents_with_a_rank[i]=sim[i]
+                documents_with_a_rank[i] = sim[i]
 
-        five_ranked_documents = sorted(documents_with_a_rank, key=documents_with_a_rank   .get, reverse=True)[:5]
-        five_ranked_piece_index=[]
+        five_ranked_documents = sorted(documents_with_a_rank, key=documents_with_a_rank.get, reverse=True)[:5]
+        five_ranked_piece_index = []
         for doc in five_ranked_documents:
-            for index, row in self.piece_index_mapping.iterrows():
-                if doc==index:
+            for index, row in self.df.iterrows():
+                if doc == index:
                     five_ranked_piece_index.append(row['pieceIndex'])
                     break
 
