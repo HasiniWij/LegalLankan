@@ -33,7 +33,7 @@ jobs:
     
     - name: Install en_core_web_sm
       run: python -m spacy download en_core_web_sm
-      working-directory: venv
+      working-directory: venv/tmp/8d9015d80284653/antenv/lib/python3.7/site-packages/
         
       
     # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
