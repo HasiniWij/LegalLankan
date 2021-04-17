@@ -45,3 +45,5 @@ spacy
 azure-functions   
 -f https://download.pytorch.org/whl/torch_stable.html
 torch==1.5.0+cpu
+
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0/en_core_web_sm-2.2.0.tar.gz
