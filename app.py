@@ -5,11 +5,10 @@ nltk.download('punkt')
 
 from flask import Flask, jsonify, request
 from backend.DatabaseConnection import DatabaseConnection
-
 from dataScienceComponents.classification.Classifier import Classifier
 from dataScienceComponents.extraction.Extractor import Extractor
 from dataScienceComponents.simplification.Simplifier import Simplifier
-#test
+
 
 app = Flask(__name__)
 
@@ -137,26 +136,26 @@ def get_answers(query):
     return jsonify(answers)
 
 
-# @app.route('/login', methods=['POST', 'GET'])
-# def login():
-#     if request.method == 'POST':
-#         data=request.json
-#         user_name = data.get('userName')
-#         admin_password = data.get('password')
+@app.route('/login')
+def login():
+    if request.method == 'POST':
+        data=request.json
+        user_name = data.get('userName')
+        admin_password = data.get('password')
 
-#         sql = '''select adminPassword from account_info where adminUsername=''' + "'" + str(user_name) + "'"
-#         db = DatabaseConnection("admins")
-#         sql_result = db.selectFromDB(sql)
+        sql = '''select adminPassword from account_info where adminUsername=''' + "'" + str(user_name) + "'"
+        db = DatabaseConnection("admins")
+        sql_result = db.selectFromDB(sql)
 
-#         if sql_result.empty:
-#             result = "Invalid username"
+        if sql_result.empty:
+            result = "Invalid username"
 
-#         elif sql_result["adminPassword"][0] == admin_password:
-#             result = "Signing in..."
-#         else:
-#             result = "Invalid details"
+        elif sql_result["adminPassword"][0] == admin_password:
+            result = "Signing in..."
+        else:
+            result = "Invalid details"
 
-#         return result
+        return result
 
 
 # @app.route('/uploadLeg')
