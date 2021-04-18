@@ -13,7 +13,7 @@ nlp = StanfordCoreNLP("https://corenlp.run/")
 
 class Simplifier:
     is_first_run = True
-    bert_model = 'bert-large-uncased'
+    bert_model = 'bert-base-uncased'
     model = ""
 
     def __init__(self):
