@@ -136,7 +136,7 @@ def get_answers(query):
     return jsonify(answers)
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         data=request.json
