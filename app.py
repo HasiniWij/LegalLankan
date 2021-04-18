@@ -155,7 +155,7 @@ def login():
         else:
             result = "Invalid details"
 
-        return result
+        return jsonify(result)
 
 
 # @app.route('/uploadLeg')
