@@ -1,6 +1,5 @@
 import React from 'react'; 
 import './explore.css';
-import { MenuAnswer } from '../Answer/menuAnswer';
 import {BrowserRouter as Router, NavLink, Route} from 'react-router-dom';
 
 export const Explore = () => { 

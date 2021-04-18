@@ -13,29 +13,9 @@ function Admin() {
         setPass(val.target.value)
     }
     const history = useHistory();
-    // function handleSubmit(event) {
-    //     console.log("making request")
-    //     fetch("/login", {
-    //         method:"POST",
-    //         cache: "no-cache",
-    //         headers:{
-    //             "content_type":"application/json",
-    //         },
-    //         body:JSON.stringify(this.state.value)
-    //         }
-    //     )
-    //       .then(response => {
-    //         console.log(response)
-    //         return response.json()
-    //       })
-    //       .then(json => {
-    //       console.log=(json)
-    //     //   this.setState({playerName: json[0]})
-    //       })
-    //   }
+    
     return (
       <div className="logincon">
-        {/* <form class ="adminForm" action="http://localhost:5000/login" onSubmit={handleSubmit} method="post" autocomplete ="off"> */}
         <form class ="adminForm" autocomplete ="off">
         <div className="formimgdiv">
             <img className="formimg" src={Logo} alt="Logo"/>

@@ -24,7 +24,6 @@ export class Display extends Component {
         })
         .catch(error =>{
             console.log(error)
-            // this.setState({urfull:this.props.location.state.urlfull}) //test
             this.setState({errormsg:"Invalid Request"})
         })
     }

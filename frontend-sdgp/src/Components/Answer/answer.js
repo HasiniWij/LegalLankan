@@ -9,7 +9,6 @@ export class Answer extends Component {
         this.state={
             posts:[],
             errormsg:"",
-            urfull:"",
             query:"",
         }
     }
@@ -22,13 +21,12 @@ export class Answer extends Component {
         })
         .catch(error =>{
             console.log(error)
-            this.setState({urfull:this.props.location.state.urlfull}) //test
             this.setState({errormsg:"Invalid Request"})
         })
     }
 
     render(){
-        const {posts, errormsg, query,urfull} = this.state
+        const {posts, errormsg, query} = this.state
         return (
          <div className="searchans">
              { errormsg? <div className="seatitle">{errormsg}</div> : null}

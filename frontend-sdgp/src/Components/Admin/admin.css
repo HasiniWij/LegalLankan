@@ -119,12 +119,67 @@
 
 /* upload styles */
 .uploadcon{
-    width: 70%;
+    width: 30%;
+    height: 100%;
     padding: 2% 3%;
     background-color: rgba(0, 0, 0, 0.7);
     border-radius: 15px;
     box-shadow: 0px 20px 40px rgba(0, 0, 0, 1);
-    color: white;
     text-align: center;
-    margin: 5% auto 0 auto;
+    margin: 10% auto 0 auto;
+}
+.uploadbtn{
+    width: 25%;
+    height: 35px;
+    letter-spacing: 1px;
+    color: white;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.8);
+    transition: transform .3s;
+    border: 3px solid rgba(169,121,46,1);
+    box-shadow:  0px 0px 10px rgba(169,121,46,1);
+    box-sizing: none;
+    border-radius: 15px;
+    margin-top: 7%;
+    outline: none;
+}
+.uploadbtn:hover{
+    transform: scale(1.07);
+}
+.uploadtitle{
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: rgba(169,121,46,1);
+    font-weight: 700;
+    margin-bottom: 5%;
+}
+.fileerror{
+    margin-top: 3%;
+    color: red;
+    letter-spacing: 1px;
+    font-size: 13px;
+}
+.fileinput{
+    background-color: rgba(255, 255, 255, 0.3);
+    padding: 2%;
+    color: white;
+    border-radius: 10px;
+}
+
+/* confirm styles */
+.confirmcon{
+    width: 25%;
+    height: 100%;
+    padding: 2% 3%;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 15px;
+    box-shadow: 0px 20px 40px rgba(0, 0, 0, 1);
+    margin: 14% auto 0 auto;
+    text-align: center;
+}
+.confirmtext{
+    color: white;
+    margin-bottom: 12%;
+    letter-spacing: 1px;
+    font-size: 15px;
 }

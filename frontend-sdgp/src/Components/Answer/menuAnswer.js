@@ -14,9 +14,6 @@ export class MenuAnswer extends Component {
         }
     }
     componentDidMount(){
-        //axios.get(this.props.location.state.url+this.props.location.state.q)
-        //axios.get(this.props.location.state.url)
-        //axios.get("https://jsonplaceholder.typicode.com/posts")
         axios.get(this.props.location.state.urlfull)
         .then(response =>{
             console.log(response)

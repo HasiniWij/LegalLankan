@@ -1,28 +1,30 @@
 import React, {useState} from 'react'; 
 import './admin.css';
+import { useHistory } from 'react-router-dom';
+import {BrowserRouter as Router, Link, NavLink, Route} from 'react-router-dom';
 
 function Upload() {
-  const [pdfFile, setPdfFile]=useState(null);
-  const [pdfFileError, setPdfFileError]=useState('');
-
-  const [viewPdf, setViewPdf]=useState(null);
   const [test, setTest]=useState('');
-
-  const fileType=['application/pdf'];
-  const handlePdfFileChange=(e)=>{
+  const [textFile, setTextFile]=useState('');
+  const [fileError, setFileError]=useState('');
+  const history = useHistory();
+  
+  const fileType=['text/plain'];
+  const handleFileChange=(e)=>{
     let selectedFile=e.target.files[0];
     if (selectedFile){
       if (selectedFile&&fileType.includes(selectedFile.type)){
-        let reader =new FileReader();
-        reader.readAsDataURL(selectedFile);
-        reader.onloadend = (e) =>{
-          setPdfFile(e.target.result);
-          setPdfFileError('');
+        let filereader =new FileReader();
+        filereader.readAsText(selectedFile);
+        filereader.onloadend=(e)=>{
+          setTextFile(e.target.result);
+          console.log(e.target.result)
         }
+        setFileError('');
       }
       else{
-        setPdfFile(null);
-        setPdfFileError('Please select valid pdf file');
+        setTextFile("");
+        setFileError('INVALID FILE FORMAT');
       }
     }
     else{
@@ -30,28 +32,33 @@ function Upload() {
     }
   }
 
-  const handleSubmit=(e)=>{
+  function handleSubmit(e) {
     e.preventDefault();
-    if (pdfFile!==null){
-      setViewPdf(pdfFile);
+    if (textFile!==""){
       setTest("submit working");
+      history.push({pathname:'/admin/confirm',state: { data:{ text: textFile }, textFile:textFile }})
+      setTest("")
     }
     else{
-      setViewPdf(null);
+      setTest("PLEASE SELECT A TEXT FILE");
     }
   }
+ 
 
     return (
       <div className="uploadcon">
+        <div className="uploadtitle">UPLOAD TEXT FILE</div>
         <form>
-          <input type="file" required onChange={handlePdfFileChange}/>
-          {pdfFileError&&<div>{pdfFileError}</div>}
+        <div class="upload-btn-wrapper">
+          <input type="file"  className="fileinput" required onChange={handleFileChange} />
+        </div>
+        {fileError ?<div className="fileerror">{fileError}</div>:<div></div>}
           <div>
-            <button onClick={handleSubmit}>UPLAOD PDF</button>
+            <button className="uploadbtn" onClick={handleSubmit}>UPLAOD</button>
           </div>
         </form>
         <div>
-          {test&&<div>{test}</div>}
+          {test&&<div className="fileerror">{test}</div>}
         </div>
     </div>
     );
