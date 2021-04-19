@@ -1,6 +1,6 @@
 import pymysql
 import pandas as pd
-# import mysql.connector
+import mysql.connector
 
 
 class DatabaseConnection:
