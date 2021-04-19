@@ -21,6 +21,7 @@ class DatabaseConnection:
         cur = self.conn.cursor()
         cur.execute(sql, val)
         self.conn.commit()
+        cur.close()
 #         mydb = mysql.connector.connect(
 #             host=self.host,
 #             port = self.port,
@@ -37,6 +38,7 @@ class DatabaseConnection:
         cur = self.conn.cursor()
         cur.execute(sql)
         self.conn.commit()
+        cur.close()
 #         mydb = mysql.connector.connect(
 #             host=self.host,
 #             port=self.port,
