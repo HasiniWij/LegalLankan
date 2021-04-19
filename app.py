@@ -206,6 +206,6 @@ def uploadLegislation():
         update_leg_category_sql = "UPDATE legislation SET categoryIndex = " + '"' + str(cat) + '"' + " WHERE legislationIndex =" + str(leg_index)
         db.updateDB(update_leg_category_sql)
         
-        return "process successful"
+        return jsonify("process successful")
 
-    return "invalid request made"
+#     return "invalid request made"
