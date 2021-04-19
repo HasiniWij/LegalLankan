@@ -2,11 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import Admin from './Components/Admin/admin'
+import Admin from './Components/Admin/admin';
 import Process from './Components/Admin/process';
 import Upload from './Components/Admin/upload';
+import Confirm from './Components/Admin/confirm';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter as Router, NavLink, Route, Redirect, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Redirect, Switch} from 'react-router-dom';
 
 
 ReactDOM.render(
@@ -21,6 +22,7 @@ ReactDOM.render(
       <Route exact path='/admin' component={Admin}/>
       <Route path='/admin/process' component={Process}/>
       <Route path='/admin/upload' component={Upload}/>
+      <Route path='/admin/confirm' component={Confirm}/>
     </Router>
   </React.StrictMode>,
   document.getElementById('root')

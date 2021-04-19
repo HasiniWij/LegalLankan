@@ -37,7 +37,7 @@ function App() {
                 }}
               />
       <Route path='/home' component={Home}/>
-      <Route path='/search' component={ Search }/>
+      <Route exact path='/search' component={Search}/>
       <Route path='/explore' component={ Explore }/>
       <Route path='/answer' component={ Answer }/>
       <Route path='/explore/family' component={ MenuAnswer }/>
@@ -45,9 +45,9 @@ function App() {
       <Route path='/explore/crime' component={ MenuAnswer }/>
       <Route path='/explore/employment' component={ MenuAnswer }/>
       <Route path='/legislation' component={ Display }/>
-      <Switch>
+    
       <Route path='/simplify/:Id' component={ Simplify }/>
-      </Switch>
+    
       </div>
     </Router>
     </div>

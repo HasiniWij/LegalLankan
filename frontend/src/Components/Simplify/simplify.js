@@ -45,7 +45,11 @@ export class Simplify extends Component {
                  <div className="simtitle">ORIGINAL</div>
                  <div style={{width: "90%", margin:"0 auto", }}>
                 { title? <div style={{fontSize: "16px", color:"rgba(182,166,139,1)", }}>{title}</div> : null}
-                { content? <div style={{fontSize: "15px", color:"white", marginTop:"4px"}}>{content}</div> : null}
+                { content? <div style={{fontSize: "15px", color:"white", marginTop:"4px"}}>{content}</div> :
+                 <div>
+                 <div className="loader"></div>
+                 <div className="loadermsg">PLEASE WAIT..</div>
+             </div>}
                 </div>
              </div>
              <div className="simplified">
