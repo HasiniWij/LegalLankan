@@ -1,6 +1,6 @@
 import pymysql
 import pandas as pd
-import mysql.connector
+# import mysql.connector
 
 
 class DatabaseConnection:
@@ -17,7 +17,10 @@ class DatabaseConnection:
         sql_result = pd.read_sql(sql, con=self.conn)
         return sql_result
 
-#     def insertToDB(self, sql,val):
+    def insertToDB(self, sql,val):
+        cur = self.conn.cursor()
+        cur.execute(sql, val)
+        self.conn.commit()
 #         mydb = mysql.connector.connect(
 #             host=self.host,
 #             port = self.port,
@@ -29,7 +32,11 @@ class DatabaseConnection:
 #         mycursor.execute(sql, val)
 #         mydb.commit()
 
-#     def updateDB(self, sql):
+
+    def updateDB(self, sql):
+        cur = self.conn.cursor()
+        cur.execute(sql)
+        self.conn.commit()
 #         mydb = mysql.connector.connect(
 #             host=self.host,
 #             port=self.port,
