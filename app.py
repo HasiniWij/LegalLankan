@@ -158,51 +158,52 @@ def login():
         return jsonify(result)
 
 
-# @app.route('/uploadLeg')
-# def uploadLegislation():
-#     global piece_title
-#     if request.method == 'POST':
-#         db = DatabaseConnection("classify-legislation")
-#         legislation = request.form['legislation']
-#         legislation_name = request.form['legislation_name']
-#
-#         insert_leg_sql = "INSERT INTO legislation ( legislationName) VALUES (%s)"
-#         val = (legislation_name)
-#         db.insertToDB(insert_leg_sql, val)
-#
+@app.route('/uploadLeg', methods=['GET', 'POST'])
+def uploadLegislation():
+    if request.method == 'POST':
+        data = request.json
+        text = data.get('text')
 
-#         splitter = DocumentSplitting()
-#         list_dictionary_piece = splitter.getpieces(legislation)
+        splitter = DocumentSplitter()
+        legislation_name, list_dictionary_piece = splitter.split_core_legislation(text)
+        legislation_name = legislation_name.strip()
 
-#         splitter = DocumentSplitter()
-#         list_dictionary_piece = splitter.split_core_legislation(legislation)
+        db = DatabaseConnection("classify-legislation")
+        insert_leg_sql = "INSERT INTO legislation (legislationName, categoryIndex) VALUES (%s, %s)"
+        val = (legislation_name, "OT")
+        db.insertToDB(insert_leg_sql, val)
 
-#
-#         sql = "select legislationIndex from legislation where legislationName=" + legislation_name
-#         sql_result = db.selectFromDB(sql)
-#         leg_index = sql_result["legislationName"][0]
-#
-#         categories = {}
-#         # article1:CR,article2=CR,
-#         for piece_dictionary in list_dictionary_piece:
-#             C = Classifier()
-#             piece_category = C.get_category_of_text(piece_title + piece_dictionary.get(piece_title))
-#             categories[piece_title] = piece_category
-#
-#         same_category = len(list(set(list(categories.values())))) == 1
-#
-#         if same_category:
-#             cat=categories[0].get(piece_title)
-#             update_leg_category_sql = "UPDATE legislation SET categoryIndex = "+str(cat)+" WHERE legislationIndex =" +leg_index
-#             db.updateDB(update_leg_category_sql)
-#             for piece_dictionary in list_dictionary_piece:
-#                 sql = "INSERT INTO piece ( pieceTitle,content,legislationIndex) VALUES (%s, %s,%s)"
-#                 val = (piece_title, piece_dictionary.get(piece_title),leg_index)
-#                 db.insertToDB(sql, val)
-#
-#         else:
-#             for piece_dictionary in list_dictionary_piece:
-#                 sql = "INSERT INTO pieceCategory ( pieceTitle,content,legislationIndex,categoryIndex) VALUES (%s, %s,%s,%s)"
-#                 val = (piece_title, piece_dictionary.get(piece_title), leg_index,categories.get(piece_title))
-#                 db.insertToDB(sql, val)
+        sql = '''select l.legislationIndex from legislation l where legislationName = ''' + '"' + str(
+            legislation_name) + '"'
 
+        sql_result = db.selectFromDB(sql)
+        leg_index = sql_result["legislationIndex"][0]
+
+        for piece_dictionary in list_dictionary_piece:
+            content = piece_dictionary.get("content")
+            title = piece_dictionary.get("pieceTitle")
+            u = UploadLeg(title, content)
+            u.upload_data_of_piece(leg_index, legislation_name)
+
+        category = ["family", "crime", "rights", "employment", ]
+        for cat in category:
+            e = Extractor(cat)
+            e.create_matix_dic_tfidf(cat)
+
+        db = DatabaseConnection("classify-legislation")
+        sql = "SELECT categoryIndex, COUNT(pieceIndex) FROM piece_category GROUP BY categoryIndex"
+        sql_result = db.selectFromDB(sql)
+
+        max = 0
+        cat = ""
+        for index, row in sql_result.iterrows():
+            if row['COUNT(pieceIndex)'] > max:
+                max = row['COUNT(pieceIndex)']
+                cat = row['categoryIndex']
+
+        leg_index = leg_index.item()
+
+        update_leg_category_sql = "UPDATE legislation SET categoryIndex = " + '"' + str(cat) + '"' + " WHERE legislationIndex =" + str(leg_index)
+        db.updateDB(update_leg_category_sql)
+
+    return "working"
