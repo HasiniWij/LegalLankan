@@ -1,6 +1,6 @@
 import pickle
 import pandas as pd
-# from backend.DatabaseConnection import DatabaseConnection
+from backend.DatabaseConnection import DatabaseConnection
 from dataScienceComponents.classification.Classifier import Classifier
 
 
