@@ -168,7 +168,7 @@ def uploadLegislation():
         u = UploadLeg()
         u.upload_data_of_piece(text)
 
-        return "successfully uploaded"
+        return jsonify("successfully uploaded")
 
 
 # @app.route('/uploadLeg', methods=['GET', 'POST'])
