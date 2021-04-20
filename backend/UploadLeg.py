@@ -42,11 +42,11 @@ class UploadLeg:
         val = (self.title, self.content,leg_index,category_code)
         db.insertToDB(sql, val)
 
-#         sql = 'select pieceIndex from piece_category where pieceTitle=' + '"' + self.title + '"' + " AND content=" + '"' + self.content + '"'
-#         sql_result = db.selectFromDB(sql)
+        sql = 'select pieceIndex from piece_category where pieceTitle=' + '"' + self.title + '"' + " AND content=" + '"' + self.content + '"'
+        sql_result = db.selectFromDB(sql)
 
-#         piece_index = sql_result["pieceIndex"][0]
-#         print(piece_index)
+        piece_index = sql_result["pieceIndex"][0]
+        print(piece_index)
 
 #         df_path = "dataScienceComponents/extraction/models/" + piece_category + "/" + piece_category+"-df.pickle"
 #         with open(df_path, 'rb') as df:
