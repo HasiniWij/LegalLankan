@@ -2,7 +2,7 @@
     height: 100%;
 }
 .searchbox{
-    width: 30%;
+    width: 420px;
     height: 30px;
     border-radius: 40px;
     padding: 10px;
@@ -52,5 +52,5 @@
 }
 .searchdiv{
     margin: 2.5% auto;
-    width: 8%;
+    width:110px;
 }

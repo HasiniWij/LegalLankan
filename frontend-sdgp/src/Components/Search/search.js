@@ -1,4 +1,4 @@
-import React, { Component, useState} from 'react'; 
+import React, { useState} from 'react'; 
 import './search.css';
 import Searchimg from './search.png';
 import { useHistory } from 'react-router-dom';
@@ -16,7 +16,7 @@ export const Search = () => {
             <form>
                 <div className="searchbox">
                     <input type="text" className="searchtext" onChange={getData}
-                    name="query" placeholder="Ask a Question.."></input>
+                    name="query" placeholder="Ask a Question..."></input>
                     <div className="searchimgdiv"><img className="searchimg" src={Searchimg} alt="Search"/></div>
                 </div>
                  <div className="searchdiv"><button className="searchbutton" 
