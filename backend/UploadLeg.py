@@ -35,17 +35,18 @@ class UploadLeg:
 
         self.content = self.content.replace("'", "")
         self.content = self.content.replace("\"", "")
-        print(self.content)
+        print(self.title)
 
-#         db = DatabaseConnection("classify-legislation")
-#         sql = "INSERT INTO piece_category (pieceTitle,content,legislationIndex,categoryIndex) VALUES (%s, %s,%s,%s)"
-#         val = (self.title, self.content,leg_index,category_code)
-#         db.insertToDB(sql, val)
+        db = DatabaseConnection("classify-legislation")
+        sql = "INSERT INTO piece_category (pieceTitle,content,legislationIndex,categoryIndex) VALUES (%s, %s,%s,%s)"
+        val = (self.title, self.content,leg_index,category_code)
+        db.insertToDB(sql, val)
 
-#         sql = 'select pieceIndex from piece_category where pieceTitle=' + '"' + self.title + '"' + " AND content=" + '"' + self.content + '"'
-#         sql_result = db.selectFromDB(sql)
+        sql = 'select pieceIndex from piece_category where pieceTitle=' + '"' + self.title + '"' + " AND content=" + '"' + self.content + '"'
+        sql_result = db.selectFromDB(sql)
 
-#         piece_index = sql_result["pieceIndex"][0]
+        piece_index = sql_result["pieceIndex"][0]
+        print(piece_index)
 
 #         df_path = "dataScienceComponents/extraction/models/" + piece_category + "/" + piece_category+"-df.pickle"
 #         with open(df_path, 'rb') as df:
