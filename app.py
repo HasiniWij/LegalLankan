@@ -188,11 +188,11 @@ def uploadLegislation():
             u.upload_data_of_piece(leg_index, legislation_name)
         print("4-content inserted")
         
-        category = ["family", "crime", "rights", "employment", ]
-        for cat in category:
-            e = Extractor(cat)
-            e.create_matix_dic_tfidf(cat)
-        print("5- models updated")
+#         category = ["family", "crime", "rights", "employment", ]
+#         for cat in category:
+#             e = Extractor(cat)
+#             e.create_matix_dic_tfidf(cat)
+#         print("5- models updated")
         db = DatabaseConnection("classify-legislation")
         sql = "SELECT categoryIndex, COUNT(pieceIndex) FROM piece_category GROUP BY categoryIndex"
         sql_result = db.selectFromDB(sql)
