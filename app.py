@@ -158,58 +158,69 @@ def login():
             result = "Invalid details"
 
         return jsonify(result)
-
-
+    
+    
 @app.route('/uploadLeg', methods=['GET', 'POST'])
 def uploadLegislation():
     if request.method == 'POST':
         data = request.json
         text = data.get('text')
-        print("1-Text received")
-        splitter = DocumentSplitter()
-        legislation_name, list_dictionary_piece = splitter.split_core_legislation(text)
-        legislation_name = legislation_name.strip()
-        print("2-Doc split done")
-        db = DatabaseConnection("classify-legislation")
-        insert_leg_sql = "INSERT INTO legislation (legislationName, categoryIndex) VALUES (%s, %s)"
-        val = (legislation_name, "OT")
-        db.insertToDB(insert_leg_sql, val)
-        print("3-Leg name inserted")
-        sql = '''select l.legislationIndex from legislation l where legislationName = ''' + '"' + str(
-            legislation_name) + '"'
-        sql_result = db.selectFromDB(sql)
+        u = UploadLeg()
+        u.upload_data_of_piece(text)
+
+        return "successfully uploaded"
+
+
+# @app.route('/uploadLeg', methods=['GET', 'POST'])
+# def uploadLegislation():
+#     if request.method == 'POST':
+#         data = request.json
+#         text = data.get('text')
+#         print("1-Text received")
+#         splitter = DocumentSplitter()
+#         legislation_name, list_dictionary_piece = splitter.split_core_legislation(text)
+#         legislation_name = legislation_name.strip()
+#         print("2-Doc split done")
+#         db = DatabaseConnection("classify-legislation")
+#         insert_leg_sql = "INSERT INTO legislation (legislationName, categoryIndex) VALUES (%s, %s)"
+#         val = (legislation_name, "OT")
+#         db.insertToDB(insert_leg_sql, val)
+#         print("3-Leg name inserted")
+#         sql = '''select l.legislationIndex from legislation l where legislationName = ''' + '"' + str(
+#             legislation_name) + '"'
+#         sql_result = db.selectFromDB(sql)
         
-        leg_index = sql_result["legislationIndex"][0]
-        print("3-Leg index selected")
-        for piece_dictionary in list_dictionary_piece:
-            content = piece_dictionary.get("content")
-            title = piece_dictionary.get("pieceTitle")
-            u = UploadLeg(title, content)
-            u.upload_data_of_piece(leg_index, legislation_name)
-        print("4-content inserted")
+#         leg_index = sql_result["legislationIndex"][0]
+#         print("3-Leg index selected")
+#         for piece_dictionary in list_dictionary_piece:
+#             content = piece_dictionary.get("content")
+#             title = piece_dictionary.get("pieceTitle")
+#             u = UploadLeg(title, content)
+#             u.upload_data_of_piece(leg_index, legislation_name)
+#         print("4-content inserted")
         
 #         category = ["family", "crime", "rights", "employment", ]
 #         for cat in category:
 #             e = Extractor(cat)
 #             e.create_matix_dic_tfidf(cat)
 #         print("5- models updated")
-        db = DatabaseConnection("classify-legislation")
-        sql = "SELECT categoryIndex, COUNT(pieceIndex) FROM piece_category GROUP BY categoryIndex"
-        sql_result = db.selectFromDB(sql)
-        print("6-count taken")
-        max = 0
-        cat = ""
-        for index, row in sql_result.iterrows():
-            if row['COUNT(pieceIndex)'] > max:
-                max = row['COUNT(pieceIndex)']
-                cat = row['categoryIndex']
+#         db = DatabaseConnection("classify-legislation")
+#         sql = "SELECT categoryIndex, COUNT(pieceIndex) FROM piece_category GROUP BY categoryIndex"
+#         sql_result = db.selectFromDB(sql)
+#         print("6-count taken")
+#         max = 0
+#         cat = ""
+#         for index, row in sql_result.iterrows():
+#             if row['COUNT(pieceIndex)'] > max:
+#                 max = row['COUNT(pieceIndex)']
+#                 cat = row['categoryIndex']
 
-        leg_index = leg_index.item()
+#         leg_index = leg_index.item()
 
-        update_leg_category_sql = "UPDATE legislation SET categoryIndex = " + '"' + str(cat) + '"' + " WHERE legislationIndex =" + str(leg_index)
-        db.updateDB(update_leg_category_sql)
+#         update_leg_category_sql = "UPDATE legislation SET categoryIndex = " + '"' + str(cat) + '"' + " WHERE legislationIndex =" + str(leg_index)
+#         db.updateDB(update_leg_category_sql)
         
-        return jsonify("process successful")
+#         return jsonify("process successful")
 
     
 #     return "invalid request made"
