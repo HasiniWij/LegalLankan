@@ -186,27 +186,27 @@ def uploadLegislation():
             title = piece_dictionary.get("pieceTitle")
             u = UploadLeg(title, content)
             u.upload_data_of_piece(leg_index, legislation_name)
-        print("4-content inserted")
-        category = ["family", "crime", "rights", "employment", ]
-        for cat in category:
-            e = Extractor(cat)
-            e.create_matix_dic_tfidf(cat)
-        print("5- models updated")
-        db = DatabaseConnection("classify-legislation")
-        sql = "SELECT categoryIndex, COUNT(pieceIndex) FROM piece_category GROUP BY categoryIndex"
-        sql_result = db.selectFromDB(sql)
-        print("6-count taken")
-        max = 0
-        cat = ""
-        for index, row in sql_result.iterrows():
-            if row['COUNT(pieceIndex)'] > max:
-                max = row['COUNT(pieceIndex)']
-                cat = row['categoryIndex']
+#         print("4-content inserted")
+#         category = ["family", "crime", "rights", "employment", ]
+#         for cat in category:
+#             e = Extractor(cat)
+#             e.create_matix_dic_tfidf(cat)
+#         print("5- models updated")
+#         db = DatabaseConnection("classify-legislation")
+#         sql = "SELECT categoryIndex, COUNT(pieceIndex) FROM piece_category GROUP BY categoryIndex"
+#         sql_result = db.selectFromDB(sql)
+#         print("6-count taken")
+#         max = 0
+#         cat = ""
+#         for index, row in sql_result.iterrows():
+#             if row['COUNT(pieceIndex)'] > max:
+#                 max = row['COUNT(pieceIndex)']
+#                 cat = row['categoryIndex']
 
-        leg_index = leg_index.item()
+#         leg_index = leg_index.item()
 
-        update_leg_category_sql = "UPDATE legislation SET categoryIndex = " + '"' + str(cat) + '"' + " WHERE legislationIndex =" + str(leg_index)
-        db.updateDB(update_leg_category_sql)
+#         update_leg_category_sql = "UPDATE legislation SET categoryIndex = " + '"' + str(cat) + '"' + " WHERE legislationIndex =" + str(leg_index)
+#         db.updateDB(update_leg_category_sql)
         
         return jsonify("process successful")
 
