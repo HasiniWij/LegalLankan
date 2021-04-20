@@ -48,23 +48,23 @@ class UploadLeg:
         piece_index = sql_result["pieceIndex"][0]
         print(piece_index)
 
-        df_path = "dataScienceComponents/extraction/models/" + piece_category + "/" + piece_category+"-df.pickle"
-        with open(df_path, 'rb') as df:
-            df_cat = pickle.load(df)
-        new_df = pd.DataFrame({"pieceIndex": [piece_index], "legislationName": [legislation_name], "pieceTitle": [self.title],"content": [self.content]})
-        df_cat.append(new_df)
-        df.close()
+#         df_path = "dataScienceComponents/extraction/models/" + piece_category + "/" + piece_category+"-df.pickle"
+#         with open(df_path, 'rb') as df:
+#             df_cat = pickle.load(df)
+#         new_df = pd.DataFrame({"pieceIndex": [piece_index], "legislationName": [legislation_name], "pieceTitle": [self.title],"content": [self.content]})
+#         df_cat.append(new_df)
+#         df.close()
 
-        with open(df_path, 'wb') as df:
-            pickle.dump(df_cat, df)
-        df.close()
-        other_path = "dataScienceComponents/extraction/models/other/other-df.pickle"
+#         with open(df_path, 'wb') as df:
+#             pickle.dump(df_cat, df)
+#         df.close()
+#         other_path = "dataScienceComponents/extraction/models/other/other-df.pickle"
 
-        with open(other_path, 'rb') as df_other:
-            other = pickle.load(df_other)
-        other.append(new_df)
-        df_other.close()
+#         with open(other_path, 'rb') as df_other:
+#             other = pickle.load(df_other)
+#         other.append(new_df)
+#         df_other.close()
 
-        with open(df_path, 'wb') as df_other:
-            pickle.dump(df_cat, df_other)
-        df_other.close()
+#         with open(df_path, 'wb') as df_other:
+#             pickle.dump(df_cat, df_other)
+#         df_other.close()
