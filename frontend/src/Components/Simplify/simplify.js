@@ -65,7 +65,7 @@ export class Simplify extends Component {
              </div>
              </div>
               
-             <div className="goback">GO BACK TO - 
+             <div className="goback">GO TO LEGISLATION - 
              <Link className="goblink" to ={{pathname:"/legislation", 
                      state:{urlfull: "https://legallankanbackend.azurewebsites.net/legislation/"+legno, 
                      in:legno, name:name}}}> {name}</Link>
