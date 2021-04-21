@@ -6,14 +6,11 @@ class DocumentSplitter:
     def split_core_legislation(self, full_legislation):
 
         full_leg_list = full_legislation.split("\n")
-
         total_lines = 0
 
         for line in full_leg_list:
-
             if total_lines == 0:
                 leg_name = line
-
             total_lines += 1
 
         content_list = []
