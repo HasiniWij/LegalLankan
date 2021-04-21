@@ -35,7 +35,7 @@ export class MenuAnswer extends Component {
                  posts.length ?
                  posts.map(post => <div class="leglist" key={post.legislationIndex}>
                      <Link className="menulinks" to ={{pathname:"/legislation", 
-                     state:{urlfull: "https://legallankanbackend.azurewebsites.net/legislation/"+post.legislationIndex, 
+                     state:{urlfull: "http://127.0.0.1:5000/legislation/"+post.legislationIndex,
                      in:post.legislationIndex, name:post.legislationName}}}>
                      - {post.legislationName} 
                      </Link>

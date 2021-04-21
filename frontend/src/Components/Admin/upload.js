@@ -54,7 +54,7 @@ function Upload() {
         </div>
         {fileError ?<div className="fileerror">{fileError}</div>:<div></div>}
           <div>
-            <button className="uploadbtn" onClick={handleSubmit}>UPLAOD</button>
+            <button className="uploadbtn" onClick={handleSubmit}>UPLOAD</button>
           </div>
         </form>
         <div>

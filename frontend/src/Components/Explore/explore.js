@@ -8,22 +8,22 @@ export const Explore = () => {
             <div className="categorylist">
                 <div className="catitems">
                     <NavLink activeClassName="activee" className="catlink" to={{pathname:"/explore/family", 
-                    state: { urlfull: "https://legallankanbackend.azurewebsites.net/legislationlist/FA", title:"FAMILY" }}}>FAMILY
+                    state: { urlfull: "http://127.0.0.1:5000/legislationlist/FA", title:"FAMILY" }}}>FAMILY
                     </NavLink>
                 </div>
                 <div className="catitems">
                     <NavLink activeClassName="activee" className="catlink" to={{pathname:"/explore/rights",
-                    state: { urlfull: "https://legallankanbackend.azurewebsites.net/legislationlist/RI", title:"RIGHTS" }}}>RIGHTS
+                    state: { urlfull: "http://127.0.0.1:5000/legislationlist/RI", title:"RIGHTS" }}}>RIGHTS
                     </NavLink>
                 </div>
                 <div className="catitems">
                     <NavLink activeClassName="activee" className="catlink" to={{pathname:"/explore/crime",
-                    state: { urlfull: "https://legallankanbackend.azurewebsites.net/legislationlist/CR", title:"CRIME" }}}>CRIME
+                    state: { urlfull: "http://127.0.0.1:5000/legislationlist/CR", title:"CRIME" }}}>CRIME
                     </NavLink>
                 </div>
                 <div className="catitems">
                     <NavLink activeClassName="activee" className="catlink" to={{pathname:"/explore/employment",
-                    state: { urlfull: "https://legallankanbackend.azurewebsites.net/legislationlist/EM", title:"EMPLOYMENT" }}}>EMPLOYMENT
+                    state: { urlfull: "http://127.0.0.1:5000/legislationlist/EM", title:"EMPLOYMENT" }}}>EMPLOYMENT
                     </NavLink>
                 </div>
             </div>

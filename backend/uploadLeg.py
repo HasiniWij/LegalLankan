@@ -1,59 +1,67 @@
-import pickle
-import pandas as pd
-from backend.DatabaseConnection import DatabaseConnection
-from dataScienceComponents.classification.Classifier import Classifier
+from backend.DatabaseConnection import DatabaseConnection  # used to connect with the database
+from backend.DocumentSplitter import DocumentSplitter  # used to split the document into pieces
+from dataScienceComponents.classification.Classifier import Classifier  # used to classify the the document
 
 
-class uploadLeg:
-    def __init__(self,  title,content):
-        self.title=title
-        self.content=content
+class UploadLeg:
 
-    def upload_data_of_piece(self,leg_index,legislation_name):
-        C = Classifier()
+    def upload_data_of_piece(self, text):
 
-        piece_category = C.get_category_of_text( self.title+ self.content)
+        # Split the document into pieces
+        splitter = DocumentSplitter()
+        legislation_name, list_dictionary_piece = splitter.split_core_legislation(text)
+        legislation_name = legislation_name.strip()
 
-        if piece_category=="family":
-            category_code="FA"
+        # classifying the pieces
+        categories = []
+        for piece_dictionary in list_dictionary_piece:
+            content = piece_dictionary.get("content")
+            title = piece_dictionary.get("pieceTitle")
 
-        elif piece_category=="crime":
-            category_code="CR"
+            C = Classifier("dataScienceComponents/classification/models/svm.pickle", "dataScienceComponents"
+                                                                                     "/classification/models/tfidf"
+                                                                                     ".pickle")
 
-        elif piece_category=="rights":
-            category_code="RI"
+            piece_category = C.get_category_of_text(title + content)
+            categories.append(piece_category)
 
-        elif piece_category=="employment":
-            category_code="EM"
+        # classifying the documents
+        count_dict = {i: categories.count(i) for i in categories}
+        final_category = max(count_dict, key=count_dict.get)
 
+        if final_category == "family":
+            category_code = "FA"
+
+        elif final_category == "crime":
+            category_code = "CR"
+
+        elif final_category == "rights":
+            category_code = "RI"
+
+        elif final_category == "employment":
+            category_code = "EM"
         else:
             category_code = "OT"
 
+        # Insert the legislation name and category
         db = DatabaseConnection("classify-legislation")
-        sql = "INSERT INTO pieceCategory ( pieceTitle,content,legislationIndex,categoryIndex) VALUES (%s, %s,%s,%s)"
-        val = (self.title+ self.content,leg_index,category_code)
-        db.insertToDB(sql, val)
+        insert_leg_sql = "INSERT INTO legislation (legislationName, categoryIndex) VALUES (%s, %s)"
+        val = (legislation_name, category_code)
+        db.insertToDB(insert_leg_sql, val)
 
-        sql = "select pieceIndex from piece where pieceTitle=" + self.title +" AND content="+self.content
+        # Select the legislation index of the uploaded legislation
+        sql = '''select l.legislationIndex from legislation l where legislationName = ''' + '"' + str(
+            legislation_name) + '"'
         sql_result = db.selectFromDB(sql)
-        piece_index = sql_result["pieceIndex"][0]
+        leg_index = sql_result["legislationIndex"][0]
 
-        df_path = "dataScienceComponents/extraction/models/" + piece_category + "/" + piece_category+"-df"
-        with open(df_path, 'rb') as df:
-            df_cat = pickle.load(df)
-        new_df = pd.DataFrame({"pieceIndex":[piece_index],"legislationName":[legislation_name],"pieceTitle":[self.title],"content":[self.content]})
-        df_cat.append(new_df)
-        df.close()
+        # Insert pieces to the database
+        for piece_dictionary in list_dictionary_piece:
+            content = piece_dictionary.get("content")
+            title = piece_dictionary.get("pieceTitle")
 
-        with open(df_path, 'wb') as df:
-            pickle.dump(df_cat, df)
-        df.close()
-        other_path = "dataScienceComponents/extraction/models/other/other-df"
-        with open(other_path, 'rb') as df_other:
-            other = pickle.load(df_other)
-        other.append(new_df)
-        df_other.close()
+            db = DatabaseConnection("classify-legislation")
+            sql = "INSERT INTO piece ( pieceTitle,content,legislationIndex) VALUES (%s, %s,%s)"
+            val = (title, content, leg_index)
+            db.insertToDB(sql, val)
 
-        with open(df_path, 'wb') as df_other:
-            pickle.dump(df_cat, df_other)
-        df_other.close()

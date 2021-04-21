@@ -1,8 +1,8 @@
-import pymysql
-import pandas as pd
-import mysql.connector
+import pymysql  # used to communicate with the database
+import pandas as pd  # when queried from the database the result is put into a dataframe
 
 
+# Database connection is formed  through this file (Insert, select,update)
 class DatabaseConnection:
 
     def __init__(self, dbname):
@@ -16,25 +16,14 @@ class DatabaseConnection:
         sql_result = pd.read_sql(sql, con=self.conn)
         return sql_result
 
-    def insertToDB(self, sql,val):
-        mydb = mysql.connector.connect(
-            host=self.host,
-            port = self.port,
-            user = self.user,
-            password = self.password
-        )
-        mycursor = mydb.cursor()
-        mycursor.execute(sql, val)
-        mydb.commit()
+    def insertToDB(self, sql, val):
+        cur = self.conn.cursor()
+        cur.execute(sql, val)
+        self.conn.commit()
+        cur.close()
 
     def updateDB(self, sql):
-        mydb = mysql.connector.connect(
-            host=self.host,
-            port=self.port,
-            user=self.user,
-            password=self.password
-        )
-
-        mycursor = mydb.cursor()
-        mycursor.execute(sql)
-        mydb.commit()
+        cur = self.conn.cursor()
+        cur.execute(sql)
+        self.conn.commit()
+        cur.close()

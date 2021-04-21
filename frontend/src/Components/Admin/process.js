@@ -13,7 +13,7 @@ export class Process extends Component {
         }
     }
     componentDidMount(){
-        axios.post('https://legallankanbackend.azurewebsites.net/login', this.props.location.state.userdata)
+        axios.post('http://127.0.0.1:5000/login', this.props.location.state.userdata)
         .then(response =>{
             console.log(response)
             this.setState({posts: response.data})

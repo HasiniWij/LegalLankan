@@ -1,8 +1,8 @@
-import pickle
-import pandas as pd
-import nltk
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
+import pickle  # models are stored as pickles and loaded to this file
+import pandas as pd  # features are stored and dealt using dataframes
+from nltk.corpus import stopwords  # Stop words are removed
+from nltk.stem import WordNetLemmatizer  # Lemmatized to get the words to same format
+
 
 class Classifier:
 
