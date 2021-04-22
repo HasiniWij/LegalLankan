@@ -6,7 +6,7 @@ import pandas as pd  # when queried from the database the result is put into a d
 class DatabaseConnection:
 
     def __init__(self, dbname):
-        self.host = "classified-legislation.cfb1te3o5nxb.ap-south-1.rds.amazonaws.com"
+        self.host = "legallankan.cfh5wyhlrwr1.ap-south-1.rds.amazonaws.com"
         self.port = 3306
         self.user = "admin"
         self.password = "legalLankan2020"
