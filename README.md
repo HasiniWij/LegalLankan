@@ -1,10 +1,10 @@
 # LegalLankan
 ### A web application that makes law accessible and understandable to the general public of Sri Lanka.
 
-## Frontend - 
+## Frontend
 React is used to build the UI of the web application.
 
-## Backend - 
+## Backend 
 Flask library is used in building the API of this project.
 
 ## Data Science Components
