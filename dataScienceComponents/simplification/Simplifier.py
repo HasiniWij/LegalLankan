@@ -42,11 +42,13 @@ class Simplifier:
 
     def identify_complex_words(self,content, zip_value=4):
         cwi_words = []
-        nltk_tokens = nltk.word_tokenize(content)
-        print("nltk_tokens: ",nltk_tokens)
+
+        content = content.replace("\n", "")
+        words = content.split()
+
         names_enitites=[]
         # names_enitites = Simplifier.NER_identifier(content)
-        for word in nltk_tokens:
+        for word in words:
             cleaned_word = word.lower().strip()
             if zipf_frequency(cleaned_word,'en') < zip_value and word.isalpha() and \
                     word not in names_enitites and word not in cwi_words:

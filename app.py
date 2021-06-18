@@ -1,5 +1,6 @@
 import pickle
-
+import re
+from nltk.tokenize import sent_tokenize
 import nltk  # used for NLP
 
 # nltk.download('wordnet')  # Used for lemmatization
@@ -23,6 +24,7 @@ def default():
 @app.route('/legislation/<legName>')
 def get_legislation(legName):
 
+    global block_result
     with open("data.pickle", 'rb') as data:
         data = pickle.load(data)
 
@@ -33,24 +35,49 @@ def get_legislation(legName):
 
     S = Simplifier()
     complex_words = S.identify_complex_words(content)
-    print(complex_words)
-    result={'complexWords':complex_words,"content":content}
+
+    list_of_blocks=[]
+    block = ""
+    content = content.replace("\n", "")
+    f = sent_tokenize(content)
+    block_result = {"title": "", "content": ""}
+    previous_line=""
+    for line in f:
+
+        x = line.replace(".", "")
+        if x.isdecimal():
+            print(line)
+            block = block.replace(previous_line, "")
+            block_result["content"]=block
+            list_of_blocks.append(block_result)
+            block_result = {"title": line+previous_line, "content": ""}
+            block=""
+        else:
+            block=block+line
+
+        previous_line=line
+
+    result={'complexWords':complex_words,"block":list_of_blocks}
+
     return jsonify(result)
 
 
 @app.route('/legislationlist/<category>')
 def get_legislation_list(category):
 
-    legislationlist={}
+    legislationlist=[]
 
     with open("title_category.pickle", 'rb') as legislation_list:
         legislation_list = pickle.load(legislation_list)
 
     for index, row in legislation_list.iterrows():
-        if row['category']==category:
-            legislationlist["title"]=row['title']
 
-    return legislationlist
+        if row['category']==category:
+            leg={'title': row['title']}
+            legislationlist.append(leg)
+
+
+    return jsonify(legislationlist)
 
 
 @app.route('/simplifiedWord/<word>/<sentence>')
@@ -86,7 +113,6 @@ def login():
         user_name = data.get('userName')
         admin_password = data.get('password')
 
-
         if user_name=="admin1" and admin_password=="123":
             result = "Signing in..."
 
@@ -105,3 +131,5 @@ def login():
 #         u.upload_data_of_piece(text)
 #
 #         return jsonify("successfully uploaded")
+
+

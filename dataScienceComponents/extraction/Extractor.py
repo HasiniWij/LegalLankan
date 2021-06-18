@@ -75,7 +75,7 @@ class Extractor:
 
         five_ranked_documents = sorted(documents_with_a_rank, key=documents_with_a_rank.get, reverse=True)[:7]
 
-        title_segment = {}
+        relevant_docs= []
         for doc in five_ranked_documents:
             title = self.data['title'][doc]
             sentence_list = sent_tokenize(self.data['content'][doc])
@@ -107,7 +107,11 @@ class Extractor:
             index = np.where(sim_segment == np.amax(sim_segment))
             print("index: ", index[0][0])
 
-            content_segment = segmented_doc[index[0][0]]
-            title_segment[title] = content_segment + "..."
+            content_segment = segmented_doc[index[0][0]]+"..."
+            title_segment={'title':title,'content':content_segment}
+            relevant_docs.append(title_segment)
 
-        return title_segment
+
+            # title_segment[title] = content_segment + "..."
+
+        return relevant_docs
