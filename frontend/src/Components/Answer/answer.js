@@ -30,21 +30,23 @@ export class Answer extends Component {
         return (
          <div className="searchans">
              { errormsg? <div className="seatitle">{errormsg}</div> : null}
-             <div className="seatitle">Results: {query}</div>
+             <h4><div className="seatitle">Results: {query}</div></h4>
              {
                  posts.length ?
-                 posts.map(post => <div className="spieces" key={post.pieceIndex}>
-                     <span style={{fontSize: "16px", color:"rgba(182,166,139,1)", }}>{post.pieceTitle} - {post.legislationName}</span><br/>
+                 posts.map(post => <div className="spieces" key={post.title}>
+                     <h4><span style={{ color:"rgba(182,166,139,1)", }}>{post.title} </span><br/></h4>
                      <span style={{fontSize: "15px", color:"white", marginTop:"4px"}}>{post.content}</span>
                     <div className="searchlinks">
-                        <NavLink className="menulink" to={{pathname:`/simplify/${post.pieceIndex}`, state:{urlfull:"http://127.0.0.1:5000/simplifiedpiece/"+post.pieceIndex,
-                        pindex:post.pieceIndex, content:post.content, title:post.pieceTitle, legno:post.legislationIndex,name:post.legislationName}}}>
-                         SIMPLIFY</NavLink>
-
-                         <Link className="sealeglink" to ={{pathname:"/legislation", 
+                        {/* <NavLink className="menulink" to={{pathname:`/simplify/${post.pieceIndex}`, state:{urlfull:"http://127.0.0.1:5000/simplifiedpiece/"+post.pieceIndex,
+                        pindex:post.pieceIndex, content:post.content, title:post.pieceTitle, legno:post.title,name:post.title}}}>
+                         SIMPLIFY</NavLink> */}
+                    <button type="button" class="btn btn-dark" id="fullLegButton">
+                        SEE FULL LEGISLATION
+                         {/* { <Link className="sealeglink" to ={{pathname:"/legislation",
                         state:{urlfull: "http://127.0.0.1:5000/legislation/"+post.legislationIndex,
-                        in:post.legislationIndex, name:post.legislationName}}}>SEE FULL LEGISLATION</Link>
-                    </div>            
+                        in:post.legislationIndex, name:post.legislationName}}}>SEE FULL LEGISLATION</Link> } */}
+                    </button>
+                    </div>
                     </div>) :
                     <div>
                         <div className="loader"></div>

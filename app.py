@@ -8,12 +8,12 @@ import nltk  # used for NLP
 # nltk.download('punkt')  # used tokenize sentences
 
 from flask import Flask, jsonify, request  # to provide an API (Handle requests, turn objects to json)
-from backend.DatabaseConnection import DatabaseConnection  # used to connect and perform operation on database
-from dataScienceComponents.classification.Classifier import Classifier  # Used for classification
 from dataScienceComponents.extraction.Extractor import Extractor  # used for Extraction
 from dataScienceComponents.simplification.Simplifier import Simplifier  # used for simplification
+from flask_cors import CORS   # comment this on deployment
 
 app = Flask(__name__)
+CORS(app)  # comment this on deployment
 
 
 @app.route('/')
