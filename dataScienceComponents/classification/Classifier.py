@@ -22,31 +22,7 @@ class Classifier:
             'other': 4
         }
 
-    def get_query_keywords(self, query):
-        query_lowered = query.lower()  # all letters are turned into lowercase
 
-        punctuation_signs = list("?:!.,;")  # punctuation signs are removed
-        for punctuation_sign in punctuation_signs:
-            query_lowered = query_lowered.replace(punctuation_sign, '')
-
-        query_lowered = query_lowered.replace("'s", "")  # apostrophes are removed
-
-        wordnet_lemmatizer = WordNetLemmatizer()  # all query words are lemmatized
-        lemmatized_query_words_list = []
-
-        query_words = query_lowered.split(" ")
-        for word in query_words:
-            lemmatized_query_words_list.append(wordnet_lemmatizer.lemmatize(word, pos="v"))
-
-        stop_words = list(stopwords.words('english'))  # all stop words within the query are removed
-        for word in lemmatized_query_words_list:
-            if word in stop_words:
-                lemmatized_query_words_list.remove(word)
-
-        # all keywords after preprocessing, turned into a string of words, and returned
-        cleaned_query = ' '.join(map(str, lemmatized_query_words_list))
-
-        return cleaned_query
 
     def create_features_from_df(self, df):
 
