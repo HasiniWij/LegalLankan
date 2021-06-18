@@ -43,6 +43,7 @@ class Simplifier:
     def identify_complex_words(self,content, zip_value=4):
         cwi_words = []
         nltk_tokens = nltk.word_tokenize(content)
+        print("nltk_tokens: ",nltk_tokens)
         names_enitites=[]
         # names_enitites = Simplifier.NER_identifier(content)
         for word in nltk_tokens:

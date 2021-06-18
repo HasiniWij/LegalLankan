@@ -8,7 +8,6 @@ import nltk  # used for NLP
 
 from flask import Flask, jsonify, request  # to provide an API (Handle requests, turn objects to json)
 from backend.DatabaseConnection import DatabaseConnection  # used to connect and perform operation on database
-from backend.UploadLeg import UploadLeg  # used to upload legislation to system
 from dataScienceComponents.classification.Classifier import Classifier  # Used for classification
 from dataScienceComponents.extraction.Extractor import Extractor  # used for Extraction
 from dataScienceComponents.simplification.Simplifier import Simplifier  # used for simplification
@@ -34,7 +33,7 @@ def get_legislation(legName):
 
     S = Simplifier()
     complex_words = S.identify_complex_words(content)
-
+    print(complex_words)
     result={'complexWords':complex_words,"content":content}
     return jsonify(result)
 
@@ -49,7 +48,7 @@ def get_legislation_list(category):
 
     for index, row in legislation_list.iterrows():
         if row['category']==category:
-            legislationlist[index]=row['title']
+            legislationlist["title"]=row['title']
 
     return legislationlist
 
@@ -68,7 +67,7 @@ def get_simplified_piece(word,sentence):
         else:
             result=result+", "+i
 
-    return result
+    return jsonify(result)
 
 
 @app.route('/search/<query>')
@@ -76,7 +75,7 @@ def get_answers(query):
     if query is not None:
         E = Extractor()
         result = E.get_ranked_documents(E.get_query_keywords(query))
-        return result
+        return jsonify(result)
 
 
 
@@ -97,12 +96,12 @@ def login():
         return jsonify(result)
 
 
-@app.route('/uploadLeg', methods=['GET', 'POST'])
-def uploadLegislation():
-    if request.method == 'POST':
-        data = request.json
-        text = data.get('text')
-        u = UploadLeg()
-        u.upload_data_of_piece(text)
-
-        return jsonify("successfully uploaded")
+# @app.route('/uploadLeg', methods=['GET', 'POST'])
+# def uploadLegislation():
+#     if request.method == 'POST':
+#         data = request.json
+#         text = data.get('text')
+#         u = UploadLeg()
+#         u.upload_data_of_piece(text)
+#
+#         return jsonify("successfully uploaded")
