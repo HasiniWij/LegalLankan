@@ -27,6 +27,7 @@ class UploadLeg:
 
         for item in split_core_leg:
             title = leg_name + " - " + item["chapterTitle"]
+            title=title.strip()
             content = item["chapterContent"]
             self.update_data(title, content)
 

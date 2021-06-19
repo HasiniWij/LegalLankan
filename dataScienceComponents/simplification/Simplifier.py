@@ -21,7 +21,7 @@ class Simplifier:
             Simplifier.is_first_run = False
         self.tokenizer = BertTokenizer.from_pretrained(Simplifier.bert_model)
         Simplifier.model.eval()
-        self.conjunction_list = ["for", "and"]
+        # self.conjunction_list = ["for", "and"]
 
 
 
