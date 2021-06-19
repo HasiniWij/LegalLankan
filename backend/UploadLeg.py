@@ -6,25 +6,17 @@ from dataScienceComponents.extraction.Extractor import Extractor
 
 
 class UploadLeg:
-
-    def upload_act(self, content,title):
-
+    def __init__(self):
         with open("data.pickle", 'rb') as data_df:
-            data_df = pickle.load(data_df)
+            self.data_df = pickle.load(data_df)
 
         with open("title_category.pickle", 'rb') as data:
-            title_cat = pickle.load(data)
+            self.title_cat = pickle.load(data)
 
-        data_df,title_cat=self.cat(title, content, title_cat, data_df)
 
-        data = []
-        for index, row in data_df.iterrows():
-            data.append(row['title'] + " " + row['content'])
-
-        E=Extractor()
-        tfidf,dictionary,matrix=E.create_matrix_tfidf_dic(data)
-
-        self.save_pickles(matrix,dictionary,tfidf,data_df,title_cat)
+    def upload_act(self, content,title):
+        self.update_data(title, content)
+        self.save_pickles()
 
 
 
@@ -40,23 +32,31 @@ class UploadLeg:
             content = item["chapterContent"]
             u.upload_act(content, title)
 
-    def cat(self,title,content,title_cat,data_df):
+    def update_data(self,title,content):
         C = Classifier("dataScienceComponents/classification/models/svm.pickle", "dataScienceComponents"
                                                                                  "/classification/models/tfidf.pickle")
         category = C.get_category_of_text(title + content)
         print("cat", category)
 
         new_row = {'title': title, 'category': category}
-        title_cat = title_cat.append(new_row, ignore_index=True)
+        self.title_cat = self.title_cat.append(new_row, ignore_index=True)
 
         new_row_2 = {'title': title, 'content': content}
-        data_df = data_df.append(new_row_2, ignore_index=True)
+        self.data_df = self.data_df.append(new_row_2, ignore_index=True)
 
-        print("data: ", data_df)
-        print("title: ", title_cat)
-        return data_df,title_cat
+        print("data: ", self.data_df)
+        print("title: ", self.title_cat)
 
-    def save_pickles(self,matrix,dictionary,tfidf,data_df,title_cat):
+
+    def save_pickles(self):
+
+        data = []
+        for index, row in self.data_df.iterrows():
+            data.append(row['title'] + " " + row['content'])
+
+        E = Extractor()
+        tfidf, dictionary, matrix = E.create_matrix_tfidf_dic(data)
+
         with open('dataScienceComponents/extraction/models/matrix.pickle', 'wb') as output:
             pickle.dump(matrix, output)
 
@@ -67,10 +67,10 @@ class UploadLeg:
             pickle.dump(tfidf, output)
 
         with open('data.pickle', 'wb') as output:
-            pickle.dump(data_df, output)
+            pickle.dump(self.data_df, output)
 
         with open('title_category.pickle', 'wb') as output:
-            pickle.dump(title_cat, output)
+            pickle.dump(self.title_cat, output)
 
 
 
