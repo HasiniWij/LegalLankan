@@ -1,5 +1,4 @@
 import pickle
-import pandas as pd
 
 from backend.DocumentSplitter import DocumentSplitter  # used to split the document into pieces
 from dataScienceComponents.classification.Classifier import Classifier  # used to classify the the document
@@ -20,14 +19,17 @@ class UploadLeg:
         C = Classifier("dataScienceComponents/classification/models/svm.pickle", "dataScienceComponents"
                                                                     "/classification/models/tfidf.pickle")
         category = C.get_category_of_text(title + content)
+        print("cat",category)
 
 
+        new_row = {'title': title, 'category': category}
+        title_cat = title_cat.append(new_row, ignore_index=True)
 
-        df=pd.DataFrame({"title": [title],"category": [category]})
-        title_cat.append(df)
+        new_row_2 = {'title': title, 'content': content}
+        data_df = data_df.append(new_row_2, ignore_index=True)
 
-        df2 = pd.DataFrame({"title": [title], "content": [content]})
-        data_df.append(df2)
+        print("data: ",data_df)
+        print("title: ",title_cat)
 
 
         data = []
@@ -45,5 +47,12 @@ class UploadLeg:
 
         with open('dataScienceComponents/extraction/models//tfdif.pickle', 'wb') as output:
             pickle.dump(tfidf, output)
+
+        with open('data.pickle', 'wb') as output:
+            pickle.dump(data_df, output)
+
+        with open('title_category.pickle', 'wb') as output:
+            pickle.dump(title_cat, output)
+
 
 
