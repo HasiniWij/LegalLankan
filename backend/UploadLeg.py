@@ -55,4 +55,19 @@ class UploadLeg:
             pickle.dump(title_cat, output)
 
 
+    def upload_core_leg(self, full_core_leg):
+
+        d = DocumentSplitter()
+        leg_name, split_core_leg = d.split_core_legislation()
+
+        u = UploadLeg()
+
+        for item in split_core_leg:
+            title = leg_name + " - " + item["chapterTitle"]
+            content = item["chapterContent"]
+            u.upload_act(content, title)
+
+        
+
+
 

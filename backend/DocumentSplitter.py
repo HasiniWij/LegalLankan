@@ -52,8 +52,8 @@ class DocumentSplitter:
         split_core_legislation = []
         i = 0
         for title in piece_titles:
-            piece = {"pieceTitle": title, "content": content_list[i]}
-            split_core_legislation.append(piece)
+            chapter = {"chapterTitle": title, "chapterContent": content_list[i]}
+            split_core_legislation.append(chapter)
             i += 1
 
         return leg_name, split_core_legislation    # returned to be stored in the database
