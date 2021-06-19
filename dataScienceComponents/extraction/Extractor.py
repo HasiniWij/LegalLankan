@@ -57,6 +57,21 @@ class Extractor:
 
         return cleaned_query
 
+    def create_matrix_tfidf_dic(self, data):
+        # dictionary - convert search word to vector
+        # jieba - cuts the kewords into segments
+        data = [jieba.lcut(text) for text in data]
+        dictionary = corpora.Dictionary(data)
+        # counts the word features of the dictionary of texts
+        feature_cnt = len(dictionary.token2id)
+        # counts the number of occurrences of a word within the corpus
+        corpus = [dictionary.doc2bow(text) for text in data]
+        # Creates a tf-idf model
+        tfidf = models.TfidfModel(corpus)
+        # Convert and index the corpus to check for similarity
+        matrix = similarities.SparseMatrixSimilarity(tfidf[corpus], num_features=feature_cnt)
+        return tfidf,dictionary,matrix
+
     def get_ranked_documents(self, keywords):
 
 
@@ -87,21 +102,23 @@ class Extractor:
                     content = sentence_list[i] + sentence_list[i + 1] + sentence_list[i + 2] + sentence_list[i + 3]
                     segmented_doc.append(content)
 
+            tfidf_segment, dictionary_segment, matrix_segment=self.create_matrix_tfidf_dic(segmented_doc)
 
-            segmented_doc_process = [jieba.lcut(text) for text in segmented_doc]
-            dictionary_segment = corpora.Dictionary(segmented_doc_process)
-            # counts the word features of the dictionary of texts
-            feature_cnt = len(dictionary_segment.token2id)
-            # counts the number of occurrences of a word within the corpus
-            corpus = [dictionary_segment.doc2bow(text) for text in segmented_doc_process]
-            # Creates a tf-idf model
-            tfidf_segment = models.TfidfModel(corpus)
+
+            # segmented_doc_process = [jieba.lcut(text) for text in segmented_doc]
+            # dictionary_segment = corpora.Dictionary(segmented_doc_process)
+            # # counts the word features of the dictionary of texts
+            # feature_cnt = len(dictionary_segment.token2id)
+            # # counts the number of occurrences of a word within the corpus
+            # corpus = [dictionary_segment.doc2bow(text) for text in segmented_doc_process]
+            # # Creates a tf-idf model
+            # tfidf_segment = models.TfidfModel(corpus)
             # Convert and index the corpus to check for similarity
-            matrix_segment = similarities.SparseMatrixSimilarity(tfidf_segment[corpus], num_features=feature_cnt)
-            kw_vector_segment = dictionary_segment.doc2bow(jieba.lcut(keywords))
-            sim_segment = matrix_segment[
-                tfidf_segment[kw_vector_segment]]  # checks the similarity of each document within the category
+            # matrix_segment = similarities.SparseMatrixSimilarity(tfidf_segment[corpus], num_features=feature_cnt)
 
+            kw_vector_segment = dictionary_segment.doc2bow(jieba.lcut(keywords))
+            # checks the similarity of each document within the category
+            sim_segment = matrix_segment[tfidf_segment[kw_vector_segment]]
             print("sim_segment: ", sim_segment)
 
             index = np.where(sim_segment == np.amax(sim_segment))

@@ -8,6 +8,8 @@ import nltk  # used for NLP
 # nltk.download('punkt')  # used tokenize sentences
 
 from flask import Flask, jsonify, request  # to provide an API (Handle requests, turn objects to json)
+
+from backend.UploadLeg import UploadLeg
 from dataScienceComponents.extraction.Extractor import Extractor  # used for Extraction
 from dataScienceComponents.simplification.Simplifier import Simplifier  # used for simplification
 from flask_cors import CORS   # comment this on deployment
@@ -122,14 +124,15 @@ def login():
         return jsonify(result)
 
 
-# @app.route('/uploadLeg', methods=['GET', 'POST'])
-# def uploadLegislation():
-#     if request.method == 'POST':
-#         data = request.json
-#         text = data.get('text')
-#         u = UploadLeg()
-#         u.upload_data_of_piece(text)
-#
-#         return jsonify("successfully uploaded")
+@app.route('/uploadLeg', methods=['GET', 'POST'])
+def uploadLegislation():
+    if request.method == 'POST':
+        data = request.json
+        text = data.get('text')
+        title=data.get('title')
+        u = UploadLeg()
+        u.upload_act(text,title)
+
+        return jsonify("successfully uploaded")
 
 

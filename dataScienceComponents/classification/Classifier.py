@@ -3,6 +3,8 @@ import pandas as pd  # features are stored and dealt using dataframes
 from nltk.corpus import stopwords  # Stop words are removed
 from nltk.stem import WordNetLemmatizer  # Lemmatized to get the words to same format
 
+from dataScienceComponents.extraction.Extractor import Extractor
+
 
 class Classifier:
 
@@ -103,7 +105,8 @@ class Classifier:
     # call this method to get the category of a document or a query
     def get_category_of_text(self, input_text):
 
-        keywords = self.get_query_keywords(input_text)
+        E=Extractor()
+        keywords = E.get_query_keywords(input_text)
 
         content = [keywords]
 
