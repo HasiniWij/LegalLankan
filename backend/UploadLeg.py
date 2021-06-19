@@ -25,12 +25,12 @@ class UploadLeg:
         d = DocumentSplitter()
         leg_name, split_core_leg = d.split_core_legislation(full_core_leg)
 
-        u = UploadLeg()
-
         for item in split_core_leg:
             title = leg_name + " - " + item["chapterTitle"]
             content = item["chapterContent"]
-            u.upload_act(content, title)
+            self.update_data(title, content)
+
+        self.save_pickles()
 
     def update_data(self,title,content):
         C = Classifier("dataScienceComponents/classification/models/svm.pickle", "dataScienceComponents"
@@ -71,6 +71,3 @@ class UploadLeg:
 
         with open('title_category.pickle', 'wb') as output:
             pickle.dump(self.title_cat, output)
-
-
-
