@@ -1,11 +1,10 @@
 import React from 'react'; 
 import './App.css';
-import {BrowserRouter as Router, NavLink, Route, Redirect, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Link, NavLink, Route, Redirect, Switch} from 'react-router-dom';
 
 import Logo from './images/logo.png';
 
 import { Answer } from './Components/Answer/answer';
-import { Search } from './Components/Search/search';
 import { Explore } from './Components/Explore/explore';
 import { Home } from './Components/Home/home';
 import { Display } from './Components/Display/display';
@@ -18,14 +17,12 @@ function App() {
     <Router>
     <div className="headerdiv"> 
       <div className="image">
-        <img className="logoimg" src={Logo} alt="Logo"/>
+        <Link to="/home"><img className="logoimg" src={Logo} alt="Logo"/></Link>
       </div>
           <div className="linkdiv">
             <NavLink activeClassName="active" to="/home" className="links">HOME</NavLink>
           </div>
-          <div className="linkdiv">
-            <NavLink activeClassName="active" to="/search" className="links">SEARCH</NavLink >
-          </div>
+          
           <div className="linkdiv">
             <NavLink activeClassName="active" to="/explore" className="links">EXPLORE</NavLink >
           </div>
@@ -37,7 +34,6 @@ function App() {
                 }}
               />
       <Route path='/home' component={Home}/>
-      <Route exact path='/search' component={Search}/>
       <Route path='/explore' component={ Explore }/>
       <Route path='/answer' component={ Answer }/>
       <Route path='/explore/family' component={ MenuAnswer }/>
