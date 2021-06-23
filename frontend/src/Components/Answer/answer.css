@@ -85,3 +85,25 @@
     100% { transform: rotate(360deg); }
   }
 
+  .searchbutton1{
+    width: 100%;
+    outline: none;
+    height: 35px;
+    letter-spacing: 1px;
+    color: white;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.8);
+    transition: transform .3s;
+    border: 3px solid rgba(169,121,46,1);
+    box-shadow:  0px 0px 10px rgba(169,121,46,1);
+    box-sizing: none;
+    border-radius: 15px;
+}
+.searchbutton1:hover{
+    transform: scale(1.07);
+}
+.searchdiv1{
+    /* margin: 15% auto; */
+    width:110px;
+    /* float:right; */
+}

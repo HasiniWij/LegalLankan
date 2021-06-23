@@ -37,15 +37,20 @@ export class Answer extends Component {
                      <h4><span style={{ color:"rgba(182,166,139,1)", }}>{post.title} </span><br/></h4>
                      <span style={{fontSize: "15px", color:"white", marginTop:"4px"}}>{post.content}</span>
                     <div className="searchlinks">
-                        {/* <NavLink className="menulink" to={{pathname:`/simplify/${post.pieceIndex}`, state:{urlfull:"http://127.0.0.1:5000/simplifiedpiece/"+post.pieceIndex,
-                        pindex:post.pieceIndex, content:post.content, title:post.pieceTitle, legno:post.title,name:post.title}}}>
-                         SIMPLIFY</NavLink> */}
-                    <button type="button" class="btn btn-dark" id="fullLegButton">
-                        SEE FULL LEGISLATION
-                         {/* { <Link className="sealeglink" to ={{pathname:"/legislation",
-                        state:{urlfull: "http://127.0.0.1:5000/legislation/"+post.legislationIndex,
-                        in:post.legislationIndex, name:post.legislationName}}}>SEE FULL LEGISLATION</Link> } */}
+                
+                    <button className="searchbutton1 searchdiv1"  id="fullLegButton">
+
+                        <Link className="menulinks"  to ={{pathname:"/legislation",
+                            state:{urlfull: "http://127.0.0.1:5000/legislation/"+post.title,
+                            in:post.title, name:post.title}}}>
+                                SEE FULL LEGISLATION
+                        </Link>
+
                     </button>
+
+
+
+
                     </div>
                     </div>) :
                     <div>

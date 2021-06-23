@@ -14,17 +14,23 @@
     letter-spacing: 0.1px;
     font-size: 15px;
     transition:.1s;
+    margin-left: None;
 }
 .menulinks:hover{
     color: rgba(169,121,46,1);
+}
+#id{
+
+    text-align: left;
+    
 }
 .menutitle{
     margin-bottom: 2%;
     /* font-size: 20px; */
     letter-spacing: 2px;
-    color: rgba(169,121,46,1);
+    color: white;
     font-weight: 700;
-    text-align: center;
+    text-align: left;
 }
 .leglist{
     margin-bottom: 1%;
@@ -57,3 +63,4 @@
     height: 75px;
     
   }
+  

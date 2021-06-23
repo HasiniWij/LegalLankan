@@ -2,6 +2,7 @@ import React, { Component} from 'react';
 import {BrowserRouter as Router, Link, NavLink, Route} from 'react-router-dom';
 import axios from 'axios';
 import './display.css';
+import { Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 
 export class Display extends Component {
     constructor(props){
@@ -14,8 +15,19 @@ export class Display extends Component {
             urfull:"",
             legno:"",
             name:"",
+            isModalOpen: false,
+            simpleWord:""
+            
         }
+        this.toggleModal = this.toggleModal.bind(this);
+        this.hello=this.hello.bind(this);
     }
+    toggleModal() {
+        this.setState({
+          isModalOpen: !this.state.isModalOpen
+        });
+      }
+
     componentDidMount(){
         axios.get(this.props.location.state.urlfull)
         .then(response =>{
@@ -33,6 +45,27 @@ export class Display extends Component {
             this.setState({errormsg:"Invalid Request"})
         })
     }
+
+    hello(word,content){
+        console.log("heloo")
+        // consol
+        this.setState({ simpleWord:"loading..."})
+        axios.get('http://localhost:5000/simplifiedWord/'+word+"/"+content)
+      .then(response => {
+          console.log(response)
+          this.setState({ simpleWord:response.data})
+        
+         
+          // this.setState({simpleWords: })
+        //  console.log("sim "+this.state.simpleWords)
+      })
+      .catch(error => {
+          console.log(error)
+      })
+  
+    }
+
+
     render(){
         const {errormsg,posts,legno,name,block,complex} = this.state
         return (
@@ -49,7 +82,7 @@ export class Display extends Component {
                        console.log(block.title.split(" ")),
                        block.title.split(" ").map(text => {
                         // return text.toUpperCase() === "ACCOUNT" ? 
-                        return complex.includes(text.toUpperCase()) ?
+                        return complex.includes(text) ?
                          <Link >{text} </Link> : 
                         <span style={{fontSize: "16px", color:"rgba(182,166,139,1)", }}>{text} </span>;
     
@@ -60,8 +93,25 @@ export class Display extends Component {
                        console.log(block.content.split(" ")),
                        block.content.split(" ").map(text => {
                         // return text.toUpperCase() === "SECTION" ? 
-                        return complex.includes(text.toUpperCase()) ?
-                        <Link >{text} </Link> : 
+                        return complex.includes(text) ?
+                        <span>
+                        <Link id="TooltipExample" onClick={() => this.hello(text,block.content)}>{text} </Link>
+
+                        <Popover isOpen={this.state.isModalOpen} toggle={this.toggleModal} 
+                        placement="top"  target="TooltipExample">
+                            
+                            
+                            {this.state.simpleWord}
+                        
+                        
+                        </Popover>
+                        
+                        {/* <Popover isOpen={this.state.isTooltipOpen} toggle={this.toggleTootip} placement="top"  target="TooltipExample" >
+                            Hello World!  
+                        </Popover> */}
+
+                        </span>
+                         : 
                         <span style={{fontSize: "15px", color:"white", marginTop:"4px"}}>{text} </span>;
     
                      })}

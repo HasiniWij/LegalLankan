@@ -34,7 +34,7 @@ def get_legislation(legName):
     for index, row in data.iterrows():
         if row['title']==legName:
             content=row['content']
-
+    print("content",content)
     S = Simplifier()
     complex_words = S.identify_complex_words(content)
 
@@ -58,7 +58,11 @@ def get_legislation(legName):
             block=block+line
 
         previous_line=line
-
+        
+        if not list_of_blocks:
+            block_result = {"title": "", "content": content}
+            list_of_blocks.append(block_result)
+  
     result={'complexWords':complex_words,"block":list_of_blocks}
 
     return jsonify(result)
@@ -130,11 +134,16 @@ def uploadLegislation():
         data = request.json
         text = data.get('text')
         title=data.get('title')
+
+        text = text.replace("\r", "")
+        title=title.replace("\r", "")
+
         u = UploadLeg()
 
-        if data.get('type')=="core":
-            u.upload_act(text,title)
-        else:
+        if data.get('type')=="core":        
             u.upload_core_leg(text)
+            
+        else:
+            u.upload_act(text,title [0:-4])
 
         return jsonify("successfully uploaded")

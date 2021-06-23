@@ -125,7 +125,7 @@ class Extractor:
             print("index: ", index[0][0])
 
             content_segment = segmented_doc[index[0][0]]+"..."
-            title_segment={'title':title,'content':content_segment}
+            title_segment={'title':title,'content':content_segment[0:745]}
             relevant_docs.append(title_segment)
 
 
