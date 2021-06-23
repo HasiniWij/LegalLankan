@@ -45,7 +45,7 @@ function Upload() {
     if (textFile!==""){
       setTest("submit working");
       history.push({pathname:'/admin/confirm',state: {data:{ text: textFile, title:title, type:type}, textFile:textFile }})
-      console.log(type)
+
       setTest("")
     }
     else{
