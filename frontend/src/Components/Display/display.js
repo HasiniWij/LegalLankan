@@ -47,10 +47,21 @@ export class Display extends Component {
     }
 
     hello(word,content){
-        console.log("heloo")
-        // consol
+        
+        
         this.setState({ simpleWord:"loading..."})
-        axios.get('http://localhost:5000/simplifiedWord/'+word+"/"+content)
+
+        var splitContent=content
+        var chosenSent=""
+
+        splitContent.split(".").map(sentence => {
+            if (sentence.includes(word)) {
+                chosenSent = sentence
+            }
+        })
+
+
+        axios.get('http://localhost:5000/simplifiedWord/'+word+"/"+chosenSent)
       .then(response => {
           console.log(response)
           this.setState({ simpleWord:response.data})
