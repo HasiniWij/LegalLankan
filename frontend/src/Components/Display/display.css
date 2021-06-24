@@ -68,3 +68,19 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+  .LinkStyle{
+      color: white;
+      /* text-decoration: none; */
+      font-weight: bold;    
+      /* background-color: rgba(169,121,46,1); */
+      /* padding-right: 1px; */
+  }
+  .LinkStyle:hover{
+    color: rgba(169,121,46,1);
+  }
+  .popoverStyle{
+    font-weight: bold; 
+
+      /* padding-right: 10px; */
+  }

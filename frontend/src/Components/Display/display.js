@@ -95,13 +95,14 @@ export class Display extends Component {
                         // return text.toUpperCase() === "ACCOUNT" ? 
                         return complex.includes(text) ?
                         <span>
-                        <Link id="titleComplexWord" onClick={() => this.hello(text,block.title)}>{text} </Link>
+                        <Link className="LinkStyle" id="titleComplexWord" onClick={() => this.hello(text,block.title)}>{text} </Link>
 
                         <Popover isOpen={this.state.isModalOpen} toggle={this.toggleModal} 
                         placement="top"  target="titleComplexWord">
                             
-                            
+                            <PopoverBody>
                             {this.state.simpleWord}
+                            </PopoverBody>
                         
                         
                         </Popover>
@@ -120,13 +121,15 @@ export class Display extends Component {
                         // return text.toUpperCase() === "SECTION" ? 
                         return complex.includes(text) ?
                         <span>
-                        <Link id="TooltipExample" onClick={() => this.hello(text,block.content)}>{text} </Link>
+                        <Link className="LinkStyle" id="TooltipExample" onClick={() => this.hello(text,block.content)}>{text} </Link>
 
                         <Popover isOpen={this.state.isModalOpen} toggle={this.toggleModal} 
-                        placement="top"  target="TooltipExample">
+                        placement="top"  target="TooltipExample" className="popoverStyle">
+                            <PopoverBody>
                             
                             
                             {this.state.simpleWord}
+                            </PopoverBody>
                         
                         
                         </Popover>
@@ -134,7 +137,7 @@ export class Display extends Component {
 
                         </span>
                          : 
-                        <span style={{fontSize: "15px", color:"white", marginTop:"4px"}}>{text} </span>;
+                        <span style={{fontSize: "15px", color:"#cfcfca", marginTop:"4px"}}>{text} </span>;
     
                      })}
                      
