@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import {BrowserRouter as Router, Link, NavLink, Route} from 'react-router-dom';
 import axios from 'axios';
 import './display.css';
-import { Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
+import { Button, Popover, UncontrolledPopover, PopoverBody } from 'reactstrap';
 
 export class Display extends Component {
     constructor(props){
@@ -17,12 +17,14 @@ export class Display extends Component {
             name:"",
             isModalOpen: false,
             isTitleOpen: false,
-            simpleWord:""
+            simpleWord:"",
+            simpleTitle:""
             
         }
         this.toggleModal = this.toggleModal.bind(this);
         this.toggleTitle = this.toggleTitle.bind(this);
         this.hello=this.hello.bind(this);
+        this.simplifyTitle=this.simplifyTitle.bind(this);
     }
     toggleModal() {
         this.setState({
@@ -54,8 +56,6 @@ export class Display extends Component {
     }
 
     hello(word,content){
-        
-        
         this.setState({ simpleWord:"loading..."})
 
         var splitContent=content
@@ -66,16 +66,32 @@ export class Display extends Component {
                 chosenSent = sentence
             }
         })
-
-
         axios.get('http://localhost:5000/simplifiedWord/'+word+"/"+chosenSent)
       .then(response => {
           console.log(response)
           this.setState({ simpleWord:response.data})
-        
-         
-          // this.setState({simpleWords: })
-        //  console.log("sim "+this.state.simpleWords)
+      })
+      .catch(error => {
+          console.log(error)
+      })
+  
+    }
+
+    simplifyTitle(word,content){
+        this.setState({ simpleTitle:"loading..."})
+
+        var splitContent=content
+        var chosenSent=""
+
+        splitContent.split(".").map(sentence => {
+            if (sentence.includes(word)) {
+                chosenSent = sentence
+            }
+        })
+        axios.get('http://localhost:5000/simplifiedWord/'+word+"/"+chosenSent)
+      .then(response => {
+          console.log(response)
+          this.setState({ simpleTitle:response.data})
       })
       .catch(error => {
           console.log(error)
@@ -102,18 +118,19 @@ export class Display extends Component {
                     
                         return complex.includes(text) ?
                         <span>
-                        <Link className="LinkStyle" id="titleComplexWord" onClick={() => this.hello(text,block.title)}>{text} </Link>
+                        <Link className="LinkStyle"  id="titleComplexWord" onClick={() => this.simplifyTitle(text,block.title)}>{text} </Link>
 
-                        <Popover isOpen={this.state.isTitleOpen} toggle={this.toggleTitle} 
-                        placement="top"  target="titleComplexWord">
+                        {/* <Popover isOpen={this.state.isTitleOpen} toggle={this.toggleTitle} 
+                        placement="top"  target="titleComplexWord" trigger="focus"> */}
+                         <UncontrolledPopover placement="top"  target="titleComplexWord" trigger="focus">
                             
                             <PopoverBody>
-                            {this.state.simpleWord}
+                            {this.state.simpleTitle}
                             </PopoverBody>
                         
                         
-                        </Popover>
-                      
+                        {/* </Popover> */}
+                        </UncontrolledPopover>
 
                         </span>
                          : 
@@ -130,16 +147,18 @@ export class Display extends Component {
                         <span>
                         <Link className="LinkStyle" id="TooltipExample" onClick={() => this.hello(text,block.content)}>{text} </Link>
 
-                        <Popover isOpen={this.state.isModalOpen} toggle={this.toggleModal} 
-                        placement="top"  target="TooltipExample" className="popoverStyle">
+                        {/* <Popover isOpen={this.state.isModalOpen} toggle={this.toggleModal} 
+                        placement="top"  target="TooltipExample" className="popoverStyle" trigger="focus"> */}
+                            <UncontrolledPopover placement="top"  target="TooltipExample" className="popoverStyle" trigger="focus">
+
+
+                            
                             <PopoverBody>
-                            
-                            
                             {this.state.simpleWord}
                             </PopoverBody>
                         
                         
-                        </Popover>
+                            </UncontrolledPopover>
                       
 
                         </span>
