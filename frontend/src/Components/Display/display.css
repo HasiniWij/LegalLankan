@@ -1,25 +1,31 @@
 .legcon{
-    padding: 2% 3%;
+    /* padding: 2% 15%; */
     height: 100%;
-    width: 950px;
-    margin: 0 auto 2% auto;
-    background-color: rgba(0, 0, 0, 0.7);
-    border-radius: 15px;
-    box-shadow: 0px 20px 50px rgba(0, 0, 0, 1);
+    width: 100%;
+    /* margin: 0 auto 2% auto; */
+    background-color: black;
+    padding-left: 15%;
+    padding-right: 15%;
+    
+    /* border-radius: 15px; */
+    /* box-shadow: 0px 20px 50px rgba(0, 0, 0, 1);   */
 }
 .legtitle{
     margin-bottom: 3%;
-    font-size: 20px;
+    font-size: 30px;
     letter-spacing: 1px;
     color: rgba(169,121,46,1);
     font-weight: 700;
+    text-align: center;
 }
 .legpiece{
     height: 100%;
     margin-bottom: 2%;
     display: inline-block;
     padding-bottom: 2% ;
-    border-bottom: 1px solid rgba(169,121,46,0.4);
+    border-bottom: 3px solid rgba(169,121,46,0.4);
+    border-width: 100%;
+    width: 100%;
 }
 .menutext{
     width: 790px;
@@ -70,25 +76,29 @@
   }
 
   .LinkStyle{
-      color: white;
+      /* color: white; */
+      color: rgba(169,121,46,1);
       /* text-decoration: none; */
       font-weight: bold;    
       /* background-color: rgba(169,121,46,1); */
       /* padding-right: 1px; */
   }
-  /* .TitleLinkStyle:hover{
-    color: rgba(169,121,46,1);
+  .LinkStyleStyle{
+    color: #cfcfca;
+    font-weight: bold;    
 
   }
-  .TitleLinkStyle{
-    color:rgba(182,166,139,1);
-    
-  } */
-  .LinkStyle:hover{
+  .LinkStyleStyle:hover{
     color: rgba(169,121,46,1);
+  }
+
+  .LinkStyle:hover{
+    color: #cfcfca;
   }
   .popoverStyle{
     font-weight: bold; 
+  }
 
-      /* padding-right: 10px; */
+  .bodyStyle{
+    background-color: black;
   }

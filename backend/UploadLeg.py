@@ -37,7 +37,7 @@ class UploadLeg:
         C = Classifier("dataScienceComponents/classification/models/svm.pickle", "dataScienceComponents"
                                                                                  "/classification/models/tfidf.pickle")
         category = C.get_category_of_text(title + content)
-        print("cat", category)
+
 
         new_row = {'title': title, 'category': category}
         self.title_cat = self.title_cat.append(new_row, ignore_index=True)
@@ -45,8 +45,8 @@ class UploadLeg:
         new_row_2 = {'title': title, 'content': content}
         self.data_df = self.data_df.append(new_row_2, ignore_index=True)
 
-        print("data: ", self.data_df)
-        print("title: ", self.title_cat)
+        # print("data: ", self.data_df)
+        # print("title: ", self.title_cat)
 
 
     def save_pickles(self):

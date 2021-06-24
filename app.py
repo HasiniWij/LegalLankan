@@ -34,7 +34,7 @@ def get_legislation(legName):
     for index, row in data.iterrows():
         if row['title']==legName:
             content=row['content']
-    print("content",content)
+
     S = Simplifier()
     complex_words = S.identify_complex_words(content)
 
@@ -48,7 +48,7 @@ def get_legislation(legName):
 
         x = line.replace(".", "")
         if x.isdecimal():
-            print(line)
+
             block = block.replace(previous_line, "")
             block_result["content"]=block
             list_of_blocks.append(block_result)

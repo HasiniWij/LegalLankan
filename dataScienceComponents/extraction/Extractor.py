@@ -119,10 +119,10 @@ class Extractor:
             kw_vector_segment = dictionary_segment.doc2bow(jieba.lcut(keywords))
             # checks the similarity of each document within the category
             sim_segment = matrix_segment[tfidf_segment[kw_vector_segment]]
-            print("sim_segment: ", sim_segment)
+
 
             index = np.where(sim_segment == np.amax(sim_segment))
-            print("index: ", index[0][0])
+
 
             content_segment = segmented_doc[index[0][0]]+"..."
             title_segment={'title':title,'content':content_segment[0:745]}

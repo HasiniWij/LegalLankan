@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import {BrowserRouter as Router, Link, NavLink, Route} from 'react-router-dom';
 import axios from 'axios';
 import './display.css';
-import { Button, Popover, UncontrolledPopover, PopoverBody } from 'reactstrap';
+import {  UncontrolledPopover, PopoverBody } from 'reactstrap';
 
 export class Display extends Component {
     constructor(props){
@@ -23,7 +23,7 @@ export class Display extends Component {
         }
         this.toggleModal = this.toggleModal.bind(this);
         this.toggleTitle = this.toggleTitle.bind(this);
-        this.hello=this.hello.bind(this);
+        this.simplifyWords=this.simplifyWords.bind(this);
         this.simplifyTitle=this.simplifyTitle.bind(this);
     }
     toggleModal() {
@@ -55,7 +55,7 @@ export class Display extends Component {
         })
     }
 
-    hello(word,content){
+    simplifyWords(word,content){
         this.setState({ simpleWord:"loading..."})
 
         var splitContent=content
@@ -118,23 +118,17 @@ export class Display extends Component {
                     
                         return complex.includes(text) ?
                         <span>
-                        <Link className="LinkStyle"  id="titleComplexWord" onClick={() => this.simplifyTitle(text,block.title)}>{text} </Link>
+                        <Link className="LinkStyleStyle"  id="titleComplexWord" onClick={() => this.simplifyTitle(text,block.title)}>{text} </Link>
 
-                        {/* <Popover isOpen={this.state.isTitleOpen} toggle={this.toggleTitle} 
-                        placement="top"  target="titleComplexWord" trigger="focus"> */}
                          <UncontrolledPopover placement="top"  target="titleComplexWord" trigger="focus">
-                            
                             <PopoverBody>
-                            {this.state.simpleTitle}
-                            </PopoverBody>
-                        
-                        
-                        {/* </Popover> */}
+                                {this.state.simpleTitle}
+                            </PopoverBody> 
                         </UncontrolledPopover>
 
                         </span>
                          : 
-                        <span style={{fontSize: "16px", color:"rgba(182,166,139,1)", fontWeight: "bold" }}>{text} </span>;
+                        <span style={{fontSize: "16px", color:"rgba(169,121,46,1)", fontWeight: "bold" }}>{text} </span>;
     
                      })}
                      <br/>
@@ -142,43 +136,22 @@ export class Display extends Component {
 { 
                        console.log(block.content.split(" ")),
                        block.content.split(" ").map(text => {
-                        // return text.toUpperCase() === "SECTION" ? 
                         return complex.includes(text) ?
                         <span>
-                        <Link className="LinkStyle" id="TooltipExample" onClick={() => this.hello(text,block.content)}>{text} </Link>
+                        <Link className="LinkStyle" id="TooltipExample" onClick={() => this.simplifyWords(text,block.content)}>{text} </Link>
 
-                        {/* <Popover isOpen={this.state.isModalOpen} toggle={this.toggleModal} 
-                        placement="top"  target="TooltipExample" className="popoverStyle" trigger="focus"> */}
                             <UncontrolledPopover placement="top"  target="TooltipExample" className="popoverStyle" trigger="focus">
-
-
-                            
-                            <PopoverBody>
-                            {this.state.simpleWord}
-                            </PopoverBody>
-                        
-                        
+                                <PopoverBody>
+                                    {this.state.simpleWord}
+                                </PopoverBody>
                             </UncontrolledPopover>
-                      
-
+   
                         </span>
                          : 
                         <span style={{fontSize: "15px", color:"#cfcfca", marginTop:"4px"}}>{text} </span>;
-    
+
                      })}
                      
-
-                     {/* <div className="menutext">
-                        <span style={{fontSize: "16px", color:"rgba(182,166,139,1)", }}>{block.title} </span><br/>
-
-                        <span style={{fontSize: "15px", color:"white", marginTop:"4px"}}>{block.content} </span>
-                     </div> */}
-
-                    
-
-                        {/* <NavLink className="menulink" to={{pathname:`/simplify/${post.pieceIndex}`, state:{urlfull:"http://127.0.0.1:5000/simplifiedpiece/"+post.pieceIndex,
-                        pindex:post.pieceIndex, content:post.content, title:post.pieceTitle, legno:legno,name:name}}}>
-                         SIMPLIFY</NavLink> */}
                      
                 </div>) :
                 <div>

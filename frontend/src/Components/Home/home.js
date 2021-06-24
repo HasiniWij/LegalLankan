@@ -15,11 +15,11 @@ export const Home = ()=> {
         <div className="container">
             
             <div id="bigTopic">
-                <h1 id="topic1"> Unlimited movies, TV shows, and more.</h1>
-                <h3>Watch anywhere. Cancel anytime.</h3>
+                <h1 id="topic1"> The Sri Lankan Constitution</h1>
+                <h3>Clear the legal confusion with just a search...</h3>
         {/* <div class="widthDiv"> */}
 
-        
+        </div>
 
         <form>
         <Row>
@@ -59,7 +59,7 @@ export const Home = ()=> {
         
           
             </div>
-        </div>
+        // </div>
         // </div>
       );
 }

@@ -13,7 +13,8 @@ import { Simplify } from './Components/Simplify/simplify';
 
 function App() {
   return (
-    <div>
+    <body style={{ background: "black"}} id="main">
+    <div >
     <Router>
     <div className="headerdiv"> 
       <div className="image">
@@ -47,6 +48,7 @@ function App() {
       </div>
     </Router>
     </div>
+    </body>
   );
 }
 export default App;

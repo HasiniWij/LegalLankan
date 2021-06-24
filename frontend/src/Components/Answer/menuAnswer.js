@@ -36,7 +36,7 @@ export class MenuAnswer extends Component {
              {
                  posts.length ?
                  posts.map(post => <div class="leglist" key={post.title}>
-                <button type="button" class="btn btn-dark" id="id">
+                <button type="button" class="btn"  id="id">
 
                     <Link className="menulinks" to ={{pathname:"/legislation",
                         state:{urlfull: "http://127.0.0.1:5000/legislation/"+post.title,

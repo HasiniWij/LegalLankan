@@ -46,8 +46,17 @@ class Simplifier:
         content = content.replace("\n", "")
         words = content.split()
 
-        names_enitites=[]
-        # names_enitites = Simplifier.NER_identifier(content)
+
+        enitites = Simplifier.NER_identifier(content)
+
+        all_entities=""
+        for sentence in enitites:
+            all_entities=all_entities+ " "+ sentence
+
+        names_enitites=all_entities.split()
+
+
+        print("entities: ",names_enitites)
         for word in words:
             cleaned_word = word.lower().strip()
             if zipf_frequency(cleaned_word,'en') < zip_value and word.isalpha() and \

@@ -1,10 +1,15 @@
 body { 
+  background: "black" ;
+  /* background-color: #ff0000; */
   margin: 0; 
   font-family:"Bahnscrift", sans-serif; 
-  background-image: url("bg.jpg");
+  background-image: url("black.jpg");
+  
+
   background-position: center; 
   background-repeat: no-repeat; 
   background-size: cover; 
   background-attachment: fixed;
+  
 }
 

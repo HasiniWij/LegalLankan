@@ -34,7 +34,7 @@ export class Answer extends Component {
              {
                  posts.length ?
                  posts.map(post => <div className="spieces" key={post.title}>
-                     <h4><span style={{ color:"rgba(182,166,139,1)", }}>{post.title} </span><br/></h4>
+                     <h5><span style={{ color:"rgba(182,166,139,1)", }}>{post.title} </span><br/></h5>
                      <span style={{fontSize: "15px", color:"white", marginTop:"4px"}}>{post.content}</span>
                     <div className="searchlinks">
                 
