@@ -76,6 +76,14 @@
       /* background-color: rgba(169,121,46,1); */
       /* padding-right: 1px; */
   }
+  /* .TitleLinkStyle:hover{
+    color: rgba(169,121,46,1);
+
+  }
+  .TitleLinkStyle{
+    color:rgba(182,166,139,1);
+    
+  } */
   .LinkStyle:hover{
     color: rgba(169,121,46,1);
   }

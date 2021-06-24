@@ -59,9 +59,9 @@ def get_legislation(legName):
 
         previous_line=line
         
-        if not list_of_blocks:
-            block_result = {"title": "", "content": content}
-            list_of_blocks.append(block_result)
+    if len(list_of_blocks)==0:
+        block_result = {"title": "", "content": content}
+        list_of_blocks.append(block_result)
   
     result={'complexWords':complex_words,"block":list_of_blocks}
 

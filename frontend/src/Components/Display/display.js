@@ -16,15 +16,22 @@ export class Display extends Component {
             legno:"",
             name:"",
             isModalOpen: false,
+            isTitleOpen: false,
             simpleWord:""
             
         }
         this.toggleModal = this.toggleModal.bind(this);
+        this.toggleTitle = this.toggleTitle.bind(this);
         this.hello=this.hello.bind(this);
     }
     toggleModal() {
         this.setState({
           isModalOpen: !this.state.isModalOpen
+        });
+      }
+      toggleTitle() {
+        this.setState({
+            isTitleOpen: !this.state.isTitleOpen
         });
       }
 
@@ -92,12 +99,12 @@ export class Display extends Component {
                       { 
                        console.log(block.title.split(" ")),
                        block.title.split(" ").map(text => {
-                        // return text.toUpperCase() === "ACCOUNT" ? 
+                    
                         return complex.includes(text) ?
                         <span>
                         <Link className="LinkStyle" id="titleComplexWord" onClick={() => this.hello(text,block.title)}>{text} </Link>
 
-                        <Popover isOpen={this.state.isModalOpen} toggle={this.toggleModal} 
+                        <Popover isOpen={this.state.isTitleOpen} toggle={this.toggleTitle} 
                         placement="top"  target="titleComplexWord">
                             
                             <PopoverBody>
@@ -110,7 +117,7 @@ export class Display extends Component {
 
                         </span>
                          : 
-                        <span style={{fontSize: "16px", color:"rgba(182,166,139,1)", }}>{text} </span>;
+                        <span style={{fontSize: "16px", color:"rgba(182,166,139,1)", fontWeight: "bold" }}>{text} </span>;
     
                      })}
                      <br/>
