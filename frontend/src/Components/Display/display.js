@@ -94,7 +94,21 @@ export class Display extends Component {
                        block.title.split(" ").map(text => {
                         // return text.toUpperCase() === "ACCOUNT" ? 
                         return complex.includes(text) ?
-                         <Link >{text} </Link> : 
+                        <span>
+                        <Link id="titleComplexWord" onClick={() => this.hello(text,block.title)}>{text} </Link>
+
+                        <Popover isOpen={this.state.isModalOpen} toggle={this.toggleModal} 
+                        placement="top"  target="titleComplexWord">
+                            
+                            
+                            {this.state.simpleWord}
+                        
+                        
+                        </Popover>
+                      
+
+                        </span>
+                         : 
                         <span style={{fontSize: "16px", color:"rgba(182,166,139,1)", }}>{text} </span>;
     
                      })}
@@ -116,10 +130,7 @@ export class Display extends Component {
                         
                         
                         </Popover>
-                        
-                        {/* <Popover isOpen={this.state.isTooltipOpen} toggle={this.toggleTootip} placement="top"  target="TooltipExample" >
-                            Hello World!  
-                        </Popover> */}
+                      
 
                         </span>
                          : 
