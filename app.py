@@ -93,12 +93,22 @@ def get_simplified_piece(word,sentence):
 
     result=''
     isFirst=True
+    count=1
     for i in words:
-        if isFirst:
+
+        if count==4:
+            break
+
+        if i==word:
+            continue
+
+        elif isFirst:
             result=i
             isFirst=False
+            count+=1
         else:
             result=result+", "+i
+            count+=1
 
     return jsonify(result)
 

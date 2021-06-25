@@ -69,7 +69,7 @@ class Simplifier:
     def get_bert_candidates(self,input_text, word):
         word.lower().strip()
         input_text = re.sub("[^-9A-Za-z ]", "", input_text)
-        numb_predictions_displayed = 3
+        numb_predictions_displayed = 4
 
         replace_word_mask = input_text.replace(word, '[MASK]')  # complex word is masked
         text = f'[CLS]{replace_word_mask} [SEP] {input_text} [SEP] '
