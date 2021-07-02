@@ -118,7 +118,7 @@ export class Display extends Component {
                     
                         return complex.includes(text) ?
                         <span>
-                        <Link className="LinkStyleStyle"  id="titleComplexWord" onClick={() => this.simplifyTitle(text,block.title)}>{text} </Link>
+                        <Link className="LinkStyle titleSize"  id="titleComplexWord" onClick={() => this.simplifyTitle(text,block.title)}>{text} </Link>
 
                          <UncontrolledPopover placement="top"  target="titleComplexWord" trigger="focus">
                             <PopoverBody>
@@ -128,7 +128,7 @@ export class Display extends Component {
 
                         </span>
                          : 
-                        <span style={{fontSize: "16px", color:"rgba(169,121,46,1)", fontWeight: "bold" }}>{text} </span>;
+                        <span style={{fontSize: "19px", color:"#cfcfca", fontWeight: "bold" }}>{text} </span>;
     
                      })}
                      <br/>

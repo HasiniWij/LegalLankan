@@ -22,6 +22,8 @@ class DocumentSplitter:
         content = ""
         count = 0
         title_count = 0
+        isTitleVisited=False
+        piece_title=""
 
         for line in full_leg_list:
 
@@ -35,13 +37,20 @@ class DocumentSplitter:
                 # checks for roman numerals in titles of a piece
                 if bool(re.search(r"^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$", title_number)):
                     title_count += 1
-                    piece_title = str(title_count) + "-" + line
-                    piece_titles.append(piece_title)    # title of a piece is taken separately
+                    piece_title = line
+                       # title of a piece is taken separately
                     content_list.append(content)        # content within a piece is taken separately
                     content = ""
+                    isTitleVisited=True
                     continue
 
             else:
+                if isTitleVisited:
+                    piece_title=piece_title+" - "+line
+                    piece_titles.append(piece_title)
+                    piece_title=""
+                    isTitleVisited=False
+
                 content = content + line
                 if count == total_lines:
                     content_list.append(content)
