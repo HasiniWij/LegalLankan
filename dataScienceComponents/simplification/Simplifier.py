@@ -56,7 +56,7 @@ class Simplifier:
         names_enitites=all_entities.split()
 
 
-        print("entities: ",names_enitites)
+      
         for word in words:
             cleaned_word = word.lower().strip()
             if zipf_frequency(cleaned_word,'en') < zip_value and word.isalpha() and \

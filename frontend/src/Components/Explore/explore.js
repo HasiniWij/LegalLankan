@@ -4,7 +4,7 @@ import {BrowserRouter as Router, NavLink, Route} from 'react-router-dom';
 
 export const Explore = () => { 
     return (
-        <div class="catDiv">
+        <div className="catDiv">
             <div className="categorylist">
                 <div className="catitems">
                     <NavLink activeClassName="activee" className="catlink" to={{pathname:"/explore/family", 

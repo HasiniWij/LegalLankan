@@ -40,9 +40,7 @@ export class Display extends Component {
     componentDidMount(){
         axios.get(this.props.location.state.urlfull)
         .then(response =>{
-            console.log(response)
-            console.log(response.data.block)
-            console.log("sbb"+response.data.complexWords)
+
             this.setState({posts: response.data})
             this.setState({block: response.data.block})
             this.setState({complex: response.data.complexWords})
@@ -113,7 +111,7 @@ export class Display extends Component {
 
                  <div className="legpiece" key={block.content}>
                       { 
-                       console.log(block.title.split(" ")),
+                       
                        block.title.split(" ").map(text => {
                     
                         return complex.includes(text) ?
@@ -134,7 +132,7 @@ export class Display extends Component {
                      <br/>
 
 { 
-                       console.log(block.content.split(" ")),
+
                        block.content.split(" ").map(text => {
                         return complex.includes(text) ?
                         <span>
