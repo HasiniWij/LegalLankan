@@ -38,29 +38,24 @@ export const Home = ()=> {
             Search</button>
           </div>
         </Col>
-           
-
-           {/* <div className="searchbox">
-               <input type="text" className="searchtext" onChange={getData} name="query" placeholder="Ask a Question...">
-               </input>
-               <div className="searchdiv">
-                <button className="searchbutton searchdiv" 
-            onClick={() => {history.push({pathname:'/answer',state: { urlfull: "http://127.0.0.1:5000/search/"+data, query:data }}) }}>
-            Search</button>
-          </div> */}
+        
+    
            
          
         </Row>
+        
        </form>
 
 
+      <div className="hotline">
+      National hotline for domestic violence - 1938 &nbsp;| &nbsp; National Child Protection Authority - 0112 778 911  &nbsp;| &nbsp;  CID Cyber Crime Unit - 0112326979  &nbsp;| &nbsp;  Women in Need -  0112 671 411
 
+ 
+
+      </div>
        
-        
-          
-            </div>
-        // </div>
-        // </div>
+    </div>
+
       );
 }
 export default Home

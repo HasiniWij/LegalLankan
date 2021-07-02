@@ -27,7 +27,7 @@ export const Explore = () => {
                     </NavLink>
                 </div>
             </div>
-
+        {/* <MenuAnswer></MenuAnswer> */}
         </div>
     );
   }

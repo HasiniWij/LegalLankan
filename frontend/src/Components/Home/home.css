@@ -69,3 +69,13 @@
     width:110px;
     /* float:right; */
 }
+
+.hotline{
+    color: white;
+    position: fixed;
+    /* width: 50%; */
+    bottom: 1.5%;
+    left: 5%;
+    /* border: 3px solid #8AC007; */
+    text-align: center;
+}

@@ -25,7 +25,10 @@ function App() {
           </div>
           
           <div className="linkdiv">
-            <NavLink activeClassName="active" to="/explore" className="links">EXPLORE</NavLink >
+            {/* <NavLink activeClassName="active" to="/explore" className="links">EXPLORE</NavLink > */}
+            <NavLink activeClassName="activee" className="links" to={{pathname:"/explore/family", 
+                    state: { urlfull: "http://127.0.0.1:5000/legislationlist/family", title:"FAMILY" }}}>EXPLORE
+                    </NavLink>
           </div>
       </div> 
       <div className="routerdiv">
@@ -35,7 +38,7 @@ function App() {
                 }}
               />
       <Route path='/home' component={Home}/>
-      <Route path='/explore' component={ Explore }/>
+      <Route path='/explore' component={ Explore } />
       <Route path='/answer' component={ Answer }/>
       <Route path='/explore/family' component={ MenuAnswer }/>
       <Route path='/explore/rights' component={ MenuAnswer }/>
